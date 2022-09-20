@@ -1,0 +1,6 @@
+{
+    "scm.alwaysShowActions": true,
+    "scm.alwaysShowRepositories": true,
+    "git.alwaysShowStagedChangesResourceGroup": true,
+    "git.alwaysSignOff": true
+}

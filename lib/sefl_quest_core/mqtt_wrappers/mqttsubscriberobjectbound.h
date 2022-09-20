@@ -18,7 +18,9 @@ namespace SEFL
 	{
 	public:
 		typedef void (ObjT::*CallbackBufferT)(const char *data, const uint16_t len);
-		MQTT_Subscriber_Object_Bound(MQTT &mqttserver, const char *feed,
+		// MQTT_Subscriber_Object_Bound(MQTT &mqttserver, const char *feed,
+		// 							 CallbackBufferT clb, ObjT *obj, uint8_t q = 0);
+		MQTT_Subscriber_Object_Bound(const char *feed,
 									 CallbackBufferT clb, ObjT *obj, uint8_t q = 0);
 
 		void removeCallback(void) override;

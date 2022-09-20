@@ -11,10 +11,12 @@
 namespace SEFL
 {
 
-	MQTT_Subscriber::MQTT_Subscriber(MQTT &mqttserver, const char *feedname,
+	// MQTT_Subscriber::MQTT_Subscriber(MQTT &mqttserver, const char *feedname,
+	// 								 uint8_t q)
+	MQTT_Subscriber::MQTT_Subscriber(const char *feedname,
 									 uint8_t q)
 	{
-		mqtt = &mqttserver;
+		// mqtt = &mqttserver;
 		topic[0] = '\0';
 		strcpy(topic, feedname);
 		qos = q;

@@ -20,17 +20,25 @@ namespace SEFL
 
 namespace SEFL
 {
-
 	class Quest_Board_Manager : public MQTT_Two_Way_Interactor
 	{
+		struct CallbackItem
+		{
+			Quest_Client *client;
+			String *payload;
+		};
+
 	private:
+		CallbackItem *callbackQueue_storage[MAX_MESSAGE_QUEUE_AMOUNT];
+		Vector<CallbackItem *> callbacksQueue;
 		uint32_t callback_timestamp;
 		uint32_t shutdown_timestamp;
-		Quest_Client *clients_storage[MAX_CLIENT_AMOUNT];
 		const char *name_;
 		Language language_;
 		bool power_status_;
 		Quest_Host_Client host_;
+
+		Quest_Client *clients_storage[MAX_CLIENT_AMOUNT];
 		Vector<Quest_Client *> clients_;
 		void send_config();
 		void setLanguage(Language language_);
@@ -51,6 +59,12 @@ namespace SEFL
 		Language getLanguage() const;
 		const char *getName() const;
 		bool isPowerStatus() const;
+
+		bool checkSubscribitions(String &topic_name, String &payload_val);
+		bool pushToCallbacksQueue(Quest_Client &client, String &payload_val);
+		void processCallbackQueueOne();
+		void processCallbackQueueAll();
+		void processCallbackQueue(int number);
 	};
 
 } /* namespace SEFL */

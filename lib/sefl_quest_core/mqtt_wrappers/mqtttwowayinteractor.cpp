@@ -22,9 +22,12 @@ namespace SEFL
 		return (pubfeed_);
 	}
 
+	// MQTT_Two_Way_Interactor::MQTT_Two_Way_Interactor(SEFL::MQTT &mqtt,
+	// 												 String subfeed, String pubfeed) : mqtt_(&mqtt), subfeed_(subfeed), pubfeed_(pubfeed), sub_(mqtt,
+	// 																																			subfeed_.c_str(), &SEFL::MQTT_Two_Way_Interactor::inputClb,
+	// 																																			this, 1)
 	MQTT_Two_Way_Interactor::MQTT_Two_Way_Interactor(SEFL::MQTT &mqtt,
-													 String subfeed, String pubfeed) : mqtt_(&mqtt), subfeed_(subfeed), pubfeed_(pubfeed), sub_(mqtt,
-																																				subfeed_.c_str(), &SEFL::MQTT_Two_Way_Interactor::inputClb,
+													 String subfeed, String pubfeed) : mqtt_(&mqtt), subfeed_(subfeed), pubfeed_(pubfeed), sub_(subfeed_.c_str(), &SEFL::MQTT_Two_Way_Interactor::inputClb,
 																																				this, 1)
 	{
 		this->mqtt_->subscribe(&sub_);

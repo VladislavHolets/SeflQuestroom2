@@ -37,7 +37,8 @@ namespace SEFL
 	{
 		this->clients_.setStorage(clients_storage, MAX_CLIENT_AMOUNT);
 		this->clients_.clear();
-
+		this->callbacksQueue.setStorage(callbackQueue_storage, MAX_MESSAGE_QUEUE_AMOUNT);
+		this->callbacksQueue.clear();
 		Logger::notice("board_manager", F("constructor_done"));
 	}
 
@@ -269,5 +270,41 @@ namespace SEFL
 		}
 		}
 	}
+	bool Quest_Board_Manager::checkSubscribitions(String &topic_name, String &payload_val)
+	{
+		for (auto client : this->clients_)
+		{
+			if (topic_name
+					.equals(client->getSubfeed()))
+				this->pushToCallbacksQueue(*client, payload_val);
+		}
+	}
 
+	bool Quest_Board_Manager::pushToCallbacksQueue(Quest_Client &client, String &payload_val)
+	{
+		CallbackItem *item = new CallbackItem();
+		item->client = &client;
+		item->payload = new String(payload_val);
+		this->callbacksQueue.push_back(item);
+	}
+	void Quest_Board_Manager::processCallbackQueueOne()
+	{
+		this->callbacksQueue[0]->client->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());
+		delete this->callbacksQueue[0];
+		this->callbacksQueue.remove(0);
+	}
+	void Quest_Board_Manager::processCallbackQueueAll()
+	{
+		while (callbacksQueue.size())
+		{
+			processCallbackQueueOne();
+		}
+	}
+	void Quest_Board_Manager::processCallbackQueue(int number)
+	{
+		for (size_t i = 0; i < number && callbacksQueue.size(); i++)
+		{
+			processCallbackQueueOne();
+		}
+	}
 } /* namespace SEFL */

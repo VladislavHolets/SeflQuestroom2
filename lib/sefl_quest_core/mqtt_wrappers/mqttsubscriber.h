@@ -25,9 +25,11 @@ namespace SEFL
 	class MQTT_Subscriber
 	{
 	public:
-		MQTT_Subscriber(MQTT &mqttserver, const char *feedname,
-						uint8_t q = 0);
+		// MQTT_Subscriber(MQTT &mqttserver, const char *feedname,
+		// 				uint8_t q = 0);
 
+		MQTT_Subscriber(const char *feedname,
+						uint8_t q = 0);
 		virtual void removeCallback(void);
 		virtual void callbackBuffer(char *data, uint16_t len);
 		virtual bool getCallbackBuffer();
@@ -40,7 +42,7 @@ namespace SEFL
 		// ensure nul terminating lastread.
 		uint16_t datalen;
 		SubscriberCallbackBufferType callback_buffer;
-		MQTT *mqtt;
+		// MQTT *mqtt;
 		virtual ~MQTT_Subscriber();
 	};
 

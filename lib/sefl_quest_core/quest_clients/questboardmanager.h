@@ -43,12 +43,13 @@ namespace SEFL
 		void send_config();
 		void setLanguage(Language language_);
 		void setPowerStatus(bool power_status_);
+		MQTT_Config room_config_;
 
 	protected:
 	public:
 		void removeAllClients();
 		void removeClient(SEFL::Quest_Client *client);
-		Quest_Board_Manager(MQTT &mqtt, const char *host_name,
+		Quest_Board_Manager(MQTTClient &mqtt, MQTT_Config room_config, const char *host_name,
 							const char *placement = DEFAULT_PLACEMENT, const char *server_name = DEFAULT_SERVER_NAME,
 							const char *in_topic = DEFAUT_OUT_TOPIC, const char *out_topic = DEFAUT_IN_TOPIC, SEFL::Language language = UKR);
 		virtual ~Quest_Board_Manager();

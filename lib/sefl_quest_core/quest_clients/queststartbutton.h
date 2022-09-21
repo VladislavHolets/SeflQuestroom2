@@ -22,7 +22,7 @@ namespace SEFL
 		SEFL::StartButtonClientStatuses status_;
 
 	public:
-		Quest_Start_Button(MQTT &mqtt, uint8_t start_pin, const char *name = DEFAULT_DEVICE_NAME, uint8_t reset_status = 1,
+		Quest_Start_Button(MQTTClient &mqtt, uint8_t start_pin, const char *name = DEFAULT_DEVICE_NAME, uint8_t reset_status = 1,
 						   const char *placement = DEFAULT_PLACEMENT, const char *in_topic = DEFAUT_IN_TOPIC, const char *out_topic = DEFAUT_OUT_TOPIC,
 						   SEFL::Language language = UKR);
 		virtual ~Quest_Start_Button();

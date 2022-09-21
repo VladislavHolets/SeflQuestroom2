@@ -33,7 +33,7 @@ namespace SEFL
 		const uint8_t reset_status_;
 		void cleanData();
 		void setChangedStatus(bool changedStatus);
-		Quest_Client(MQTT &mqtt, const char *name, ClientType type = DEFAULT_DEVICE,
+		Quest_Client(MQTTClient &mqtt, const char *name, ClientType type = DEFAULT_DEVICE,
 					 uint8_t reset_status = 1, const char *placement = DEFAULT_PLACEMENT,
 					 const char *in_topic = DEFAUT_IN_TOPIC, const char *out_topic = DEFAUT_OUT_TOPIC, SEFL::Language language = UKR);
 		virtual ~Quest_Client();

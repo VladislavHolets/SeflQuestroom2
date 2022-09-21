@@ -66,7 +66,7 @@ namespace SEFL
 		this->changed_status_ = changedStatus;
 	}
 
-	Quest_Client::Quest_Client(MQTT &mqtt, const char *name, ClientType type,
+	Quest_Client::Quest_Client(MQTTClient &mqtt, const char *name, ClientType type,
 							   uint8_t reset_status, const char *placement, const char *in_topic,
 							   const char *out_topic, SEFL::Language language) : MQTT_Two_Way_Interactor(mqtt,
 																										 String(String(placement) + TOPIC_DELIMETER + name + TOPIC_DELIMETER + in_topic),

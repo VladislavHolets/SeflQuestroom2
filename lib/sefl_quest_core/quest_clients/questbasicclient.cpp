@@ -61,7 +61,7 @@ namespace SEFL
 		{
 		case SEFL::DirectCommands::PING_COMMAND:
 		{
-			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 1);
+			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
 		}
 		break;
 		case SEFL::DirectCommands::STATUS_COMMAND:
@@ -75,7 +75,7 @@ namespace SEFL
 			repDoc["SubcommandId"] = tstatus;
 			JsonArray jdata = repDoc.createNestedArray("Data");
 			serializeJson(repDoc, output);
-			this->getMqtt()->publish(this->getPubfeed().c_str(), output, 1);
+			this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
 		}
 		break;
 		case SEFL::DirectCommands::ACTION_COMMAND:
@@ -85,7 +85,7 @@ namespace SEFL
 				static_cast<SEFL::BasicClientStatuses>(doc["SubcommandId"].as<int>());
 			this->setStatus(status);
 
-			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 1);
+			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
 		}
 		break;
 		case SEFL::DirectCommands::DEACTIVATE_DEVICE_COMMAND:
@@ -119,7 +119,7 @@ namespace SEFL
 		}
 	}
 
-	Quest_Basic_Client::Quest_Basic_Client(MQTT &mqtt, const char *name,
+	Quest_Basic_Client::Quest_Basic_Client(MQTTClient &mqtt, const char *name,
 										   uint8_t reset_status, const char *placement, const char *in_topic,
 										   const char *out_topic, SEFL::Language language) : Quest_Client(mqtt, name, BASIC, reset_status, placement, in_topic,
 																										  out_topic, language),
@@ -143,7 +143,7 @@ namespace SEFL
 				jdata.add(this->data[i]);
 		}
 		serializeJson(repDoc, output);
-		this->getMqtt()->publish(this->getPubfeed().c_str(), output, 1);
+		this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
 	}
 
 	SEFL::BasicClientStatuses Quest_Basic_Client::getStatus() const

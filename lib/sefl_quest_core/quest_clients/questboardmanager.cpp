@@ -20,7 +20,7 @@
 namespace SEFL
 {
 
-	Quest_Board_Manager::Quest_Board_Manager(MQTT &mqtt, const char *host_name,
+	Quest_Board_Manager::Quest_Board_Manager(MQTTClient &mqtt, MQTT_Config room_config, const char *host_name,
 											 const char *placement, const char *server_name, const char *in_topic,
 											 const char *out_topic, SEFL::Language language) : MQTT_Two_Way_Interactor(mqtt,
 																													   String(
@@ -33,7 +33,7 @@ namespace SEFL
 																											   0),
 																							   callback_timestamp(0), name_(server_name), language_(
 																																			  language),
-																							   power_status_(true)
+																							   power_status_(true), room_config_(room_config)
 	{
 		this->clients_.setStorage(clients_storage, MAX_CLIENT_AMOUNT);
 		this->clients_.clear();
@@ -83,7 +83,7 @@ namespace SEFL
 		}
 		String output;
 		serializeJson(repDoc, output);
-		this->getMqtt()->publish(this->getPubfeed().c_str(), output.c_str(), 1);
+		this->getMqtt()->publish(this->getPubfeed().c_str(), output.c_str(), 0, 2);
 	}
 
 	void Quest_Board_Manager::removeAllClients()
@@ -106,7 +106,7 @@ namespace SEFL
 	{
 		if ((millis() - this->callback_timestamp) > SEFL::CALLBACK_TIMEOUT)
 		{
-			if (!this->getMqtt()->ping())
+			if (!this->getMqtt()->connected())
 			{
 				this->getMqtt()->disconnect();
 			}
@@ -117,10 +117,10 @@ namespace SEFL
 		{
 			int8_t ret;
 			Logger::notice(this->name_, "Connecting to MQTT... ");
-			while ((ret = this->getMqtt()->connect()) != 0)
+			while ((ret = this->getMqtt()->connect(room_config_.IP, room_config_.username, room_config_.password)) != 0)
 			{ // connect will return 0 for connected
-				SEFL::Logger::error(this->name_,
-									this->getMqtt()->connectErrorString(ret));
+				// SEFL::Logger::error(this->name_,
+				// 					this->getMqtt()->lastError());
 				Logger::notice(this->name_,
 							   "Retrying MQTT connection in 1 second...");
 				this->getMqtt()->disconnect();
@@ -130,18 +130,30 @@ namespace SEFL
 			this->send_config();
 			this->callback_timestamp = millis();
 		}
-		if (this->getMqtt()->processPackets(100))
+		uint32_t timestamp_for_message_avaiting = millis();
+		while (millis() - timestamp_for_message_avaiting < 100)
 		{
-			Logger::notice(this->name_, "packets received");
-			this->callback_timestamp = millis();
+			if (!this->getMqtt()->loop())
+			{
+				int8_t ret;
+				while ((ret = this->getMqtt()->connect(room_config_.IP, room_config_.username, room_config_.password)) != 0)
+				{ // connect will return 0 for connected
+					// SEFL::Logger::error(this->name_,
+					// 					this->getMqtt()->lastError());
+					Logger::notice(this->name_,
+								   "Retrying MQTT connection in 1 second...");
+					this->getMqtt()->disconnect();
+					delay(2000); // wait 1 seconds
+				}
+				Logger::notice(this->name_, "MQTT Connected!");
+				this->send_config();
+				this->callback_timestamp = millis();
+			}
 		}
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{
 
 			Logger::notice(this->name_, "shut down");
-			//		for (int i = 0; i < 8; i++) {
-			//			digitalWrite(6 + i, LOW);
-			//		}
 			this->shutdown_timestamp = 0;
 		}
 		if (this->power_status_ && this->shutdown_timestamp)

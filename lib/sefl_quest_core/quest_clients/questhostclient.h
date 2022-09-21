@@ -25,7 +25,7 @@ namespace SEFL
 
 	public:
 		bool reset_trigger_;
-		Quest_Host_Client(MQTT &mqtt, const char *name, const char *placement = DEFAULT_PLACEMENT, const char *in_topic = DEFAUT_IN_TOPIC,
+		Quest_Host_Client(MQTTClient &mqtt, const char *name, const char *placement = DEFAULT_PLACEMENT, const char *in_topic = DEFAUT_IN_TOPIC,
 						  const char *out_topic = DEFAUT_OUT_TOPIC, SEFL::Language language = UKR);
 		virtual ~Quest_Host_Client();
 		virtual void act() override;

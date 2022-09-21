@@ -19,7 +19,7 @@ namespace SEFL
 namespace SEFL
 {
 
-	Quest_Start_Button::Quest_Start_Button(MQTT &mqtt, uint8_t start_pin,
+	Quest_Start_Button::Quest_Start_Button(MQTTClient &mqtt, uint8_t start_pin,
 										   const char *name, uint8_t reset_status, const char *placement,
 										   const char *in_topic, const char *out_topic, SEFL::Language language) : Quest_Client(mqtt, name, START_BUTTON, reset_status, placement,
 																																in_topic, out_topic, language),
@@ -75,7 +75,7 @@ namespace SEFL
 		{
 		case SEFL::DirectCommands::PING_COMMAND:
 		{
-			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 1);
+			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
 		}
 		break;
 		case SEFL::DirectCommands::STATUS_COMMAND:
@@ -89,7 +89,7 @@ namespace SEFL
 			repDoc["SubcommandId"] = tstatus;
 			JsonArray jdata = repDoc.createNestedArray("Data");
 			serializeJson(repDoc, output);
-			this->getMqtt()->publish(this->getPubfeed().c_str(), output, 1);
+			this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
 		}
 		break;
 		case SEFL::DirectCommands::ACTION_COMMAND:
@@ -105,7 +105,7 @@ namespace SEFL
 			//
 			//		JsonArray jdata = repDoc.createNestedArray("Data");
 			//		serializeJson(repDoc, output);
-			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 1);
+			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
 		}
 		break;
 		case SEFL::DirectCommands::DEACTIVATE_DEVICE_COMMAND:
@@ -196,7 +196,7 @@ namespace SEFL
 				jdata.add(this->data[i]);
 		}
 		serializeJson(repDoc, output);
-		this->getMqtt()->publish(this->getPubfeed().c_str(), output, 1);
+		this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
 	}
 
 } /* namespace SEFL */

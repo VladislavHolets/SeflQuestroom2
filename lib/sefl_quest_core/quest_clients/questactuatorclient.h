@@ -14,11 +14,6 @@
 
 namespace SEFL
 {
-	class MQTT;
-} /* namespace SEFL */
-
-namespace SEFL
-{
 
 	class Quest_Actuator_Client : public Quest_Client
 	{
@@ -26,7 +21,7 @@ namespace SEFL
 		SEFL::ActuatorClientStatuses status_;
 
 	public:
-		Quest_Actuator_Client(MQTT &mqtt,
+		Quest_Actuator_Client(MQTTClient &mqtt,
 							  const char *name = DEFAULT_DEVICE_NAME, uint8_t reset_status = 1, const char *placement = DEFAULT_PLACEMENT, const char *in_topic = DEFAUT_IN_TOPIC,
 							  const char *out_topic = DEFAUT_OUT_TOPIC, SEFL::Language language = UKR);
 		virtual ~Quest_Actuator_Client();

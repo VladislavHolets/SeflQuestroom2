@@ -21,7 +21,7 @@ namespace SEFL
 		SEFL::SensorClientStatuses status_;
 
 	public:
-		Quest_Sensor_Client(MQTT &mqtt, const char *name = DEFAULT_DEVICE_NAME,
+		Quest_Sensor_Client(MQTTClient &mqtt, const char *name = DEFAULT_DEVICE_NAME,
 							uint8_t reset_status = 1, const char *placement = DEFAULT_PLACEMENT,
 							const char *in_topic = DEFAUT_IN_TOPIC, const char *out_topic = DEFAUT_OUT_TOPIC, SEFL::Language language = UKR);
 		virtual ~Quest_Sensor_Client();

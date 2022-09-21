@@ -44,7 +44,7 @@ namespace SEFL
 		{
 		case SEFL::DirectCommands::PING_COMMAND:
 		{
-			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 1);
+			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
 		}
 		break;
 		case SEFL::DirectCommands::RESET_COMMAND:
@@ -64,7 +64,7 @@ namespace SEFL
 	{
 	}
 
-	Quest_Host_Client::Quest_Host_Client(MQTT &mqtt, const char *name,
+	Quest_Host_Client::Quest_Host_Client(MQTTClient &mqtt, const char *name,
 										 const char *placement, const char *in_topic, const char *out_topic,
 										 SEFL::Language language) : Quest_Client(mqtt, name, HOST, 0, placement, in_topic, out_topic,
 																				 language),

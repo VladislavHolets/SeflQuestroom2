@@ -272,6 +272,14 @@ namespace SEFL
 	}
 	bool Quest_Board_Manager::checkSubscribitions(String &topic_name, String &payload_val)
 	{
+		if (topic_name.equals(this->getSubfeed()))
+		{
+			this->pushToCallbacksQueue(*this, payload_val);
+		}
+		if (topic_name.equals(this->getHost()->getSubfeed()))
+		{
+			this->pushToCallbacksQueue(*(this->getHost()), payload_val);
+		}
 		for (auto client : this->clients_)
 		{
 			if (topic_name
@@ -280,7 +288,7 @@ namespace SEFL
 		}
 	}
 
-	bool Quest_Board_Manager::pushToCallbacksQueue(Quest_Client &client, String &payload_val)
+	bool Quest_Board_Manager::pushToCallbacksQueue(MQTT_Two_Way_Interactor &client, String &payload_val)
 	{
 		CallbackItem *item = new CallbackItem();
 		item->client = &client;

@@ -24,7 +24,7 @@ namespace SEFL
 	{
 		struct CallbackItem
 		{
-			Quest_Client *client;
+			MQTT_Two_Way_Interactor *client;
 			String *payload;
 		};
 
@@ -61,7 +61,7 @@ namespace SEFL
 		bool isPowerStatus() const;
 
 		bool checkSubscribitions(String &topic_name, String &payload_val);
-		bool pushToCallbacksQueue(Quest_Client &client, String &payload_val);
+		bool pushToCallbacksQueue(MQTT_Two_Way_Interactor &client, String &payload_val);
 		void processCallbackQueueOne();
 		void processCallbackQueueAll();
 		void processCallbackQueue(int number);

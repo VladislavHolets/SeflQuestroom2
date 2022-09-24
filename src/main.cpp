@@ -145,6 +145,7 @@ void setup()
 
   SEFL::Logger::verbose("main", "Starting ethernet");
   Ethernet.begin(mac);
+  mqttclient.begin(SEFL::DEFAULT_MQTT_CONFIG.IP, client);
   SEFL::Logger::verbose("main", "Started ethernet");
 
   SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");

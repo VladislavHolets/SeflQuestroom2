@@ -8,7 +8,7 @@
 #ifndef TOMBSTONE_H_
 #define TOMBSTONE_H_
 
-#include <quest_clients/questbasicclient.h>
+#include <sefl_quest_core.h>
 
 namespace SEFL
 {

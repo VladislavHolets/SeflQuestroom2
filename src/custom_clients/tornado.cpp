@@ -6,10 +6,7 @@
  */
 
 #include <DFRobotDFPlayerMini.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
-#include <custom_clients/tornado.h>
+#include "tornado.h"
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 #include <wiring_time.h>

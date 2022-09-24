@@ -5,11 +5,7 @@
  *      Author: piatk
  */
 
-#include <custom_clients/contract.h>
-#include <constants.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
+#include "contract.h"
 #include <sys/_stdint.h>
 #include <wiring_constants.h>
 #include <wiring_digital.h>

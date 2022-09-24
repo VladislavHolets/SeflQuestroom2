@@ -7,10 +7,8 @@
 
 #ifndef TRONSEGMENTTIMER_H_
 #define TRONSEGMENTTIMER_H_
+#include <sefl_quest_core.h>
 
-#include <peripherals/hc595driver.h>
-#include <constants.h>
-#include <quest_clients/questbasicclient.h>
 #include <sys/_stdint.h>
 
 namespace SEFL

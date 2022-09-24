@@ -7,9 +7,7 @@
 
 #ifndef ELEVATORIN_H_
 #define ELEVATORIN_H_
-
-#include <constants.h>
-#include <quest_clients/questbasicclient.h>
+#include <sefl_quest_core.h>
 #include <sys/_stdint.h>
 
 namespace SEFL

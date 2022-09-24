@@ -5,12 +5,8 @@
  *      Author: piatk
  */
 
-#include <constants.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
 #include <sys/_stdint.h>
-#include <custom_clients/tombstone.h>
+#include "tombstone.h"
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 

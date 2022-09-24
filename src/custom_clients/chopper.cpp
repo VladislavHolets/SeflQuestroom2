@@ -5,11 +5,8 @@
  *      Author: piatk
  */
 
-#include <custom_clients/chopper.h>
+#include "chopper.h"
 #include <DFRobotDFPlayerMini.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
 
 bool starterfl = 0;
 bool chargerflag = 0;

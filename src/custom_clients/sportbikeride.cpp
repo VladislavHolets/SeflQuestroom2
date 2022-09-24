@@ -7,9 +7,7 @@
 
 #include <DFRobotDFPlayerMini.h>
 #include <PCA9685.h>
-#include <utils/logger.h>
-#include <peripherals/pwmpinsextender.h>
-#include <custom_clients/sportbikeride.h>
+#include "sportbikeride.h"
 #include <wiring_constants.h>
 #include <wiring_time.h>
 

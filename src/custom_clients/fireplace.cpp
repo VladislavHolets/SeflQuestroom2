@@ -6,10 +6,7 @@
  */
 
 #include <DFRobotDFPlayerMini.h>
-#include <custom_clients/fireplace.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
+#include "fireplace.h"
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 

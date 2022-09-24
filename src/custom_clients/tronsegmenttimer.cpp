@@ -5,7 +5,7 @@
  *      Author: vladi
  */
 
-#include <custom_clients/tronsegmenttimer.h>
+#include "tronsegmenttimer.h"
 
 namespace SEFL
 {

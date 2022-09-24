@@ -4,10 +4,7 @@
  *  Created on: Jun 8, 2021
  *      Author: vladi
  */
-
-#include <peripherals/pwmpinsextender.h>
-#include <peripherals/multpinsextender.h>
-#include <custom_clients/tronledmatrixpuzzle.h>
+#include "tronledmatrixpuzzle.h"
 
 namespace SEFL
 {

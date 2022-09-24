@@ -7,11 +7,8 @@
 
 #include <Adafruit_NeoPixel.h>
 #include <DFRobotDFPlayerMini.h>
-#include <custom_clients/labyrinth.h>
-#include <custom_clients/magnet.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <variants/blackpill_variant.hpp>
+#include "labyrinth.h"
+#include "magnet.h"
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 #include <wiring_time.h>

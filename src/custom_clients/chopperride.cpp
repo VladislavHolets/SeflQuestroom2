@@ -5,11 +5,8 @@
  *      Author: piatk
  */
 
-#include <custom_clients/chopperride.h>
+#include "chopperride.h"
 #include <DFRobotDFPlayerMini.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 #include <wiring_time.h>

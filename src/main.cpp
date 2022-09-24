@@ -10,22 +10,13 @@
 #include <wiring_digital.h>
 #include <wiring_time.h>
 #include <Wire.h>
-//#include <MQTT.h>
-#include <variants/blackpill_variant.hpp>
-#include <constants.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
-#include <mqtt_wrappers/MQTTClientObjectBound.h>
-#include <quest_clients/questboardmanager.h>
-#include <custom_clients/elevatorin.h>
-#include <custom_clients/labyrinth.h>
-#include <custom_clients/elevatorout.h>
-#include <custom_clients/magnet.h>
-#include <custom_clients/tornado.h>
-#include <custom_clients/underwater.h>
+#include <sefl_quest_core.h>
+#include "custom_clients/crypt.h"
+#include "custom_clients/tombstone.h"
+#include "custom_clients/contract.h"
+#include "custom_clients/magnet.h"
 
-#define Uniboard 2
+#define Uniboard 1
 using namespace SEFL;
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
@@ -135,7 +126,7 @@ void setup()
   SEFL::Logger::verbose("main", "Inited ethernet");
 
   SEFL::Logger::verbose("main", "Starting MQTT_Manager instance");
-  // SEFL::MQTT_Manager manager(&client, SEFL::DEFAULT_MQTT_CONFIG.IP,
+  // SEFL::MQTT_Manager mqttclient(&client, SEFL::DEFAULT_MQTT_CONFIG.IP,
   //                            SEFL::DEFAULT_MQTT_CONFIG.port, SEFL::DEFAULT_MQTT_CONFIG.username,
   //                            SEFL::DEFAULT_MQTT_CONFIG.password);
 
@@ -151,7 +142,7 @@ void setup()
   SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
 
 #if Uniboard == 1
-  SEFL::Quest_Board_Manager b_manager(manager, "U1", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U1", "gr22");
 #endif
 
 #if Uniboard == 2
@@ -159,20 +150,20 @@ void setup()
 #endif
 
 #if Uniboard == 3
-  SEFL::Quest_Board_Manager b_manager(manager, "U3", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U3", "gr22");
 #endif
 
 #if Uniboard == 4
-  SEFL::Quest_Board_Manager b_manager(manager, "U4", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U4", "gr22");
 #endif
 
 #if Uniboard == 5
-  SEFL::Quest_Board_Manager b_manager(manager, "U5", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U5", "gr22");
 #endif
 
   /*
   #if Uniboard == 10
-    SEFL::Quest_Board_Manager b_manager(manager, "gbu4", "gb21");
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "gbu4", "gb21");
   #endif
   */
 
@@ -184,33 +175,33 @@ void setup()
 
   // board 1
 #if Uniboard == 1
-  SEFL::Quest_Start_Button start_button(manager, 0, "hardware_start_button", 2, "gr22");
+  SEFL::Quest_Start_Button start_button(mqttclient, 0, "hardware_start_button", 2, "gr22");
 
-  SEFL::Magnet entrance_magnet(manager, "entrance_magnet", 1, "gr22");
+  SEFL::Magnet entrance_magnet(mqttclient, "entrance_magnet", 1, "gr22");
   entrance_magnet.setInverted(true);
   entrance_magnet.setPinNumber(0);
 
-  SEFL::Crypt crypt(manager, "crypt", 1, "gr22");
+  SEFL::Crypt crypt(mqttclient, "crypt", 1, "gr22");
   crypt.setRightTorch(1);
   crypt.setRightRelay(1);
   crypt.setLeftTorch(2);
   crypt.setLeftRelay(2);
 
-  SEFL::Magnet portal_magnet(manager, "portal_magnet", 2, "gr22");
+  SEFL::Magnet portal_magnet(mqttclient, "portal_magnet", 2, "gr22");
   portal_magnet.setInverted(true);
   portal_magnet.setPinNumber(3);
 
-  SEFL::Magnet main_light(manager, "main_light", 1, "gr22");
+  SEFL::Magnet main_light(mqttclient, "main_light", 1, "gr22");
   main_light.setInverted(false);
   main_light.setPinNumber(4);
 
-  SEFL::Tombstone tombstone(manager, "tombstone", 1, "gr22");
+  SEFL::Tombstone tombstone(mqttclient, "tombstone", 1, "gr22");
   tombstone.setMagnetTombstone(5);
   tombstone.setMotojacketButton(4);
 
   tombstone.setInverted(false);
 
-  SEFL::Contract contract(manager, "contract", 1, "gr22");
+  SEFL::Contract contract(mqttclient, "contract", 1, "gr22");
   contract.setHellLight(6);
   contract.setHellMagnet(7);
   contract.setSwithContract(5);
@@ -329,15 +320,15 @@ void setup()
 // board 3
 #if Uniboard == 3
 
-  SEFL::Magnet flat_light(manager, "flat_light", 1, "gr22");
+  SEFL::Magnet flat_light(mqttclient, "flat_light", 1, "gr22");
   flat_light.setInverted(true);
   flat_light.setPinNumber(12);
 
-  SEFL::Magnet garage_light(manager, "garage_light", 1, "gr22");
+  SEFL::Magnet garage_light(mqttclient, "garage_light", 1, "gr22");
   garage_light.setInverted(true);
   garage_light.setPinNumber(11);
 
-  SEFL::Motorcycles motorcycles(manager, "motorcycles", 1, "gr22");
+  SEFL::Motorcycles motorcycles(mqttclient, "motorcycles", 1, "gr22");
   // setup player
   motorcycles.setPlayer(&player);
   // setup inputs
@@ -351,7 +342,7 @@ void setup()
   motorcycles.setMotorcyclesAddressLed(14); // ---->> PB_2 ближайший к дф плееру
   motorcycles.setArduinoPower(6);
 
-  SEFL::Keyboard keyboard(manager, "keyboard", 1, "gr22");
+  SEFL::Keyboard keyboard(mqttclient, "keyboard", 1, "gr22");
   // setup player
   keyboard.setPlayer(&player);
   // setup inputs
@@ -360,7 +351,7 @@ void setup()
   keyboard.setKeyboardMagnet(1);
   keyboard.setFireplaceSmokeRelay(13);
 
-  SEFL::Fireplace fireplace(manager, "fireplace", 1, "gr22");
+  SEFL::Fireplace fireplace(mqttclient, "fireplace", 1, "gr22");
   // setup player
   fireplace.setPlayer(&player);
   // setup inputs
@@ -378,15 +369,15 @@ void setup()
 // board 4
 #if Uniboard == 4
 
-  SEFL::Magnet garage_magnet(manager, "garage_magnet", 2, "gr22");
+  SEFL::Magnet garage_magnet(mqttclient, "garage_magnet", 2, "gr22");
   garage_magnet.setInverted(true);
   garage_magnet.setPinNumber(0);
 
-  SEFL::Magnet sportbike_light(manager, "sportbike_light", 1, "gr22");
+  SEFL::Magnet sportbike_light(mqttclient, "sportbike_light", 1, "gr22");
   sportbike_light.setInverted(true);
   sportbike_light.setPinNumber(5);
 
-  SEFL::Sportbike sportbike(manager, "sport_bike", 1, "gr22");
+  SEFL::Sportbike sportbike(mqttclient, "sport_bike", 1, "gr22");
   // setup player
   sportbike.setPlayer(&player);
   // setup inputs
@@ -406,7 +397,7 @@ void setup()
   sportbike.setDashboardLight(5);
   sportbike.setTachometerPower(10);
 
-  SEFL::Sportbikeride sportbikeride(manager, "sport_bike_ride", 1, "gr22");
+  SEFL::Sportbikeride sportbikeride(mqttclient, "sport_bike_ride", 1, "gr22");
   // setup player
   sportbikeride.setPlayer(&player);
   // setup inputs
@@ -431,11 +422,11 @@ void setup()
 // board 5
 #if Uniboard == 5
 
-  SEFL::Magnet cargoLift_magnet(manager, "cargo_lift_magnet", 2, "gr22");
+  SEFL::Magnet cargoLift_magnet(mqttclient, "cargo_lift_magnet", 2, "gr22");
   cargoLift_magnet.setInverted(true);
   cargoLift_magnet.setPinNumber(1);
 
-  SEFL::Chains chains(manager, "chains", 1, "gr22");
+  SEFL::Chains chains(mqttclient, "chains", 1, "gr22");
   // setup player
 
   // setup inputs
@@ -446,7 +437,7 @@ void setup()
   chains.setChainsLeftMagnet(2);
   chains.setChainsRightMagnet(0);
 
-  SEFL::ElevatorChopperDown elevatorChopperDown(manager, "elevator_chopper_down", 1, "gr22");
+  SEFL::ElevatorChopperDown elevatorChopperDown(mqttclient, "elevator_chopper_down", 1, "gr22");
   // setup player
 
   // setup inputs
@@ -459,7 +450,7 @@ void setup()
   elevatorChopperDown.setFabricMagnet(5);
   elevatorChopperDown.setChopperLight(4);
 
-  SEFL::ElevatorChopperUp elevatorChopperUp(manager, "elevator_chopper_up", 1, "gr22");
+  SEFL::ElevatorChopperUp elevatorChopperUp(mqttclient, "elevator_chopper_up", 1, "gr22");
   // setup player
 
   // setup inputs
@@ -470,7 +461,7 @@ void setup()
   elevatorChopperUp.setWinchOnRelay(14);
   elevatorChopperUp.setWinchUpRelay(12);
 
-  SEFL::Chopper chopper(manager, "chopper", 1, "gr22");
+  SEFL::Chopper chopper(mqttclient, "chopper", 1, "gr22");
   // setup player
   chopper.setPlayer(&player);
   // setup inputs
@@ -480,7 +471,7 @@ void setup()
   chopper.setChopperLight(4);
   chopper.setChopperAddressLed(6);
 
-  SEFL::Chopperride chopperride(manager, "chopper_ride", 1, "gr22");
+  SEFL::Chopperride chopperride(mqttclient, "chopper_ride", 1, "gr22");
   // setup player
   chopperride.setPlayer(&player);
   // setup inputs
@@ -493,7 +484,7 @@ void setup()
   chopperride.setChopperAddressLed(6);
   chopperride.setContactMagnet(8);
 
-  SEFL::Magnet cargo_light(manager, "chopper_light", 1, "gr22");
+  SEFL::Magnet cargo_light(mqttclient, "chopper_light", 1, "gr22");
   cargo_light.setInverted(false);
   cargo_light.setPinNumber(11);
 
@@ -505,12 +496,12 @@ void setup()
     uint8_t magnet_pin = 4;
     uint8_t sensor_pins[4] = { 0, 1, 2, 3 };
     uint8_t servo_pins[4] = { 0, 1, 2, 3 };
-    SEFL::Bookshelf book_shelf(manager, servo_pins, sensor_pins, magnet_pin,
+    SEFL::Bookshelf book_shelf(mqttclient, servo_pins, sensor_pins, magnet_pin,
         "book_shelf", 1, "gb21","in","out",SEFL::Language::ENG);
-    SEFL::Magnet entrance(manager,"entrance",5,"gb21");
+    SEFL::Magnet entrance(mqttclient,"entrance",5,"gb21");
     entrance.setInverted(true);
     entrance.setPinNumber(5);
-    SEFL::Magnet book_shelf_light(manager,"book_shelf_light",5,"gb21");
+    SEFL::Magnet book_shelf_light(mqttclient,"book_shelf_light",5,"gb21");
     book_shelf_light.setPinNumber(6);
     book_shelf_light.setInverted(true);
 

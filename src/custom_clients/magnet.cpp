@@ -5,10 +5,7 @@
  *      Author: piatk
  */
 
-#include <custom_clients/magnet.h>
-#include <constants.h>
-#include <utils/logger.h>
-#include <peripherals/pwmpinsextender.h>
+#include "magnet.h"
 #include <sys/_stdint.h>
 
 namespace SEFL

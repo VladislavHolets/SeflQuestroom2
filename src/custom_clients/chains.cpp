@@ -5,10 +5,7 @@
  *      Author: piatk
  */
 
-#include <custom_clients/chains.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
+#include "chains.h"
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 #include <wiring_time.h>

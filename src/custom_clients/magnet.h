@@ -7,8 +7,7 @@
 
 #ifndef MAGNET_H_
 #define MAGNET_H_
-
-#include <quest_clients/questactuatorclient.h>
+#include <sefl_quest_core.h>
 
 namespace SEFL
 {

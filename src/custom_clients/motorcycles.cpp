@@ -6,11 +6,8 @@
  */
 
 #include <Adafruit_NeoPixel.h>
-#include <custom_clients/motorcycles.h>
+#include "motorcycles.h"
 #include <PinNames.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 #include <WMath.h>

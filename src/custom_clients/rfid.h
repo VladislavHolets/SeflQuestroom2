@@ -8,8 +8,8 @@
 #ifndef RFID_H_
 #define RFID_H_
 
-#include <peripherals/rfid1.h>
-#include <quest_clients/questsensorclient.h>
+#include <sefl_quest_core.h>
+
 #include <sys/_stdint.h>
 
 namespace SEFL

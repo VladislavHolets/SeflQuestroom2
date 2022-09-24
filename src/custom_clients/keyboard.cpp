@@ -6,11 +6,7 @@
  */
 
 #include <DFRobotDFPlayerMini.h>
-#include <custom_clients/keyboard.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
-
+#include "keyboard.h"
 uint8_t prevkey = 0;
 uint8_t pin;
 

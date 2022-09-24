@@ -8,7 +8,7 @@
 #ifndef HOME_H_
 #define HOME_H_
 
-#include <quest_clients/questbasicclient.h>
+#include <sefl_quest_core.h>
 
 namespace SEFL
 {

@@ -7,10 +7,7 @@
 
 #include <DFRobotDFPlayerMini.h>
 #include <Printable.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
-#include <custom_clients/underwater.h>
+#include "underwater.h"
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 #include <WString.h>

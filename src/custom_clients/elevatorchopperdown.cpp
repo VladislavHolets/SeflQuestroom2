@@ -5,10 +5,7 @@
  *      Author: piatk
  */
 
-#include <custom_clients/elevatorchopperdown.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
+#include "elevatorchopperdown.h"
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 

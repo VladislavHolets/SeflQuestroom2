@@ -5,9 +5,7 @@
  *      Author: piatk
  */
 
-#include <custom_clients/bookshelf.h>
-#include <peripherals/multpinsextender.h>
-#include <peripherals/pwmpinsextender.h>
+#include "bookshelf.h"
 #include <USBSerial.h>
 #include <wiring_constants.h>
 #include <wiring_digital.h>

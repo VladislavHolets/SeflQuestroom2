@@ -8,7 +8,7 @@
 #ifndef CONTRACT_H_
 #define CONTRACT_H_
 
-#include <quest_clients/questbasicclient.h>
+#include <sefl_quest_core.h>
 
 namespace SEFL
 {

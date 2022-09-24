@@ -6,10 +6,8 @@
  */
 
 #include <DFRobotDFPlayerMini.h>
-#include <custom_clients/elevatorout.h>
-#include <custom_clients/magnet.h>
-#include <utils/logger.h>
-#include <peripherals/multpinsextender.h>
+#include "elevatorout.h"
+#include "magnet.h"
 #include <wiring_constants.h>
 #include <wiring_digital.h>
 #include <wiring_time.h>

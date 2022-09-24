@@ -8,8 +8,7 @@
 #ifndef SPORTBIKERIDE_H_
 #define SPORTBIKERIDE_H_
 
-#include <constants.h>
-#include <quest_clients/questbasicclient.h>
+#include <sefl_quest_core.h>
 #include <sys/_stdint.h>
 
 class PCA9685;

@@ -8,8 +8,8 @@
 #ifndef UNDERWATER_H_
 #define UNDERWATER_H_
 
-#include <constants.h>
-#include <quest_clients/questbasicclient.h>
+#include <sefl_quest_core.h>
+
 #include <sys/_stdint.h>
 
 class DFRobotDFPlayerMini;

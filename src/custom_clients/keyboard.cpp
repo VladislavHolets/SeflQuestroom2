@@ -167,7 +167,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Keyboard::getKeyboardMagnet() const
+	uint8_t Keyboard::getKeyboardMagnet()
 	{
 		return keyboardMagnet;
 	}
@@ -177,7 +177,7 @@ namespace SEFL
 		this->keyboardMagnet = keyboardMagnet;
 	}
 
-	uint8_t Keyboard::getKeyboardPin() const
+	uint8_t Keyboard::getKeyboardPin()
 	{
 		return keyboardPin;
 	}
@@ -187,12 +187,12 @@ namespace SEFL
 		this->keyboardPin = keyboardPin;
 	}
 
-	DFRobotDFPlayerMini *Keyboard::getPlayer() const
+	DFRobotDFPlayerMini *Keyboard::getPlayer()
 	{
 		return player;
 	}
 
-	uint8_t Keyboard::getFireplaceSmokeRelay() const
+	uint8_t Keyboard::getFireplaceSmokeRelay()
 	{
 		return fireplaceSmokeRelay;
 	}

@@ -29,13 +29,13 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint8_t getChainsLeftButton() const;
+		uint8_t getChainsLeftButton();
 		void setChainsLeftButton(uint8_t chainsLeftButton);
-		uint8_t getChainsLeftMagnet() const;
+		uint8_t getChainsLeftMagnet();
 		void setChainsLeftMagnet(uint8_t chainsLeftMagnet);
-		uint8_t getChainsRightButton() const;
+		uint8_t getChainsRightButton();
 		void setChainsRightButton(uint8_t chainsRightButton);
-		uint8_t getChainsRightMagnet() const;
+		uint8_t getChainsRightMagnet();
 		void setChainsRightMagnet(uint8_t chainsRightMagnet);
 	};
 

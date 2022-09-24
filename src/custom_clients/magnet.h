@@ -25,9 +25,9 @@ namespace SEFL
 		virtual ~Magnet();
 		virtual void onOn() override;
 		virtual void onOff() override;
-		bool isInverted() const;
+		bool isInverted();
 		void setInverted(bool inverted);
-		uint8_t getPinNumber() const;
+		uint8_t getPinNumber();
 		void setPinNumber(uint8_t pinNumber);
 	};
 

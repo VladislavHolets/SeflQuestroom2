@@ -333,7 +333,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Labyrinth::getLabyrinthAddressLed() const
+	uint8_t Labyrinth::getLabyrinthAddressLed()
 	{
 		return labyrinthAddressLed;
 	}
@@ -343,7 +343,7 @@ namespace SEFL
 		this->labyrinthAddressLed = labyrinthAddressLed;
 	}
 
-	uint8_t Labyrinth::getLabyrinthLeftButton() const
+	uint8_t Labyrinth::getLabyrinthLeftButton()
 	{
 		return labyrinthLeftButton;
 	}
@@ -353,7 +353,7 @@ namespace SEFL
 		this->labyrinthLeftButton = labyrinthLeftButton;
 	}
 
-	uint8_t Labyrinth::getLabyrinthRightButton() const
+	uint8_t Labyrinth::getLabyrinthRightButton()
 	{
 		return labyrinthRightButton;
 	}
@@ -363,12 +363,12 @@ namespace SEFL
 		this->labyrinthRightButton = labyrinthRightButton;
 	}
 
-	DFRobotDFPlayerMini *Labyrinth::getPlayer() const
+	DFRobotDFPlayerMini *Labyrinth::getPlayer()
 	{
 		return player;
 	}
 
-	uint8_t Labyrinth::getElevatorInSwith() const
+	uint8_t Labyrinth::getElevatorInSwith()
 	{
 		return elevatorInSwith;
 	}
@@ -378,12 +378,12 @@ namespace SEFL
 		this->elevatorInSwith = elevatorInSwith;
 	}
 
-	uint8_t Labyrinth::getElevatorOutSwith() const
+	uint8_t Labyrinth::getElevatorOutSwith()
 	{
 		return elevatorOutSwith;
 	}
 
-	uint8_t Labyrinth::getLabyrinthDownButton() const
+	uint8_t Labyrinth::getLabyrinthDownButton()
 	{
 		return labyrinthDownButton;
 	}
@@ -393,12 +393,12 @@ namespace SEFL
 		this->labyrinthDownButton = labyrinthDownButton;
 	}
 
-	uint8_t Labyrinth::getLabyrinthUpButton() const
+	uint8_t Labyrinth::getLabyrinthUpButton()
 	{
 		return labyrinthUpButton;
 	}
 
-	bool Labyrinth::isFlagFinish() const
+	bool Labyrinth::isFlagFinish()
 	{
 		return flag_finish;
 	}
@@ -428,7 +428,7 @@ namespace SEFL
 		flag_finish = flagFinish;
 	}
 
-	uint64_t Labyrinth::getTimer() const
+	uint64_t Labyrinth::getTimer()
 	{
 		return timer;
 	}

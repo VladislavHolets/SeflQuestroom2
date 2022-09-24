@@ -3,21 +3,30 @@
 #include <SoftwareSerial.h>
 #include <Ethernet.h>
 #include <EthernetClient.h>
-#include <MQTT.h>
+#include <PCA9685.h>
+#include <PinNames.h>
+#include <variant.h>
+#include <wiring_constants.h>
+#include <wiring_digital.h>
+#include <wiring_time.h>
+#include <Wire.h>
+//#include <MQTT.h>
 #include <variants/blackpill_variant.hpp>
 #include <constants.h>
 #include <utils/logger.h>
-#include <quest_clients/questboardmanager.h>
-#include <mqtt_wrappers/MQTTClientObjectBound.h>
 #include <peripherals/multpinsextender.h>
 #include <peripherals/pwmpinsextender.h>
+#include <mqtt_wrappers/MQTTClientObjectBound.h>
+#include <quest_clients/questboardmanager.h>
 #include <custom_clients/elevatorin.h>
 #include <custom_clients/labyrinth.h>
 #include <custom_clients/elevatorout.h>
 #include <custom_clients/magnet.h>
 #include <custom_clients/tornado.h>
 #include <custom_clients/underwater.h>
+
 #define Uniboard 2
+using namespace SEFL;
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
 // PCA9685_ServoEval pwmServo1;
@@ -129,6 +138,7 @@ void setup()
   // SEFL::MQTT_Manager manager(&client, SEFL::DEFAULT_MQTT_CONFIG.IP,
   //                            SEFL::DEFAULT_MQTT_CONFIG.port, SEFL::DEFAULT_MQTT_CONFIG.username,
   //                            SEFL::DEFAULT_MQTT_CONFIG.password);
+
   SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
 
   SEFL::Logger::verbose("main", "Started MQTT_Manager instance");

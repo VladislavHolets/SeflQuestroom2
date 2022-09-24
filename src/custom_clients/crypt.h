@@ -27,13 +27,13 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint8_t getLeftRelay() const;
+		uint8_t getLeftRelay();
 		void setLeftRelay(uint8_t leftRelay);
-		uint8_t getLeftTorch() const;
+		uint8_t getLeftTorch();
 		void setLeftTorch(uint8_t leftTorch);
-		uint8_t getRightRelay() const;
+		uint8_t getRightRelay();
 		void setRightRelay(uint8_t rightRelay);
-		uint8_t getRightTorch() const;
+		uint8_t getRightTorch();
 		void setRightTorch(uint8_t rightTorch);
 	};
 

@@ -326,7 +326,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Tornado::getMotorCentre() const
+	uint8_t Tornado::getMotorCentre()
 	{
 		return motor_centre;
 	}
@@ -336,7 +336,7 @@ namespace SEFL
 		motor_centre = motorCentre;
 	}
 
-	uint8_t Tornado::getMotorLeft() const
+	uint8_t Tornado::getMotorLeft()
 	{
 		return motor_left;
 	}
@@ -351,7 +351,7 @@ namespace SEFL
 		this->player = player;
 	}
 
-	uint8_t Tornado::getPotLb() const
+	uint8_t Tornado::getPotLb()
 	{
 		return pot_lb;
 	}
@@ -361,7 +361,7 @@ namespace SEFL
 		pot_lb = potLb;
 	}
 
-	uint8_t Tornado::getPotLc() const
+	uint8_t Tornado::getPotLc()
 	{
 		return pot_lc;
 	}
@@ -371,7 +371,7 @@ namespace SEFL
 		pot_lc = potLc;
 	}
 
-	uint8_t Tornado::getPotLt() const
+	uint8_t Tornado::getPotLt()
 	{
 		return pot_lt;
 	}
@@ -381,7 +381,7 @@ namespace SEFL
 		pot_lt = potLt;
 	}
 
-	uint8_t Tornado::getRgbLightTornadoB() const
+	uint8_t Tornado::getRgbLightTornadoB()
 	{
 		return rgb_light_tornado_b;
 	}
@@ -391,7 +391,7 @@ namespace SEFL
 		rgb_light_tornado_b = rgbLightTornadoB;
 	}
 
-	uint8_t Tornado::getRgbLightTornadoG() const
+	uint8_t Tornado::getRgbLightTornadoG()
 	{
 		return rgb_light_tornado_g;
 	}
@@ -401,7 +401,7 @@ namespace SEFL
 		rgb_light_tornado_g = rgbLightTornadoG;
 	}
 
-	uint8_t Tornado::getRgbLightTornadoR() const
+	uint8_t Tornado::getRgbLightTornadoR()
 	{
 		return rgb_light_tornado_r;
 	}
@@ -411,7 +411,7 @@ namespace SEFL
 		rgb_light_tornado_r = rgbLightTornadoR;
 	}
 
-	uint8_t Tornado::getRgbLightUnderwatherB() const
+	uint8_t Tornado::getRgbLightUnderwatherB()
 	{
 		return rgb_light_underwather_b;
 	}
@@ -421,7 +421,7 @@ namespace SEFL
 		rgb_light_underwather_b = rgbLightUnderwatherB;
 	}
 
-	uint8_t Tornado::getRgbLightUnderwatherG() const
+	uint8_t Tornado::getRgbLightUnderwatherG()
 	{
 		return rgb_light_underwather_g;
 	}
@@ -431,7 +431,7 @@ namespace SEFL
 		rgb_light_underwather_g = rgbLightUnderwatherG;
 	}
 
-	uint8_t Tornado::getRgbLightUnderwatherR() const
+	uint8_t Tornado::getRgbLightUnderwatherR()
 	{
 		return rgb_light_underwather_r;
 	}
@@ -441,17 +441,17 @@ namespace SEFL
 		rgb_light_underwather_r = rgbLightUnderwatherR;
 	}
 
-	uint8_t Tornado::getTornadoMagnet() const
+	uint8_t Tornado::getTornadoMagnet()
 	{
 		return tornado_magnet;
 	}
 
-	uint8_t Tornado::getMotorRight() const
+	uint8_t Tornado::getMotorRight()
 	{
 		return motor_right;
 	}
 
-	uint64_t Tornado::getTiming() const
+	uint64_t Tornado::getTiming()
 	{
 		return timing;
 	}

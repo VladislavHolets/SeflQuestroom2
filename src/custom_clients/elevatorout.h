@@ -40,13 +40,13 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint8_t getElevatorInSwith() const;
+		uint8_t getElevatorInSwith();
 		void setElevatorInSwith(uint8_t elevatorInSwith);
-		uint8_t getElevatorOutSwith() const;
+		uint8_t getElevatorOutSwith();
 		void setElevatorOutSwith(uint8_t elevatorOutSwith);
-		DFRobotDFPlayerMini *getPlayer() const;
+		DFRobotDFPlayerMini *getPlayer();
 		void setPlayer(DFRobotDFPlayerMini *player);
-		uint8_t getFlag() const;
+		uint8_t getFlag();
 		void setFlag(uint8_t flag);
 
 		Magnet *getOutMagnet();

@@ -113,7 +113,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Chopper::getChopperAddressLed() const
+	uint8_t Chopper::getChopperAddressLed()
 	{
 		return chopperAddressLed;
 	}
@@ -123,7 +123,7 @@ namespace SEFL
 		this->chopperAddressLed = chopperAddressLed;
 	}
 
-	uint8_t Chopper::getChopperCharger() const
+	uint8_t Chopper::getChopperCharger()
 	{
 		return chopperCharger;
 	}
@@ -141,12 +141,12 @@ namespace SEFL
 	//	this->chopperLight = chopperLight;
 	// }
 
-	DFRobotDFPlayerMini *Chopper::getPlayer() const
+	DFRobotDFPlayerMini *Chopper::getPlayer()
 	{
 		return player;
 	}
 
-	uint8_t Chopper::getChopperStarter() const
+	uint8_t Chopper::getChopperStarter()
 	{
 		return chopperStarter;
 	}

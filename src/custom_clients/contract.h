@@ -27,15 +27,15 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint8_t getHellLight() const;
+		uint8_t getHellLight();
 		void setHellLight(uint8_t hellLight);
-		uint8_t getHellMagnet() const;
+		uint8_t getHellMagnet();
 		void setHellMagnet(uint8_t hellMagnet);
-		bool isInvertet() const;
+		bool isInvertet();
 		void setInvertet(bool invertet);
-		uint8_t getSmokeButton() const;
+		uint8_t getSmokeButton();
 		void setSmokeButton(uint8_t smokeButton);
-		uint8_t getSwithContract() const;
+		uint8_t getSwithContract();
 		void setSwithContract(uint8_t swithContract);
 	};
 

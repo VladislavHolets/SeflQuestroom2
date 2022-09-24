@@ -33,20 +33,20 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint8_t getCargoLiftSwitch() const;
+		uint8_t getCargoLiftSwitch();
 		void setCargoLiftSwitch(uint8_t cargoLiftSwitch);
 
-		uint8_t getFabricMagnet() const;
+		uint8_t getFabricMagnet();
 		void setFabricMagnet(uint8_t fabricMagnet);
-		uint8_t getWinchBottomSwitch() const;
+		uint8_t getWinchBottomSwitch();
 		void setWinchBottomSwitch(uint8_t winchBottomSwitch);
-		uint8_t getWinchDownRelay() const;
+		uint8_t getWinchDownRelay();
 		void setWinchDownRelay(uint8_t winchDownRelay);
-		uint8_t getWinchOnRelay() const;
+		uint8_t getWinchOnRelay();
 		void setWinchOnRelay(uint8_t winchOnRelay);
-		uint8_t getChopperLight() const;
+		uint8_t getChopperLight();
 		void setChopperLight(uint8_t chopperLight);
-		uint64_t getTimer() const;
+		uint64_t getTimer();
 		void setTimer(uint64_t timer);
 	};
 

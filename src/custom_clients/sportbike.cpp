@@ -497,7 +497,7 @@ namespace SEFL
 		}
 	}
 
-	DFRobotDFPlayerMini *Sportbike::getPlayer() const
+	DFRobotDFPlayerMini *Sportbike::getPlayer()
 	{
 		return player;
 	}
@@ -507,7 +507,7 @@ namespace SEFL
 		this->player = player;
 	}
 
-	uint8_t Sportbike::getSportbikeKey() const
+	uint8_t Sportbike::getSportbikeKey()
 	{
 		return sportbikeKey;
 	}
@@ -517,7 +517,7 @@ namespace SEFL
 		this->sportbikeKey = sportbikeKey;
 	}
 
-	uint8_t Sportbike::getSportbikeLeftButton() const
+	uint8_t Sportbike::getSportbikeLeftButton()
 	{
 		return sportbikeLeftButton;
 	}
@@ -527,7 +527,7 @@ namespace SEFL
 		this->sportbikeLeftButton = sportbikeLeftButton;
 	}
 
-	uint8_t Sportbike::getSportbikeRideLight() const
+	uint8_t Sportbike::getSportbikeRideLight()
 	{
 		return sportbikeRideLight;
 	}
@@ -537,7 +537,7 @@ namespace SEFL
 		this->sportbikeRideLight = sportbikeRideLight;
 	}
 
-	uint8_t Sportbike::getSportbikeRightButton() const
+	uint8_t Sportbike::getSportbikeRightButton()
 	{
 		return sportbikeRightButton;
 	}
@@ -547,12 +547,12 @@ namespace SEFL
 		this->sportbikeRightButton = sportbikeRightButton;
 	}
 
-	uint8_t Sportbike::getSportbikeThrottle() const
+	uint8_t Sportbike::getSportbikeThrottle()
 	{
 		return sportbikeThrottle;
 	}
 
-	uint8_t Sportbike::getSportbikeLeftRelay() const
+	uint8_t Sportbike::getSportbikeLeftRelay()
 	{
 		return sportbikeLeftRelay;
 	}
@@ -562,12 +562,12 @@ namespace SEFL
 		this->sportbikeLeftRelay = sportbikeLeftRelay;
 	}
 
-	uint8_t Sportbike::getSportbikeRightRelay() const
+	uint8_t Sportbike::getSportbikeRightRelay()
 	{
 		return sportbikeRightRelay;
 	}
 
-	uint8_t Sportbike::getSportbikeRideThrottle() const
+	uint8_t Sportbike::getSportbikeRideThrottle()
 	{
 	}
 
@@ -575,12 +575,12 @@ namespace SEFL
 	{
 	}
 
-	uint8_t Sportbike::getSportbikePowerRelay() const
+	uint8_t Sportbike::getSportbikePowerRelay()
 	{
 		return sportbikePowerRelay;
 	}
 
-	uint8_t Sportbike::getSportbikeLeftRelayFront() const
+	uint8_t Sportbike::getSportbikeLeftRelayFront()
 	{
 		return sportbikeLeftRelayFront;
 	}
@@ -590,22 +590,22 @@ namespace SEFL
 		this->sportbikeLeftRelayFront = sportbikeLeftRelayFront;
 	}
 
-	uint8_t Sportbike::getSportbikeRightRelayFront() const
+	uint8_t Sportbike::getSportbikeRightRelayFront()
 	{
 		return sportbikeRightRelayFront;
 	}
 
-	uint8_t Sportbike::getDashboardLight() const
+	uint8_t Sportbike::getDashboardLight()
 	{
 		return dashboardLight;
 	}
 
-	uint8_t Sportbike::getTachometerPower() const
+	uint8_t Sportbike::getTachometerPower()
 	{
 		return tachometerPower;
 	}
 
-	uint64_t Sportbike::getTimerForTrottle() const
+	uint64_t Sportbike::getTimerForTrottle()
 	{
 		return timerForTrottle;
 	}
@@ -615,7 +615,7 @@ namespace SEFL
 		this->timerForTrottle = timerForTrottle;
 	}
 
-	uint64_t Sportbike::getTimerForTachometer() const
+	uint64_t Sportbike::getTimerForTachometer()
 	{
 		return timerForTachometer;
 	}
@@ -625,17 +625,17 @@ namespace SEFL
 		this->timerForTachometer = timerForTachometer;
 	}
 
-	uint8_t Sportbike::getFlagTachometer() const
+	uint8_t Sportbike::getFlagTachometer()
 	{
 		return flagTachometer;
 	}
 
-	uint8_t Sportbike::getFlagThrottle() const
+	uint8_t Sportbike::getFlagThrottle()
 	{
 		return flagThrottle;
 	}
 
-	uint8_t Sportbike::getFlagFinal() const
+	uint8_t Sportbike::getFlagFinal()
 	{
 		return flagFinal;
 	}
@@ -645,7 +645,7 @@ namespace SEFL
 		this->flagFinal = flagFinal;
 	}
 
-	uint64_t Sportbike::getTimerFinal() const
+	uint64_t Sportbike::getTimerFinal()
 	{
 		return timerFinal;
 	}

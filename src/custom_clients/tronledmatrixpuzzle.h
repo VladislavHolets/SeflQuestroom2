@@ -56,8 +56,8 @@ namespace SEFL
 		void setAnodes(const uint8_t *anodes_);
 		const uint8_t *getCathodes();
 		void setCathodes(const uint8_t *cathodes_);
-		uint8_t getAnodesAmount() const;
-		uint8_t getCathodesAmount() const;
+		uint8_t getAnodesAmount();
+		uint8_t getCathodesAmount();
 		uint8_t *getCurrent();
 	};
 

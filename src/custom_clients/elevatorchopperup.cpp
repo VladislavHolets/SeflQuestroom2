@@ -95,7 +95,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t ElevatorChopperUp::getWinchOnRelay() const
+	uint8_t ElevatorChopperUp::getWinchOnRelay()
 	{
 		return winchOnRelay;
 	}
@@ -105,7 +105,7 @@ namespace SEFL
 		this->winchOnRelay = winchOnRelay;
 	}
 
-	uint8_t ElevatorChopperUp::getWinchTopSwitch() const
+	uint8_t ElevatorChopperUp::getWinchTopSwitch()
 	{
 		return winchTopSwitch;
 	}
@@ -115,12 +115,12 @@ namespace SEFL
 		this->winchTopSwitch = winchTopSwitch;
 	}
 
-	uint8_t ElevatorChopperUp::getWinchUpRelay() const
+	uint8_t ElevatorChopperUp::getWinchUpRelay()
 	{
 		return winchUpRelay;
 	}
 
-	uint8_t ElevatorChopperUp::getCargoLiftUSwitch() const
+	uint8_t ElevatorChopperUp::getCargoLiftUSwitch()
 	{
 		return cargoLiftUSwitch;
 	}

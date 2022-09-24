@@ -136,7 +136,7 @@ namespace SEFL
 		//	}
 	}
 
-	uint8_t Fireplace::getFireplaceAcLightRelay() const
+	uint8_t Fireplace::getFireplaceAcLightRelay()
 	{
 		return fireplaceAcLightRelay;
 	}
@@ -146,7 +146,7 @@ namespace SEFL
 		this->fireplaceAcLightRelay = fireplaceAcLightRelay;
 	}
 
-	uint8_t Fireplace::getFireplaceButtont() const
+	uint8_t Fireplace::getFireplaceButtont()
 	{
 		return fireplaceButtont;
 	}
@@ -156,7 +156,7 @@ namespace SEFL
 		this->fireplaceButtont = fireplaceButtont;
 	}
 
-	uint8_t Fireplace::getFireplaceCoolerOut() const
+	uint8_t Fireplace::getFireplaceCoolerOut()
 	{
 		return fireplaceCoolerOut;
 	}
@@ -166,7 +166,7 @@ namespace SEFL
 		this->fireplaceCoolerOut = fireplaceCoolerOut;
 	}
 
-	uint8_t Fireplace::getFireplaceLedOut() const
+	uint8_t Fireplace::getFireplaceLedOut()
 	{
 		return fireplaceLedOut;
 	}
@@ -176,7 +176,7 @@ namespace SEFL
 		this->fireplaceLedOut = fireplaceLedOut;
 	}
 
-	uint8_t Fireplace::getFireplaceSmokeRelay() const
+	uint8_t Fireplace::getFireplaceSmokeRelay()
 	{
 		return fireplaceSmokeRelay;
 	}
@@ -186,12 +186,12 @@ namespace SEFL
 		this->fireplaceSmokeRelay = fireplaceSmokeRelay;
 	}
 
-	DFRobotDFPlayerMini *Fireplace::getPlayer() const
+	DFRobotDFPlayerMini *Fireplace::getPlayer()
 	{
 		return player;
 	}
 
-	uint8_t Fireplace::getLiquidLevelLed() const
+	uint8_t Fireplace::getLiquidLevelLed()
 	{
 		return LiquidLevelLed;
 	}
@@ -201,7 +201,7 @@ namespace SEFL
 		LiquidLevelLed = liquidLevelLed;
 	}
 
-	uint8_t Fireplace::getLiquidLevelSensor() const
+	uint8_t Fireplace::getLiquidLevelSensor()
 	{
 		return liquidLevelSensor;
 	}

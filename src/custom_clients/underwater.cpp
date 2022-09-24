@@ -255,7 +255,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Underwater::getButtonVolume() const
+	uint8_t Underwater::getButtonVolume()
 	{
 		return button_volume;
 	}
@@ -265,7 +265,7 @@ namespace SEFL
 		button_volume = buttonVolume;
 	}
 
-	uint8_t Underwater::getEncoderLeftA() const
+	uint8_t Underwater::getEncoderLeftA()
 	{
 		return encoder_left_a;
 	}
@@ -275,7 +275,7 @@ namespace SEFL
 		encoder_left_a = encoderLeftA;
 	}
 
-	uint8_t Underwater::getEncoderRightA() const
+	uint8_t Underwater::getEncoderRightA()
 	{
 		return encoder_right_a;
 	}
@@ -285,7 +285,7 @@ namespace SEFL
 		encoder_right_a = encoderRightA;
 	}
 
-	bool Underwater::isInverted() const
+	bool Underwater::isInverted()
 	{
 		return inverted;
 	}
@@ -295,7 +295,7 @@ namespace SEFL
 		this->inverted = inverted;
 	}
 
-	uint8_t Underwater::getLevelWater() const
+	uint8_t Underwater::getLevelWater()
 	{
 		return level_water;
 	}
@@ -305,7 +305,7 @@ namespace SEFL
 		level_water = levelWater;
 	}
 
-	uint8_t Underwater::getPump() const
+	uint8_t Underwater::getPump()
 	{
 		return pump;
 	}
@@ -315,7 +315,7 @@ namespace SEFL
 		this->pump = pump;
 	}
 
-	uint8_t Underwater::getRgbLightUnderwatherB() const
+	uint8_t Underwater::getRgbLightUnderwatherB()
 	{
 		return rgb_light_underwather_b;
 	}
@@ -325,7 +325,7 @@ namespace SEFL
 		rgb_light_underwather_b = rgbLightUnderwatherB;
 	}
 
-	uint8_t Underwater::getRgbLightUnderwatherG() const
+	uint8_t Underwater::getRgbLightUnderwatherG()
 	{
 		return rgb_light_underwather_g;
 	}
@@ -335,12 +335,12 @@ namespace SEFL
 		rgb_light_underwather_g = rgbLightUnderwatherG;
 	}
 
-	uint8_t Underwater::getRgbLightUnderwatherR() const
+	uint8_t Underwater::getRgbLightUnderwatherR()
 	{
 		return rgb_light_underwather_r;
 	}
 
-	uint64_t Underwater::getTiming() const
+	uint64_t Underwater::getTiming()
 	{
 		return timing;
 	}
@@ -350,7 +350,7 @@ namespace SEFL
 		this->timing = timing;
 	}
 
-	bool Underwater::isEncoderSwithLeft() const
+	bool Underwater::isEncoderSwithLeft()
 	{
 		return encoder_swith_left;
 	}
@@ -360,12 +360,12 @@ namespace SEFL
 		encoder_swith_left = encoderSwithLeft;
 	}
 
-	bool Underwater::isEncoderSwithRight() const
+	bool Underwater::isEncoderSwithRight()
 	{
 		return encoder_swith_right;
 	}
 
-	bool Underwater::isEncoderFlagLeft() const
+	bool Underwater::isEncoderFlagLeft()
 	{
 		return encoder_flag_left;
 	}
@@ -375,12 +375,12 @@ namespace SEFL
 		encoder_flag_left = encoderFlagLeft;
 	}
 
-	bool Underwater::isEncoderFlagRight() const
+	bool Underwater::isEncoderFlagRight()
 	{
 		return encoder_flag_right;
 	}
 
-	uint8_t Underwater::getFlagFinal() const
+	uint8_t Underwater::getFlagFinal()
 	{
 		return flag_final;
 	}
@@ -390,7 +390,7 @@ namespace SEFL
 		flag_final = flagFinal;
 	}
 
-	uint64_t Underwater::getTimingFinal() const
+	uint64_t Underwater::getTimingFinal()
 	{
 		return timing_final;
 	}

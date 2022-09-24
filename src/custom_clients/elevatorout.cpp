@@ -156,7 +156,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Elevatorout::getElevatorInSwith() const
+	uint8_t Elevatorout::getElevatorInSwith()
 	{
 		return elevatorInSwith;
 	}
@@ -166,7 +166,7 @@ namespace SEFL
 		this->elevatorInSwith = elevatorInSwith;
 	}
 
-	uint8_t Elevatorout::getElevatorOutSwith() const
+	uint8_t Elevatorout::getElevatorOutSwith()
 	{
 		return elevatorOutSwith;
 	}
@@ -176,12 +176,12 @@ namespace SEFL
 		this->elevatorOutSwith = elevatorOutSwith;
 	}
 
-	DFRobotDFPlayerMini *Elevatorout::getPlayer() const
+	DFRobotDFPlayerMini *Elevatorout::getPlayer()
 	{
 		return player;
 	}
 
-	uint8_t Elevatorout::getFlag() const
+	uint8_t Elevatorout::getFlag()
 	{
 		return flag;
 	}

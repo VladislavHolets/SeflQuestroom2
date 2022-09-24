@@ -68,7 +68,7 @@ namespace SEFL
 		}
 	}
 
-	bool Tombstone::isInverted() const
+	bool Tombstone::isInverted()
 	{
 		return inverted;
 	}
@@ -78,12 +78,12 @@ namespace SEFL
 		this->inverted = inverted;
 	}
 
-	uint8_t Tombstone::getMagnetTombstone() const
+	uint8_t Tombstone::getMagnetTombstone()
 	{
 		return magnet_tombstone;
 	}
 
-	uint8_t Tombstone::getMotojacketButton() const
+	uint8_t Tombstone::getMotojacketButton()
 	{
 		return motojacket_button;
 	}

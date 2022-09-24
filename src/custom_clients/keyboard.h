@@ -33,13 +33,13 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint8_t getKeyboardMagnet() const;
+		uint8_t getKeyboardMagnet();
 		void setKeyboardMagnet(uint8_t keyboardMagnet);
-		uint8_t getKeyboardPin() const;
+		uint8_t getKeyboardPin();
 		void setKeyboardPin(uint8_t keyboardPin);
-		DFRobotDFPlayerMini *getPlayer() const;
+		DFRobotDFPlayerMini *getPlayer();
 		void setPlayer(DFRobotDFPlayerMini *player);
-		uint8_t getFireplaceSmokeRelay() const;
+		uint8_t getFireplaceSmokeRelay();
 		void setFireplaceSmokeRelay(uint8_t fireplaceSmokeRelay);
 	};
 

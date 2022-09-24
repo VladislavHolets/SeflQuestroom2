@@ -164,7 +164,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Motorcycles::getMotorcyclesAddressLed() const
+	uint8_t Motorcycles::getMotorcyclesAddressLed()
 	{
 		return motorcyclesAddressLed;
 	}
@@ -174,7 +174,7 @@ namespace SEFL
 		this->motorcyclesAddressLed = motorcyclesAddressLed;
 	}
 
-	DFRobotDFPlayerMini *Motorcycles::getPlayer() const
+	DFRobotDFPlayerMini *Motorcycles::getPlayer()
 	{
 		return player;
 	}
@@ -184,7 +184,7 @@ namespace SEFL
 		this->player = player;
 	}
 
-	uint8_t Motorcycles::getPotC() const
+	uint8_t Motorcycles::getPotC()
 	{
 		return pot_c;
 	}
@@ -194,7 +194,7 @@ namespace SEFL
 		pot_c = potC;
 	}
 
-	uint8_t Motorcycles::getPotL() const
+	uint8_t Motorcycles::getPotL()
 	{
 		return pot_l;
 	}
@@ -204,7 +204,7 @@ namespace SEFL
 		pot_l = potL;
 	}
 
-	uint8_t Motorcycles::getPotR() const
+	uint8_t Motorcycles::getPotR()
 	{
 		return pot_r;
 	}
@@ -214,12 +214,12 @@ namespace SEFL
 		return pixels_;
 	}
 
-	uint8_t Motorcycles::getArduinoIn() const
+	uint8_t Motorcycles::getArduinoIn()
 	{
 		return arduino_in;
 	}
 
-	uint8_t Motorcycles::getArduinoPower() const
+	uint8_t Motorcycles::getArduinoPower()
 	{
 		return arduino_power;
 	}

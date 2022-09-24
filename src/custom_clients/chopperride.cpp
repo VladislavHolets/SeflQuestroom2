@@ -328,7 +328,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Chopperride::getChopperAddressLed() const
+	uint8_t Chopperride::getChopperAddressLed()
 	{
 		return chopperAddressLed;
 	}
@@ -338,7 +338,7 @@ namespace SEFL
 		this->chopperAddressLed = chopperAddressLed;
 	}
 
-	uint8_t Chopperride::getChopperLeftButton() const
+	uint8_t Chopperride::getChopperLeftButton()
 	{
 		return chopperLeftButton;
 	}
@@ -348,7 +348,7 @@ namespace SEFL
 		this->chopperLeftButton = chopperLeftButton;
 	}
 
-	uint8_t Chopperride::getChopperLight() const
+	uint8_t Chopperride::getChopperLight()
 	{
 		return chopperLight;
 	}
@@ -358,7 +358,7 @@ namespace SEFL
 		this->chopperLight = chopperLight;
 	}
 
-	uint8_t Chopperride::getChopperRightButton() const
+	uint8_t Chopperride::getChopperRightButton()
 	{
 		return chopperRightButton;
 	}
@@ -368,7 +368,7 @@ namespace SEFL
 		this->chopperRightButton = chopperRightButton;
 	}
 
-	uint8_t Chopperride::getChopperStarter() const
+	uint8_t Chopperride::getChopperStarter()
 	{
 		return chopperStarter;
 	}
@@ -378,7 +378,7 @@ namespace SEFL
 		this->chopperStarter = chopperStarter;
 	}
 
-	uint8_t Chopperride::getChopperThrottle() const
+	uint8_t Chopperride::getChopperThrottle()
 	{
 		return chopperThrottle;
 	}
@@ -388,7 +388,7 @@ namespace SEFL
 		this->chopperThrottle = chopperThrottle;
 	}
 
-	uint8_t Chopperride::getContactMagnet() const
+	uint8_t Chopperride::getContactMagnet()
 	{
 		return ContactMagnet;
 	}
@@ -398,12 +398,12 @@ namespace SEFL
 		ContactMagnet = contactMagnet;
 	}
 
-	DFRobotDFPlayerMini *Chopperride::getPlayer() const
+	DFRobotDFPlayerMini *Chopperride::getPlayer()
 	{
 		return player;
 	}
 
-	uint64_t Chopperride::getTimer() const
+	uint64_t Chopperride::getTimer()
 	{
 		return timer;
 	}
@@ -413,7 +413,7 @@ namespace SEFL
 		this->timer = timer;
 	}
 
-	uint8_t Chopperride::getFlagThrottle() const
+	uint8_t Chopperride::getFlagThrottle()
 	{
 		return flagThrottle;
 	}
@@ -423,7 +423,7 @@ namespace SEFL
 		this->flagThrottle = flagThrottle;
 	}
 
-	uint64_t Chopperride::getTimerThrottle() const
+	uint64_t Chopperride::getTimerThrottle()
 	{
 		return timerThrottle;
 	}

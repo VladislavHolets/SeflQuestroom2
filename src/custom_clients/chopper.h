@@ -34,18 +34,18 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint8_t getChopperAddressLed() const;
+		uint8_t getChopperAddressLed();
 		void setChopperAddressLed(uint8_t chopperAddressLed);
 
-		uint8_t getChopperCharger() const;
+		uint8_t getChopperCharger();
 		void setChopperCharger(uint8_t chopperCharger);
 
-		uint8_t getchopperStarter() const;
+		uint8_t getchopperStarter();
 		void setchopperStarter(uint8_t chopperStarter);
 
-		DFRobotDFPlayerMini *getPlayer() const;
+		DFRobotDFPlayerMini *getPlayer();
 		void setPlayer(DFRobotDFPlayerMini *player);
-		uint8_t getChopperStarter() const;
+		uint8_t getChopperStarter();
 		void setChopperStarter(uint8_t chopperStarter);
 
 		uint8_t getChopperLight() const

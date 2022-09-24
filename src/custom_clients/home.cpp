@@ -61,7 +61,7 @@ namespace SEFL
 		}
 	}
 
-	uint16_t Home::getCount() const
+	uint16_t Home::getCount()
 	{
 		return count;
 	}

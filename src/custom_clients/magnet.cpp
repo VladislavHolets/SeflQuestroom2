@@ -39,7 +39,7 @@ namespace SEFL
 		}
 	}
 
-	bool Magnet::isInverted() const
+	bool Magnet::isInverted()
 	{
 		return inverted;
 	}
@@ -49,7 +49,7 @@ namespace SEFL
 		this->inverted = inverted;
 	}
 
-	uint8_t Magnet::getPinNumber() const
+	uint8_t Magnet::getPinNumber()
 	{
 		return pin_number;
 	}

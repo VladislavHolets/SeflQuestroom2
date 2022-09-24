@@ -26,7 +26,7 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint16_t getCount() const;
+		uint16_t getCount();
 		void setCount(uint16_t count);
 	};
 

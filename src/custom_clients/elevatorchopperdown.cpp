@@ -103,7 +103,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t ElevatorChopperDown::getCargoLiftSwitch() const
+	uint8_t ElevatorChopperDown::getCargoLiftSwitch()
 	{
 		return cargoLiftSwitch;
 	}
@@ -113,7 +113,7 @@ namespace SEFL
 		this->cargoLiftSwitch = cargoLiftSwitch;
 	}
 
-	uint8_t ElevatorChopperDown::getFabricMagnet() const
+	uint8_t ElevatorChopperDown::getFabricMagnet()
 	{
 		return fabricMagnet;
 	}
@@ -123,7 +123,7 @@ namespace SEFL
 		this->fabricMagnet = fabricMagnet;
 	}
 
-	uint8_t ElevatorChopperDown::getWinchBottomSwitch() const
+	uint8_t ElevatorChopperDown::getWinchBottomSwitch()
 	{
 		return winchBottomSwitch;
 	}
@@ -133,7 +133,7 @@ namespace SEFL
 		this->winchBottomSwitch = winchBottomSwitch;
 	}
 
-	uint8_t ElevatorChopperDown::getWinchDownRelay() const
+	uint8_t ElevatorChopperDown::getWinchDownRelay()
 	{
 		return winchDownRelay;
 	}
@@ -143,17 +143,17 @@ namespace SEFL
 		this->winchDownRelay = winchDownRelay;
 	}
 
-	uint8_t ElevatorChopperDown::getWinchOnRelay() const
+	uint8_t ElevatorChopperDown::getWinchOnRelay()
 	{
 		return winchOnRelay;
 	}
 
-	uint8_t ElevatorChopperDown::getChopperLight() const
+	uint8_t ElevatorChopperDown::getChopperLight()
 	{
 		return chopperLight;
 	}
 
-	uint64_t ElevatorChopperDown::getTimer() const
+	uint64_t ElevatorChopperDown::getTimer()
 	{
 		return timer;
 	}

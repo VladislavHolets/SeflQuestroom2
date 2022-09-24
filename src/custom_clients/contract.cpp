@@ -159,7 +159,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Contract::getHellLight() const
+	uint8_t Contract::getHellLight()
 	{
 		return hell_light;
 	}
@@ -169,7 +169,7 @@ namespace SEFL
 		hell_light = hellLight;
 	}
 
-	uint8_t Contract::getHellMagnet() const
+	uint8_t Contract::getHellMagnet()
 	{
 		return hell_magnet;
 	}
@@ -179,7 +179,7 @@ namespace SEFL
 		hell_magnet = hellMagnet;
 	}
 
-	bool Contract::isInvertet() const
+	bool Contract::isInvertet()
 	{
 		return invertet;
 	}
@@ -189,7 +189,7 @@ namespace SEFL
 		this->invertet = invertet;
 	}
 
-	uint8_t Contract::getSmokeButton() const
+	uint8_t Contract::getSmokeButton()
 	{
 		return smoke_button;
 	}
@@ -199,7 +199,7 @@ namespace SEFL
 		smoke_button = smokeButton;
 	}
 
-	uint8_t Contract::getSwithContract() const
+	uint8_t Contract::getSwithContract()
 	{
 		return swith_contract;
 	}

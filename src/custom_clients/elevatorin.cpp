@@ -150,7 +150,7 @@ namespace SEFL
 		this->player = player;
 	}
 
-	uint8_t Elevatorin::getElevatorInButton() const
+	uint8_t Elevatorin::getElevatorInButton()
 	{
 		return elevatorInButton;
 	}
@@ -160,7 +160,7 @@ namespace SEFL
 		this->elevatorInButton = elevatorInButton;
 	}
 
-	uint8_t Elevatorin::getElevatorInLed() const
+	uint8_t Elevatorin::getElevatorInLed()
 	{
 		return elevatorInLed;
 	}
@@ -170,7 +170,7 @@ namespace SEFL
 		this->elevatorInLed = elevatorInLed;
 	}
 
-	uint8_t Elevatorin::getElevatorInSwith() const
+	uint8_t Elevatorin::getElevatorInSwith()
 	{
 		return elevatorInSwith;
 	}
@@ -180,7 +180,7 @@ namespace SEFL
 		this->elevatorInSwith = elevatorInSwith;
 	}
 
-	uint8_t Elevatorin::getElevatorOutSwith() const
+	uint8_t Elevatorin::getElevatorOutSwith()
 	{
 		return elevatorOutSwith;
 	}
@@ -190,7 +190,7 @@ namespace SEFL
 		return out_magnet;
 	}
 
-	uint64_t Elevatorin::getTimer() const
+	uint64_t Elevatorin::getTimer()
 	{
 		return timer;
 	}

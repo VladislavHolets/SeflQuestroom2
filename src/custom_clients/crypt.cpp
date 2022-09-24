@@ -29,7 +29,7 @@ namespace SEFL
 		rightTorch = 1;
 	}
 
-	uint8_t Crypt::getLeftRelay() const
+	uint8_t Crypt::getLeftRelay()
 	{
 		return leftRelay;
 	}
@@ -39,7 +39,7 @@ namespace SEFL
 		this->leftRelay = leftRelay;
 	}
 
-	uint8_t Crypt::getLeftTorch() const
+	uint8_t Crypt::getLeftTorch()
 	{
 		return leftTorch;
 	}
@@ -49,7 +49,7 @@ namespace SEFL
 		this->leftTorch = leftTorch;
 	}
 
-	uint8_t Crypt::getRightRelay() const
+	uint8_t Crypt::getRightRelay()
 	{
 		return rightRelay;
 	}
@@ -59,7 +59,7 @@ namespace SEFL
 		this->rightRelay = rightRelay;
 	}
 
-	uint8_t Crypt::getRightTorch() const
+	uint8_t Crypt::getRightTorch()
 	{
 		return rightTorch;
 	}

@@ -287,7 +287,7 @@ namespace SEFL
 		}
 	}
 
-	DFRobotDFPlayerMini *Sportbikeride::getPlayer() const
+	DFRobotDFPlayerMini *Sportbikeride::getPlayer()
 	{
 		return player;
 	}
@@ -297,7 +297,7 @@ namespace SEFL
 		this->player = player;
 	}
 
-	uint8_t Sportbikeride::getSportbikeRideLight() const
+	uint8_t Sportbikeride::getSportbikeRideLight()
 	{
 		return sportbikeRideLight;
 	}
@@ -307,7 +307,7 @@ namespace SEFL
 		this->sportbikeRideLight = sportbikeRideLight;
 	}
 
-	uint8_t Sportbikeride::getSportbikeRideThrottle() const
+	uint8_t Sportbikeride::getSportbikeRideThrottle()
 	{
 		return sportbikeRideThrottle;
 	}
@@ -317,12 +317,12 @@ namespace SEFL
 		this->sportbikeRideThrottle = sportbikeRideThrottle;
 	}
 
-	uint8_t Sportbikeride::getSportbikeServo() const
+	uint8_t Sportbikeride::getSportbikeServo()
 	{
 		return sportbikeServo;
 	}
 
-	uint8_t Sportbikeride::getSportbikeLeftRelay() const
+	uint8_t Sportbikeride::getSportbikeLeftRelay()
 	{
 		return sportbikeLeftRelay;
 	}
@@ -332,7 +332,7 @@ namespace SEFL
 		this->sportbikeLeftRelay = sportbikeLeftRelay;
 	}
 
-	uint8_t Sportbikeride::getSportbikeRightRelay() const
+	uint8_t Sportbikeride::getSportbikeRightRelay()
 	{
 		return sportbikeRightRelay;
 	}
@@ -342,7 +342,7 @@ namespace SEFL
 		return pwmController;
 	}
 
-	uint8_t Sportbikeride::getDashboardLight() const
+	uint8_t Sportbikeride::getDashboardLight()
 	{
 		return dashboardLight;
 	}
@@ -352,7 +352,7 @@ namespace SEFL
 		this->dashboardLight = dashboardLight;
 	}
 
-	uint8_t Sportbikeride::getSportbikeLeftRelayFront() const
+	uint8_t Sportbikeride::getSportbikeLeftRelayFront()
 	{
 		return sportbikeLeftRelayFront;
 	}
@@ -363,7 +363,7 @@ namespace SEFL
 		this->sportbikeLeftRelayFront = sportbikeLeftRelayFront;
 	}
 
-	uint8_t Sportbikeride::getSportbikePowerRelay() const
+	uint8_t Sportbikeride::getSportbikePowerRelay()
 	{
 		return sportbikePowerRelay;
 	}
@@ -373,7 +373,7 @@ namespace SEFL
 		this->sportbikePowerRelay = sportbikePowerRelay;
 	}
 
-	uint8_t Sportbikeride::getSportbikeRightRelayFront() const
+	uint8_t Sportbikeride::getSportbikeRightRelayFront()
 	{
 		return sportbikeRightRelayFront;
 	}
@@ -384,22 +384,22 @@ namespace SEFL
 		this->sportbikeRightRelayFront = sportbikeRightRelayFront;
 	}
 
-	uint8_t Sportbikeride::getTachometerPower() const
+	uint8_t Sportbikeride::getTachometerPower()
 	{
 		return tachometerPower;
 	}
 
-	uint8_t Sportbikeride::getSportbikePowerServo() const
+	uint8_t Sportbikeride::getSportbikePowerServo()
 	{
 		return sportbikePowerServo;
 	}
 
-	uint8_t Sportbikeride::getCountTurn() const
+	uint8_t Sportbikeride::getCountTurn()
 	{
 		return countTurn;
 	}
 
-	uint64_t Sportbikeride::getTimerForTurnSignals() const
+	uint64_t Sportbikeride::getTimerForTurnSignals()
 	{
 		return timerForTurnSignals;
 	}
@@ -409,12 +409,12 @@ namespace SEFL
 		this->timerForTurnSignals = timerForTurnSignals;
 	}
 
-	uint8_t Sportbikeride::getTurnSignalsFlag() const
+	uint8_t Sportbikeride::getTurnSignalsFlag()
 	{
 		return turnSignalsFlag;
 	}
 
-	uint8_t Sportbikeride::getThrottleFlag() const
+	uint8_t Sportbikeride::getThrottleFlag()
 	{
 		return throttleFlag;
 	}
@@ -434,7 +434,7 @@ namespace SEFL
 		this->countTurn = countTurn;
 	}
 
-	uint64_t Sportbikeride::getTimer() const
+	uint64_t Sportbikeride::getTimer()
 	{
 		return timer;
 	}

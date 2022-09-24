@@ -108,12 +108,12 @@ namespace SEFL
 		return (0);
 	}
 
-	uint8_t TronLEDMatrixPuzzle::getAnodesAmount() const
+	uint8_t TronLEDMatrixPuzzle::getAnodesAmount()
 	{
 		return anodes_amount;
 	}
 
-	uint8_t TronLEDMatrixPuzzle::getCathodesAmount() const
+	uint8_t TronLEDMatrixPuzzle::getCathodesAmount()
 	{
 		return cathodes_amount;
 	}

@@ -27,11 +27,11 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		bool isInverted() const;
+		bool isInverted();
 		void setInverted(bool inverted);
-		uint8_t getMagnetTombstone() const;
+		uint8_t getMagnetTombstone();
 		void setMagnetTombstone(uint8_t magnetTombstone);
-		uint8_t getMotojacketButton() const;
+		uint8_t getMotojacketButton();
 		void setMotojacketButton(uint8_t motojacketButton);
 	};
 

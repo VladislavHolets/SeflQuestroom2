@@ -40,20 +40,20 @@ namespace SEFL
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
 		void setPlayer(DFRobotDFPlayerMini *player);
-		uint8_t getElevatorInButton() const;
+		uint8_t getElevatorInButton();
 		void setElevatorInButton(uint8_t elevatorInButton);
-		uint8_t getElevatorInLed() const;
+		uint8_t getElevatorInLed();
 		void setElevatorInLed(uint8_t elevatorInLed);
-		uint8_t getElevatorInSwith() const;
+		uint8_t getElevatorInSwith();
 		void setElevatorInSwith(uint8_t elevatorInSwith);
-		uint8_t getElevatorOutSwith() const;
+		uint8_t getElevatorOutSwith();
 		void setElevatorOutSwith(uint8_t elevatorOutSwith);
 
 		Magnet *getInMagnet();
 		void setInMagnet(Magnet *inMagnet);
 		Magnet *getOutMagnet();
 		void setOutMagnet(Magnet *outMagnet);
-		uint64_t getTimer() const;
+		uint64_t getTimer();
 		void setTimer(uint64_t timer);
 	};
 

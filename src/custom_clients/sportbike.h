@@ -35,24 +35,24 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		DFRobotDFPlayerMini *getPlayer() const;
+		DFRobotDFPlayerMini *getPlayer();
 		void setPlayer(DFRobotDFPlayerMini *player);
-		uint8_t getSportbikeKey() const;
+		uint8_t getSportbikeKey();
 		void setSportbikeKey(uint8_t sportbikeKey);
-		uint8_t getSportbikeLeftButton() const;
+		uint8_t getSportbikeLeftButton();
 		void setSportbikeLeftButton(uint8_t sportbikeLeftButton);
-		uint8_t getSportbikeRideLight() const;
+		uint8_t getSportbikeRideLight();
 		void setSportbikeRideLight(uint8_t sportbikeRideLight);
-		uint8_t getSportbikeRideThrottle() const;
+		uint8_t getSportbikeRideThrottle();
 		void setSportbikeRideThrottle(uint8_t sportbikeRideThrottle);
-		uint8_t getSportbikeRightButton() const;
+		uint8_t getSportbikeRightButton();
 		void setSportbikeRightButton(uint8_t sportbikeRightButton);
 
-		uint8_t getSportbikeThrottle() const;
+		uint8_t getSportbikeThrottle();
 		void setSportbikeThrottle(uint8_t sportbikeThrottle);
-		uint8_t getSportbikeLeftRelay() const;
+		uint8_t getSportbikeLeftRelay();
 		void setSportbikeLeftRelay(uint8_t sportbikeLeftRelay);
-		uint8_t getSportbikeRightRelay() const;
+		uint8_t getSportbikeRightRelay();
 		void setSportbikeRightRelay(uint8_t sportbikeRightRelay);
 
 		uint8_t getSportbikeRideLightButton() const
@@ -75,27 +75,27 @@ namespace SEFL
 			this->timing = timing;
 		}
 
-		uint8_t getSportbikePowerRelay() const;
+		uint8_t getSportbikePowerRelay();
 		void setSportbikePowerRelay(uint8_t sportbikePowerRelay);
-		uint8_t getSportbikeLeftRelayFront() const;
+		uint8_t getSportbikeLeftRelayFront();
 		void setSportbikeLeftRelayFront(uint8_t sportbikeLeftRelayFront);
-		uint8_t getSportbikeRightRelayFront() const;
+		uint8_t getSportbikeRightRelayFront();
 		void setSportbikeRightRelayFront(uint8_t sportbikeRightRelayFront);
-		uint8_t getDashboardLight() const;
+		uint8_t getDashboardLight();
 		void setDashboardLight(uint8_t dashboardLight);
-		uint8_t getTachometerPower() const;
+		uint8_t getTachometerPower();
 		void setTachometerPower(uint8_t tachometerPower);
-		uint64_t getTimerForTrottle() const;
+		uint64_t getTimerForTrottle();
 		void setTimerForTrottle(uint64_t timerForTrottle);
-		uint64_t getTimerForTachometer() const;
+		uint64_t getTimerForTachometer();
 		void setTimerForTachometer(uint64_t timerForTachometer);
-		uint8_t getFlagTachometer() const;
+		uint8_t getFlagTachometer();
 		void setFlagTachometer(uint8_t flagTachometer);
-		uint8_t getFlagThrottle() const;
+		uint8_t getFlagThrottle();
 		void setFlagThrottle(uint8_t flagThrottle);
-		uint8_t getFlagFinal() const;
+		uint8_t getFlagFinal();
 		void setFlagFinal(uint8_t flagFinal);
-		uint64_t getTimerFinal() const;
+		uint64_t getTimerFinal();
 		void setTimerFinal(uint64_t timerFinal);
 	};
 

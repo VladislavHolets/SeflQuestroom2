@@ -37,21 +37,21 @@ namespace SEFL
 		virtual void onFinished() override;
 		virtual void onManualFinished() override;
 		virtual void onDefault() override;
-		uint8_t getMotorcyclesAddressLed() const;
+		uint8_t getMotorcyclesAddressLed();
 		void setMotorcyclesAddressLed(uint8_t motorcyclesAddressLed);
-		DFRobotDFPlayerMini *getPlayer() const;
+		DFRobotDFPlayerMini *getPlayer();
 		void setPlayer(DFRobotDFPlayerMini *player);
-		uint8_t getPotC() const;
+		uint8_t getPotC();
 		void setPotC(uint8_t potC);
-		uint8_t getPotL() const;
+		uint8_t getPotL();
 		void setPotL(uint8_t potL);
-		uint8_t getPotR() const;
+		uint8_t getPotR();
 		void setPotR(uint8_t potR);
 		Adafruit_NeoPixel *&getPixels();
 		void setPixels(Adafruit_NeoPixel *&pixels);
-		uint8_t getArduinoIn() const;
+		uint8_t getArduinoIn();
 		void setArduinoIn(uint8_t arduinoIn);
-		uint8_t getArduinoPower() const;
+		uint8_t getArduinoPower();
 		void setArduinoPower(uint8_t arduinoPower);
 	};
 

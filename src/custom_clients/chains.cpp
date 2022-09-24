@@ -114,7 +114,7 @@ namespace SEFL
 		}
 	}
 
-	uint8_t Chains::getChainsLeftButton() const
+	uint8_t Chains::getChainsLeftButton()
 	{
 		return chainsLeftButton;
 	}
@@ -124,7 +124,7 @@ namespace SEFL
 		this->chainsLeftButton = chainsLeftButton;
 	}
 
-	uint8_t Chains::getChainsLeftMagnet() const
+	uint8_t Chains::getChainsLeftMagnet()
 	{
 		return chainsLeftMagnet;
 	}
@@ -134,7 +134,7 @@ namespace SEFL
 		this->chainsLeftMagnet = chainsLeftMagnet;
 	}
 
-	uint8_t Chains::getChainsRightButton() const
+	uint8_t Chains::getChainsRightButton()
 	{
 		return chainsRightButton;
 	}
@@ -144,7 +144,7 @@ namespace SEFL
 		this->chainsRightButton = chainsRightButton;
 	}
 
-	uint8_t Chains::getChainsRightMagnet() const
+	uint8_t Chains::getChainsRightMagnet()
 	{
 		return chainsRightMagnet;
 	}

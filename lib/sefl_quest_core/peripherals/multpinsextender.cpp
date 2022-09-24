@@ -5,8 +5,8 @@
  *      Author: vladi
  */
 
-#include <sefl_quest_core/peripherals/multpinsextender.h>
-#include <sefl_quest_core/variants/blackpill_variant.hpp>
+#include <peripherals/multpinsextender.h>
+#include <variants/blackpill_variant.hpp>
 #include <wiring_analog.h>
 #include <wiring_digital.h>
 #include <wiring_time.h>

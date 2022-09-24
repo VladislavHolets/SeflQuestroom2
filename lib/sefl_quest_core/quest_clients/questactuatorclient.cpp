@@ -6,10 +6,9 @@
  */
 
 #include <ArduinoJson.h>
-#include <mqtt_wrappers/mqtt.h>
 #include <quest_clients/questactuatorclient.h>
 #include <WString.h>
-
+#include <MQTT.h>
 namespace SEFL
 {
 
@@ -56,7 +55,8 @@ namespace SEFL
 		{
 		case SEFL::DirectCommands::PING_COMMAND:
 		{
-			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
+			// this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
+			publish(data);
 		}
 		break;
 		case SEFL::DirectCommands::STATUS_TRIGGER_COMMAND:
@@ -71,7 +71,8 @@ namespace SEFL
 			int tstatus = static_cast<int>(this->getStatus());
 			jdata.add(tstatus);
 			serializeJson(repDoc, output);
-			this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
+			// this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
+			publish(output);
 		}
 		break;
 		case SEFL::DirectCommands::STATUS_COMMAND:
@@ -85,7 +86,8 @@ namespace SEFL
 			repDoc["SubcommandId"] = tstatus;
 			JsonArray jdata = repDoc.createNestedArray("Data");
 			serializeJson(repDoc, output);
-			this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
+			// this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
+			publish(output);
 		}
 		break;
 		case SEFL::DirectCommands::ACTION_COMMAND:
@@ -94,7 +96,8 @@ namespace SEFL
 			enum SEFL::ActuatorClientStatuses status =
 				static_cast<SEFL::ActuatorClientStatuses>(doc["SubcommandId"].as<int>());
 			this->setStatus(status);
-			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
+			// this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
+			publish(data);
 		}
 		break;
 		case SEFL::DirectCommands::DEACTIVATE_DEVICE_COMMAND:
@@ -159,7 +162,8 @@ namespace SEFL
 		}
 		// TODO stuff
 		serializeJson(repDoc, output);
-		this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
+		// this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
+		publish(output);
 	}
 
 } /* namespace SEFL */

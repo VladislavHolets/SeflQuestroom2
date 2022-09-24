@@ -13,7 +13,7 @@ namespace SEFL
 
 	template <typename ObjT>
 	// MQTT_Subscriber_Object_Bound<ObjT>::MQTT_Subscriber_Object_Bound(
-	// 	MQTT &mqttserver, const char *feed, CallbackBufferT clb,
+	// 	MQTTClient &mqttserver, const char *feed, CallbackBufferT clb,
 	// 	ObjT *obj, uint8_t q) : MQTT_Subscriber(mqttserver, feed, q), my_callback_buffer(clb), obj_(obj)
 	MQTT_Subscriber_Object_Bound<ObjT>::MQTT_Subscriber_Object_Bound(
 		const char *feed, CallbackBufferT clb,

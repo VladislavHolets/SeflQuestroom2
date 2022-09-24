@@ -11,7 +11,7 @@
 namespace SEFL
 {
 
-	// MQTT_Subscriber::MQTT_Subscriber(MQTT &mqttserver, const char *feedname,
+	// MQTT_Subscriber::MQTT_Subscriber(MQTTClient &mqttserver, const char *feedname,
 	// 								 uint8_t q)
 	MQTT_Subscriber::MQTT_Subscriber(const char *feedname,
 									 uint8_t q)

@@ -25,7 +25,7 @@ namespace SEFL
 	class MQTT_Subscriber
 	{
 	public:
-		// MQTT_Subscriber(MQTT &mqttserver, const char *feedname,
+		// MQTT_Subscriber(MQTTClient &mqttserver, const char *feedname,
 		// 				uint8_t q = 0);
 
 		MQTT_Subscriber(const char *feedname,

@@ -7,7 +7,7 @@
 
 #include <ArduinoJson.h>
 #include <utils/logger.h>
-#include <mqtt_wrappers/mqtt.h>
+#include <MQTT.h>
 #include <quest_clients/questhostclient.h>
 #include <WString.h>
 
@@ -44,7 +44,8 @@ namespace SEFL
 		{
 		case SEFL::DirectCommands::PING_COMMAND:
 		{
-			this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
+			// this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
+			publish(data);
 		}
 		break;
 		case SEFL::DirectCommands::RESET_COMMAND:

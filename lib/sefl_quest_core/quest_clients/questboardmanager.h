@@ -9,14 +9,10 @@
 #define QUESTSERVER_H_
 
 #include <constants.h>
+#include <mqtt_wrappers/MQTTClientObjectBound.h>
 #include <quest_clients/questhostclient.h>
 #include <sys/_stdint.h>
 #include <Vector.h>
-
-namespace SEFL
-{
-	class MQTT_Manager;
-} /* namespace SEFL */
 
 namespace SEFL
 {
@@ -45,11 +41,14 @@ namespace SEFL
 		void setPowerStatus(bool power_status_);
 		MQTT_Config room_config_;
 
+		bool connect() const;
+		bool subscribeAll() const;
+
 	protected:
 	public:
 		void removeAllClients();
 		void removeClient(SEFL::Quest_Client *client);
-		Quest_Board_Manager(MQTTClient &mqtt, MQTT_Config room_config, const char *host_name,
+		Quest_Board_Manager(MQTTClientObjectBound<Quest_Board_Manager> &mqtt, MQTT_Config room_config, const char *host_name,
 							const char *placement = DEFAULT_PLACEMENT, const char *server_name = DEFAULT_SERVER_NAME,
 							const char *in_topic = DEFAUT_OUT_TOPIC, const char *out_topic = DEFAUT_IN_TOPIC, SEFL::Language language = UKR);
 		virtual ~Quest_Board_Manager();
@@ -60,8 +59,7 @@ namespace SEFL
 		Language getLanguage() const;
 		const char *getName() const;
 		bool isPowerStatus() const;
-
-		bool checkSubscribitions(String &topic_name, String &payload_val);
+		void checkSubscribitions(String &topic_name, String &payload_val);
 		bool pushToCallbacksQueue(MQTT_Two_Way_Interactor &client, String &payload_val);
 		void processCallbackQueueOne();
 		void processCallbackQueueAll();

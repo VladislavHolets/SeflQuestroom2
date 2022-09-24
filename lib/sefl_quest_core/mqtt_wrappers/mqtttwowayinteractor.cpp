@@ -7,7 +7,7 @@
 
 #include <utils/logger.h>
 #include <mqtt_wrappers/mqtttwowayinteractor.h>
-
+#include <constants.h>
 namespace SEFL
 {
 
@@ -16,7 +16,7 @@ namespace SEFL
 		return (mqtt_);
 	}
 
-	// MQTT_Two_Way_Interactor::MQTT_Two_Way_Interactor(SEFL::MQTT &mqtt,
+	// MQTT_Two_Way_Interactor::MQTT_Two_Way_Interactor(SEFL::MQTTClient &mqtt,
 	// 												 String subfeed, String pubfeed) : mqtt_(&mqtt), subfeed_(subfeed), pubfeed_(pubfeed), sub_(mqtt,
 	// 																																			subfeed_.c_str(), &SEFL::MQTT_Two_Way_Interactor::inputClb,
 	// 																																			this, 1)
@@ -49,5 +49,16 @@ namespace SEFL
 	{
 		// TODO Auto-generated destructor stub
 	}
-
+	bool MQTT_Two_Way_Interactor::publish(String payload, int qos)
+	{
+		this->getMqtt()->publish(this->getPubfeed().c_str(), payload.c_str(), payload.length(), 0, qos);
+	}
+	bool MQTT_Two_Way_Interactor::publish(const char *payload, int qos)
+	{
+		this->getMqtt()->publish(this->getPubfeed().c_str(), payload, strlen(payload), 0, qos);
+	}
+	// bool MQTT_Two_Way_Interactor::publish(const char *payload, unsigned int length, int qos)
+	// {
+	// 	this->getMqtt()->publish(this->getPubfeed().c_str(), payload, length, 0, qos);
+	// }
 } /* namespace SEFL */

@@ -5,9 +5,9 @@
  *      Author: vladi
  */
 
-#include <sefl_quest_core/constants.h>
-#include <sefl_quest_core/peripherals/pwmpinsextender.h>
-#include <sefl_quest_core/variants/blackpill_variant.hpp>
+#include <constants.h>
+#include <peripherals/pwmpinsextender.h>
+#include <variants/blackpill_variant.hpp>
 
 namespace SEFL
 {

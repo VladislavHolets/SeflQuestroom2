@@ -7,7 +7,7 @@
 
 #include <ArduinoJson.h>
 #include <utils/logger.h>
-#include <mqtt_wrappers/mqtt.h>
+#include <mqtt_wrappers/MQTTClientObjectBound.h>
 #include <quest_clients/questboardmanager.h>
 #include <stddef.h>
 #include <Vector.h>
@@ -20,7 +20,7 @@
 namespace SEFL
 {
 
-	Quest_Board_Manager::Quest_Board_Manager(MQTTClient &mqtt, MQTT_Config room_config, const char *host_name,
+	Quest_Board_Manager::Quest_Board_Manager(MQTTClientObjectBound<Quest_Board_Manager> &mqtt, MQTT_Config room_config, const char *host_name,
 											 const char *placement, const char *server_name, const char *in_topic,
 											 const char *out_topic, SEFL::Language language) : MQTT_Two_Way_Interactor(mqtt,
 																													   String(
@@ -39,6 +39,8 @@ namespace SEFL
 		this->clients_.clear();
 		this->callbacksQueue.setStorage(callbackQueue_storage, MAX_MESSAGE_QUEUE_AMOUNT);
 		this->callbacksQueue.clear();
+		mqtt.onMessage(this, checkSubscribitions);
+		// TODO: push callback as a method of board manager to the mqtt client;
 		Logger::notice("board_manager", F("constructor_done"));
 	}
 
@@ -83,7 +85,8 @@ namespace SEFL
 		}
 		String output;
 		serializeJson(repDoc, output);
-		this->getMqtt()->publish(this->getPubfeed().c_str(), output.c_str(), 0, 2);
+		// this->getMqtt()->publish(this->getPubfeed().c_str(), output.c_str(), 0, 2);
+		publish(output);
 	}
 
 	void Quest_Board_Manager::removeAllClients()
@@ -104,52 +107,28 @@ namespace SEFL
 
 	void Quest_Board_Manager::loop()
 	{
-		if ((millis() - this->callback_timestamp) > SEFL::CALLBACK_TIMEOUT)
-		{
-			if (!this->getMqtt()->connected())
-			{
-				this->getMqtt()->disconnect();
-			}
-		}
+		// if ((millis() - this->callback_timestamp) > SEFL::CALLBACK_TIMEOUT)
+		// {
+		// 	if (!this->getMqtt()->connected())
+		// 	{
+		// 		this->getMqtt()->disconnect();
+		// 	}
+		// }
 
 		// Stop if already connected.
 		if (!this->getMqtt()->connected())
 		{
-			int8_t ret;
-			Logger::notice(this->name_, "Connecting to MQTT... ");
-			while ((ret = this->getMqtt()->connect(room_config_.IP, room_config_.username, room_config_.password)) != 0)
-			{ // connect will return 0 for connected
-				// SEFL::Logger::error(this->name_,
-				// 					this->getMqtt()->lastError());
-				Logger::notice(this->name_,
-							   "Retrying MQTT connection in 1 second...");
-				this->getMqtt()->disconnect();
-				delay(2000); // wait 1 seconds
-			}
-			Logger::notice(this->name_, "MQTT Connected!");
-			this->send_config();
-			this->callback_timestamp = millis();
+			connect();
 		}
 		uint32_t timestamp_for_message_avaiting = millis();
 		while (millis() - timestamp_for_message_avaiting < 100)
 		{
 			if (!this->getMqtt()->loop())
 			{
-				int8_t ret;
-				while ((ret = this->getMqtt()->connect(room_config_.IP, room_config_.username, room_config_.password)) != 0)
-				{ // connect will return 0 for connected
-					// SEFL::Logger::error(this->name_,
-					// 					this->getMqtt()->lastError());
-					Logger::notice(this->name_,
-								   "Retrying MQTT connection in 1 second...");
-					this->getMqtt()->disconnect();
-					delay(2000); // wait 1 seconds
-				}
-				Logger::notice(this->name_, "MQTT Connected!");
-				this->send_config();
-				this->callback_timestamp = millis();
+				connect();
 			}
 		}
+
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{
 
@@ -282,7 +261,7 @@ namespace SEFL
 		}
 		}
 	}
-	bool Quest_Board_Manager::checkSubscribitions(String &topic_name, String &payload_val)
+	void Quest_Board_Manager::checkSubscribitions(String &topic_name, String &payload_val)
 	{
 		if (topic_name.equals(this->getSubfeed()))
 		{
@@ -326,5 +305,55 @@ namespace SEFL
 		{
 			processCallbackQueueOne();
 		}
+	}
+	bool Quest_Board_Manager::connect() const
+	{
+		if (!this->getMqtt()->connected())
+		{
+			Logger::notice(this->name_, "Connecting to MQTT... ");
+			while (this->getMqtt()->connect(room_config_.IP, room_config_.username, room_config_.password) == 0)
+			{
+				Logger::notice(this->name_,
+							   "Retrying MQTT connection in 1 second...");
+				this->getMqtt()->disconnect();
+				delay(1000);
+			}
+
+			Logger::notice(this->name_, "MQTT Connected!");
+			Logger::notice(this->name_, "Subscribing to the topics...");
+
+			subscribeAll();
+
+			send_config();
+			this->callback_timestamp = millis();
+			return 0;
+		}
+	}
+
+	bool Quest_Board_Manager::subscribeAll() const
+	{
+		bool ret = 1;
+		ret = ret && this->getMqtt()->subscribe(this->getSubfeed());
+		Logger::warning(this->name_, String("Subscribing to server: ") + (ret) ? F("success") : F("failure"));
+		if (!ret)
+		{
+			return (ret);
+		}
+		ret = ret && this->getMqtt()->subscribe(this->getHost()->getSubfeed());
+		Logger::warning(this->name_, String("Subscribing host: ") + (ret) ? F("success") : F("failure"));
+		if (!ret)
+		{
+			return (ret);
+		}
+		for (auto client : this->clients_)
+		{
+			ret = ret && this->getMqtt()->subscribe(client->getSubfeed());
+			Logger::warning(this->name_, String("Subscribing client ") + client->getName() + F(": ") + (ret) ? F("success") : F("failure"));
+			if (!ret)
+			{
+				return (ret);
+			}
+		}
+		return !ret;
 	}
 } /* namespace SEFL */

@@ -166,5 +166,6 @@ namespace SEFL
 
 	static const MQTT_Config DEFAULT_MQTT_CONFIG = {"192.168.90.132", 1883,
 													"questroom", "likekadroom"};
+	static const uint8_t QOS_DEFAULT = 2;
 }
 #endif /* CONSTANTS_H_ */

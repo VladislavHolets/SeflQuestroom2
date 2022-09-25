@@ -38,7 +38,7 @@ namespace SEFL
 		this->clients_.clear();
 		this->callbacksQueue.setStorage(callbackQueue_storage, MAX_MESSAGE_QUEUE_AMOUNT);
 		this->callbacksQueue.clear();
-		mqtt.onMessage(this, &SEFL::Quest_Board_Manager::checkSubscribitions);
+		mqtt.onMessage(this, &SEFL::Quest_Board_Manager::pushToCallbacksQueue);
 		// TODO: push callback as a method of board manager to the mqtt client;
 		Logger::notice("board_manager", F("constructor_done"));
 	}
@@ -260,35 +260,36 @@ namespace SEFL
 		}
 		}
 	}
-	void Quest_Board_Manager::checkSubscribitions(String &topic_name, String &payload_val)
-	{
-		if (topic_name.equals(this->getSubfeed()))
-		{
-			this->pushToCallbacksQueue(*this, payload_val);
-		}
-		if (topic_name.equals(this->getHost()->getSubfeed()))
-		{
-			this->pushToCallbacksQueue(*(this->getHost()), payload_val);
-		}
-		for (auto client : this->clients_)
-		{
-			if (topic_name
-					.equals(client->getSubfeed()))
-				this->pushToCallbacksQueue(*client, payload_val);
-		}
-	}
 
-	bool Quest_Board_Manager::pushToCallbacksQueue(MQTT_Two_Way_Interactor &client, String &payload_val)
+	void Quest_Board_Manager::pushToCallbacksQueue(String &topic_name, String &payload_val)
 	{
 		CallbackItem *item = new CallbackItem();
-		item->client = &client;
+		item->subfeed = new String(topic_name);
 		item->payload = new String(payload_val);
 		this->callbacksQueue.push_back(item);
-		return 0;
 	}
 	void Quest_Board_Manager::processCallbackQueueOne()
 	{
-		this->callbacksQueue[0]->client->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());
+		if (this->callbacksQueue[0]->subfeed->equals(this->getSubfeed()))
+		{
+			this->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());
+		}
+		else if (this->callbacksQueue[0]->subfeed->equals(this->getHost()->getSubfeed()))
+		{
+			this->getHost()->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());
+		}
+		else
+		{
+			for (auto client : this->clients_)
+			{
+				if (this->callbacksQueue[0]->subfeed->equals(client->getSubfeed()))
+				{
+					client->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());
+				}
+			}
+		}
+		delete this->callbacksQueue[0]->subfeed;
+		delete this->callbacksQueue[0]->payload;
 		delete this->callbacksQueue[0];
 		this->callbacksQueue.remove(0);
 	}
@@ -310,17 +311,17 @@ namespace SEFL
 	{
 		if (!this->getMqtt()->connected())
 		{
-			Logger::notice(this->name_, "Connecting to MQTT... ");
+			Logger::notice(this->name_, F("Connecting to MQTT... "));
 			while (this->getMqtt()->connect(room_config_.IP, room_config_.username, room_config_.password) == 0)
 			{
 				Logger::notice(this->name_,
-							   "Retrying MQTT connection in 1 second...");
+							   F("Retrying MQTT connection in 1 second..."));
 				this->getMqtt()->disconnect();
 				delay(1000);
 			}
 
-			Logger::notice(this->name_, "MQTT Connected!");
-			Logger::notice(this->name_, "Subscribing to the topics...");
+			Logger::notice(this->name_, F("MQTT Connected!"));
+			Logger::notice(this->name_, F("Subscribing to the topics..."));
 
 			subscribeAll();
 
@@ -334,13 +335,13 @@ namespace SEFL
 	bool Quest_Board_Manager::subscribeAll()
 	{
 		bool ret = 1;
-		ret = ret && this->getMqtt()->subscribe(this->getSubfeed());
+		ret = ret && this->getMqtt()->subscribe(this->getSubfeed(), SEFL::QOS_DEFAULT);
 		Logger::warning(this->name_, String("Subscribing to server: ") + (ret) ? F("success") : F("failure"));
 		if (!ret)
 		{
 			return (ret);
 		}
-		ret = ret && this->getMqtt()->subscribe(this->getHost()->getSubfeed());
+		ret = ret && this->getMqtt()->subscribe(this->getHost()->getSubfeed(), SEFL::QOS_DEFAULT);
 		Logger::warning(this->name_, String("Subscribing host: ") + (ret) ? F("success") : F("failure"));
 		if (!ret)
 		{
@@ -348,7 +349,7 @@ namespace SEFL
 		}
 		for (auto client : this->clients_)
 		{
-			ret = ret && this->getMqtt()->subscribe(client->getSubfeed());
+			ret = ret && this->getMqtt()->subscribe(client->getSubfeed(), SEFL::QOS_DEFAULT);
 			Logger::warning(this->name_, String("Subscribing client ") + client->getName() + F(": ") + (ret) ? F("success") : F("failure"));
 			if (!ret)
 			{

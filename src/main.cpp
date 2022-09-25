@@ -32,6 +32,10 @@ DFRobotDFPlayerMini player;
 SoftwareSerial serial(PA_3, PA_2); // PA_12
 void setup()
 {
+
+  SPI.setMOSI(PB15);
+  SPI.setMISO(PB14);
+  SPI.setSCLK(PB13);
   // BUZZER DONT CHANGE OR REMOVE
   pinMode(PA1, OUTPUT);
   digitalWrite(PA1, LOW);

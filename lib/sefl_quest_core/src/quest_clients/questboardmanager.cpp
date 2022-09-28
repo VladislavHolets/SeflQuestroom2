@@ -126,14 +126,15 @@ namespace SEFL
 			{
 				connect();
 			}
+			this->processCallbackQueueAll();
 		}
 
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{
-
 			Logger::notice(this->name_, "shut down");
 			this->shutdown_timestamp = 0;
 		}
+
 		if (this->power_status_ && this->shutdown_timestamp)
 		{
 
@@ -147,6 +148,7 @@ namespace SEFL
 			}
 			this->shutdown_timestamp = 0;
 		}
+
 		if (this->power_status_ && !this->shutdown_timestamp)
 		{
 

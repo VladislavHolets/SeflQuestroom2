@@ -45,7 +45,7 @@ void setup()
   delay(100);
   SEFL::Logger::getInstance()->setPrinter(&serial);
 
-  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::VERBOSE); // VERBOSE   NOTICE
+  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::WARNING); // VERBOSE   NOTICE
   SEFL::Logger::getInstance()->setPostMessage();
 
   SEFL::Logger::notice("main", "Initing board");

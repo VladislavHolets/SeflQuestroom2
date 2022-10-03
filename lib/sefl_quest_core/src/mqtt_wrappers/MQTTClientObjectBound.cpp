@@ -1,5 +1,6 @@
 #include "MQTTClientObjectBound.h"
 #include "../quest_clients/questboardmanager.h"
+#include "../utils/logger.h"
 namespace SEFL
 {
     template <typename ObjT>
@@ -26,8 +27,10 @@ namespace SEFL
     {
     }
     template class MQTTClientObjectBound<Quest_Board_Manager>;
+    template <typename ObjT>
     void clbwrap(String &topic, String &payload)
     {
-        reinterpret_cast<MQTTClientObjectBound<Quest_Board_Manager> *>(clbwrapobj)->mqttclb_(topic, payload);
+        Logger::warning(String("clbwrap"));
+        reinterpret_cast<MQTTClientObjectBound<ObjT>*>(clbwrapobj)->mqttclb_(topic, payload);
     }
 }

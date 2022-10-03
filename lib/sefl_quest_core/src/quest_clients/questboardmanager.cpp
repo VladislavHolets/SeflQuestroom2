@@ -34,6 +34,7 @@ namespace SEFL
 																																			  language),
 																							   power_status_(true), room_config_(room_config)
 	{
+		
 		this->clients_.setStorage(clients_storage, MAX_CLIENT_AMOUNT);
 		this->clients_.clear();
 		this->callbacksQueue.setStorage(callbackQueue_storage, MAX_MESSAGE_QUEUE_AMOUNT);
@@ -115,20 +116,27 @@ namespace SEFL
 		// }
 
 		// Stop if already connected.
+		Logger::notice(this->name_, "BM loop");
 		if (!this->getMqtt()->connected())
 		{
 			connect();
 		}
 		uint32_t timestamp_for_message_avaiting = millis();
-		while (millis() - timestamp_for_message_avaiting < 100)
-		{
-			if (!this->getMqtt()->loop())
-			{
-				connect();
+		
+		Logger::notice(this->name_, "mqtt loop");
+		Logger::notice(this->name_, this->callbacksQueue.size());
+		
+			//this->processCallbackQueueAll();
+		//while (millis() - timestamp_for_message_avaiting < 100)
+		////{
+			this->getMqtt()->loop();
+			if (!this->getMqtt()->connected()) {
+  				connect();
 			}
-			this->processCallbackQueueAll();
-		}
-
+			
+		//this->processCallbackQueueAll();
+				
+		//}
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{
 			Logger::notice(this->name_, "shut down");
@@ -160,6 +168,7 @@ namespace SEFL
 					this->clients_[i]->act();
 				}
 			}
+			Logger::notice(this->name_, "clients done");
 		}
 		if (this->host_.reset_trigger_)
 		{
@@ -268,10 +277,17 @@ namespace SEFL
 		CallbackItem *item = new CallbackItem();
 		item->subfeed = new String(topic_name);
 		item->payload = new String(payload_val);
+		Logger::notice(this->name_,"pushed callback ");
+		Logger::notice(this->name_,item->subfeed->c_str() );
+		Logger::notice(this->name_,item->payload->c_str());
 		this->callbacksQueue.push_back(item);
 	}
 	void Quest_Board_Manager::processCallbackQueueOne()
 	{
+		if (this->callbacksQueue.size()==0)return;
+		Logger::notice(this->name_,callbacksQueue[0]->subfeed->c_str());
+		
+		Logger::notice(this->name_,"started");
 		if (this->callbacksQueue[0]->subfeed->equals(this->getSubfeed()))
 		{
 			this->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());
@@ -290,6 +306,8 @@ namespace SEFL
 				}
 			}
 		}
+		
+		Logger::notice(this->name_,"finished");
 		delete this->callbacksQueue[0]->subfeed;
 		delete this->callbacksQueue[0]->payload;
 		delete this->callbacksQueue[0];
@@ -311,7 +329,7 @@ namespace SEFL
 	}
 	bool Quest_Board_Manager::connect()
 	{
-		if (!this->getMqtt()->connected())
+		while(!this->getMqtt()->connected())
 		{
 			Logger::notice(this->name_, F("Connecting to MQTT... "));
 			while (this->getMqtt()->connect(room_config_.IP, room_config_.username, room_config_.password) == 0)

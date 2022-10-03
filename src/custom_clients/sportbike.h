@@ -42,8 +42,6 @@ namespace SEFL
 		void setSportbikeLeftButton(uint8_t sportbikeLeftButton);
 		uint8_t getSportbikeRideLight();
 		void setSportbikeRideLight(uint8_t sportbikeRideLight);
-		uint8_t getSportbikeRideThrottle();
-		void setSportbikeRideThrottle(uint8_t sportbikeRideThrottle);
 		uint8_t getSportbikeRightButton();
 		void setSportbikeRightButton(uint8_t sportbikeRightButton);
 

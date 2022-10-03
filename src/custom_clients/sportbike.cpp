@@ -564,14 +564,6 @@ namespace SEFL
 		return sportbikeRightRelay;
 	}
 
-	uint8_t Sportbike::getSportbikeRideThrottle()
-	{
-	}
-
-	void Sportbike::setSportbikeRideThrottle(uint8_t sportbikeRideThrottle)
-	{
-	}
-
 	uint8_t Sportbike::getSportbikePowerRelay()
 	{
 		return sportbikePowerRelay;

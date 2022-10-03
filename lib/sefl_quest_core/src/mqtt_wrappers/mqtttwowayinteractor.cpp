@@ -51,10 +51,12 @@ namespace SEFL
 	bool MQTT_Two_Way_Interactor::publish(String payload, int qos)
 	{
 		this->getMqtt()->publish(this->getPubfeed().c_str(), payload.c_str(), payload.length(), 0, qos);
+		return true;
 	}
 	bool MQTT_Two_Way_Interactor::publish(const char *payload, int qos)
 	{
 		this->getMqtt()->publish(this->getPubfeed().c_str(), payload, strlen(payload), 0, qos);
+	return true;
 	}
 	// bool MQTT_Two_Way_Interactor::publish(const char *payload, unsigned int length, int qos)
 	// {

@@ -1,0 +1,28 @@
+{
+    "name": "SEFL Quest Core 2.0",
+    "version": "1.0.0",
+    "description": "This library is used to connect Arduino based escape room`s devices to SEFL escape room server via MQTT protocol.",
+    "keywords": "MQTT,Ethernet,SEFL,Escaperoom",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/VladislavHolets/SeflQuestroom2.git"
+    },
+    "authors": [
+        {
+            "name": "Vladyslav Holets",
+            "email": "vladislav.holets@gmail.com",
+            "url": "Telegram: @CaptainOnBoard",
+            "maintainer": true
+        }
+    ],
+    "license": "MIT",
+    "dependencies": {
+        "256dpi/MQTT": "~2.5.0",
+        "nachtravevl/PCA9685-Arduino": "~1.2.15",
+        "bblanchon/ArduinoJson": "~6.19.4",
+        "janelia-arduino/Vector": "~1.2.2",
+        "janelia-arduino/Array": "~1.2.1"
+    },
+    "frameworks": "Arduino",
+    "platforms": "*"
+}

@@ -27,10 +27,14 @@ namespace SEFL
     {
     }
     template class MQTTClientObjectBound<Quest_Board_Manager>;
-    template <typename ObjT>
     void clbwrap(String &topic, String &payload)
     {
-        Logger::warning(String("clbwrap"));
-        reinterpret_cast<MQTTClientObjectBound<ObjT>*>(clbwrapobj)->mqttclb_(topic, payload);
+        // Logger::warning(String("clbwrap"));
+        if (clbwrapobj == nullptr)
+        {
+            Logger::warning("mqtt", String("clbwrapobj is null"));
+            return;
+        }
+        reinterpret_cast<MQTTClientObjectBound<Quest_Board_Manager> *>(clbwrapobj)->mqttclb_(topic, payload);
     }
 }

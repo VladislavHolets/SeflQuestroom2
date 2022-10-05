@@ -40,7 +40,6 @@ namespace SEFL
 		this->callbacksQueue.setStorage(callbackQueue_storage, MAX_MESSAGE_QUEUE_AMOUNT);
 		this->callbacksQueue.clear();
 		mqtt.onMessage(this, &SEFL::Quest_Board_Manager::pushToCallbacksQueue);
-		// TODO: push callback as a method of board manager to the mqtt client;
 		Logger::notice("board_manager", F("constructor_done"));
 		SEFL::clbwrapobj = &mqtt;
 	}
@@ -86,7 +85,6 @@ namespace SEFL
 		}
 		String output;
 		serializeJson(repDoc, output);
-		// this->getMqtt()->publish(this->getPubfeed().c_str(), output.c_str(), 0, 2);
 		publish(output);
 	}
 
@@ -108,26 +106,11 @@ namespace SEFL
 
 	void Quest_Board_Manager::loop()
 	{
-		// if ((millis() - this->callback_timestamp) > SEFL::CALLBACK_TIMEOUT)
-		// {
-		// 	if (!this->getMqtt()->connected())
-		// 	{
-		// 		this->getMqtt()->disconnect();
-		// 	}
-		// }
-
-		// Stop if already connected.
-		Logger::notice(this->name_, "BM loop");
 		if (!this->getMqtt()->connected())
 		{
 			connect();
 		}
 		uint32_t timestamp_for_message_avaiting = millis();
-
-		Logger::notice(this->name_, "mqtt loop");
-		Logger::notice(this->name_, this->callbacksQueue.size());
-
-		// this->processCallbackQueueAll();
 		while (millis() - timestamp_for_message_avaiting < 100)
 		{
 			this->getMqtt()->loop();
@@ -247,8 +230,6 @@ namespace SEFL
 				if (this->clients_[i] != nullptr)
 				{
 					this->clients_[i]->setLanguage(this->language_);
-					// SEFL::Logger::verbose(clients_[i]->getName());
-					// SEFL::Logger::verbose(clients_[i]->getLanguage());
 				}
 			}
 		}

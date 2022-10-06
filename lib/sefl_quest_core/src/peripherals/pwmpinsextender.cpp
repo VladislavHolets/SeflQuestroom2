@@ -19,6 +19,7 @@ SEFL::PWM_Pins_Extender::PWM_Pins_Extender(byte i2cAddress, TwoWire &i2cWire,
 {
 	this->handler_ = new PCA9685(this->_i2cAddress, i2cWire, this->_i2cSpeed);
 	this->trashhold_ = this->MAX_PWM / 2;
+
 }
 
 SEFL::PWM_Pins_Extender::PWM_Pins_Extender(PCA9685 &handler, int16_t trashhold) : trashhold_((trashhold) ? trashhold : this->MAX_PWM / 2), _i2cAddress(

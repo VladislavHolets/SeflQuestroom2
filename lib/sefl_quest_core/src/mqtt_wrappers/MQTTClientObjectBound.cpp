@@ -3,6 +3,8 @@
 #include "../utils/logger.h"
 namespace SEFL
 {
+     MQTTClient *clbwrapobj;
+
     template <typename ObjT>
     MQTTClientObjectBound<ObjT>::MQTTClientObjectBound(int bufSize) : MQTTClient(bufSize)
     {

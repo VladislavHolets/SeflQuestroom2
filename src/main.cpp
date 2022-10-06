@@ -15,9 +15,10 @@
 #include "custom_clients/tombstone.h"
 #include "custom_clients/contract.h"
 #include "custom_clients/magnet.h"
-
 #define Uniboard 1
 using namespace SEFL;
+
+extern MQTTClient * clbwrapobj;
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
 // PCA9685_ServoEval pwmServo1;
@@ -36,64 +37,46 @@ void setup()
   SPI.setMOSI(PB15);
   SPI.setMISO(PB14);
   SPI.setSCLK(PB13);
-  // BUZZER DONT CHANGE OR REMOVE
+
   pinMode(PA1, OUTPUT);
   digitalWrite(PA1, LOW);
 
-  //логер
   serial.begin(9600);
   delay(100);
   SEFL::Logger::getInstance()->setPrinter(&serial);
 
-  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::WARNING); // VERBOSE   NOTICE
+  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::VERBOSE); // VERBOSE   NOTICE
   SEFL::Logger::getInstance()->setPostMessage();
-
   SEFL::Logger::notice("main", "Initing board");
 
-  //	//дфплееер
   dfserial.begin(9600);
-
-  //	if (player.begin(dfserial)) {
-  //		while (1){
-  //
-  //
-  //		SEFL::Logger::error("main", "DFPLAYER FAILED TO INIT");
-  //		delay(1000);
-  //		}
-  //	}
-
   player.begin(dfserial);
   player.volume(25);
   player.enableDAC();
   delay(100);
-  //	player.play(1);
-  //
-  //	player.play(2);
-  //	delay(2000);
-  //	player.next();
 
-  //	pixels.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
-
-  //шим мультиплексор
   pinMode(PB10, OUTPUT);
   digitalWrite(PB10, LOW);
+  Wire.setSCL(PB6);
+  Wire.setSDA(PB7);
   Wire.begin();
   Pext.getHandler()->resetDevices();
   Pext.getHandler()->init();
   Pext.getHandler()->setPWMFrequency(1600); // 1600
   Pext.getHandler()->setAllChannelsPWM(4096);
-  //	Pext.getHandler()->setChannelOn(9);
-  //	delay(1000);
-  //	Pext.getHandler()->setChannelOff(144);
-  //	delay(1000);
-  //	Pext.getHandler()->setChannelOn(9);
-  //		delay(1000);
-  //		Pext.getHandler()->setChannelOff(9);
-  //		delay(1000);
-  //		Pext.getHandler()->setChannelOn(9);
-  //			delay(1000);
-  //			Pext.getHandler()->setChannelOff(9);
-  //			delay(1000);
+  SEFL::Logger::verbose("main",String(Pext.getHandler()->getI2CAddress()));
+  // Pext.getHandler()->setChannelOn(9);
+  // delay(1000);
+  // Pext.getHandler()->setChannelOff(14);
+  // delay(1000);
+  // Pext.getHandler()->setChannelOn(9);
+  // delay(1000);
+  // Pext.getHandler()->setChannelOff(9);
+  // delay(1000);
+  // Pext.getHandler()->setChannelOn(9);
+  // delay(1000);
+  // Pext.getHandler()->setChannelOff(9);
+  // delay(1000);
 
   SEFL::Logger::verbose("main", "Initing ethernet");
 
@@ -135,6 +118,7 @@ void setup()
   //                            SEFL::DEFAULT_MQTT_CONFIG.password);
 
   SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
+  SEFL::clbwrapobj=&mqttclient;
 
   SEFL::Logger::verbose("main", "Started MQTT_Manager instance");
 
@@ -170,7 +154,6 @@ void setup()
     SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "gbu4", "gb21");
   #endif
   */
-
   SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");
 
   //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище

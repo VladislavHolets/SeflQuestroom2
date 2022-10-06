@@ -41,7 +41,7 @@ namespace SEFL
 		this->callbacksQueue.clear();
 		mqtt.onMessage(this, &SEFL::Quest_Board_Manager::pushToCallbacksQueue);
 		Logger::notice("board_manager", F("constructor_done"));
-		SEFL::clbwrapobj = &mqtt;
+		
 	}
 
 	Quest_Board_Manager::~Quest_Board_Manager()

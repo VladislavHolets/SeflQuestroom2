@@ -20,6 +20,7 @@ namespace SEFL
     private:
     };
     void clbwrap(String &topic, String &payload);
-    static MQTTClient *clbwrapobj;
+    extern     MQTTClient *clbwrapobj;
+
 }
 #endif

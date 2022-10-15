@@ -67,19 +67,6 @@ void setup()
   Pext.getHandler()->setPWMFrequency(1600); // 1600
   Pext.getHandler()->setAllChannelsPWM(4096);
   SEFL::Logger::verbose("main", String(Pext.getHandler()->getI2CAddress()));
-  // Pext.getHandler()->setChannelOn(9);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOff(14);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOn(9);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOff(9);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOn(9);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOff(9);
-  // delay(1000);
-
   SEFL::Logger::verbose("main", "Initing ethernet");
 
 #if Uniboard == 1
@@ -115,9 +102,6 @@ void setup()
   SEFL::Logger::verbose("main", "Inited ethernet");
 
   SEFL::Logger::verbose("main", "Starting MQTT_Manager instance");
-  // SEFL::MQTT_Manager mqttclient(&client, SEFL::DEFAULT_MQTT_CONFIG.IP,
-  //                            SEFL::DEFAULT_MQTT_CONFIG.port, SEFL::DEFAULT_MQTT_CONFIG.username,
-  //                            SEFL::DEFAULT_MQTT_CONFIG.password);
 
   SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
   SEFL::clbwrapobj = &mqttclient;
@@ -126,7 +110,9 @@ void setup()
 
   SEFL::Logger::verbose("main", "Starting ethernet");
   Ethernet.begin(mac);
+
   mqttclient.begin(SEFL::DEFAULT_MQTT_CONFIG.IP, client);
+
   SEFL::Logger::verbose("main", "Started ethernet");
 
   SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");

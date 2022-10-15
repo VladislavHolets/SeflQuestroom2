@@ -18,7 +18,7 @@
 #define Uniboard 1
 using namespace SEFL;
 
-extern MQTTClient * clbwrapobj;
+extern MQTTClient *clbwrapobj;
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
 // PCA9685_ServoEval pwmServo1;
@@ -64,7 +64,7 @@ void setup()
   Pext.getHandler()->init();
   Pext.getHandler()->setPWMFrequency(1600); // 1600
   Pext.getHandler()->setAllChannelsPWM(4096);
-  SEFL::Logger::verbose("main",String(Pext.getHandler()->getI2CAddress()));
+  SEFL::Logger::verbose("main", String(Pext.getHandler()->getI2CAddress()));
   // Pext.getHandler()->setChannelOn(9);
   // delay(1000);
   // Pext.getHandler()->setChannelOff(14);
@@ -118,7 +118,7 @@ void setup()
   //                            SEFL::DEFAULT_MQTT_CONFIG.password);
 
   SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
-  SEFL::clbwrapobj=&mqttclient;
+  SEFL::clbwrapobj = &mqttclient;
 
   SEFL::Logger::verbose("main", "Started MQTT_Manager instance");
 

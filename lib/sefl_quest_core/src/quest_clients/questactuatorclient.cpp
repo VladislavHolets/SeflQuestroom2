@@ -8,7 +8,7 @@
 #include <ArduinoJson.h>
 #include "questactuatorclient.h"
 #include <WString.h>
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 namespace SEFL
 {
 

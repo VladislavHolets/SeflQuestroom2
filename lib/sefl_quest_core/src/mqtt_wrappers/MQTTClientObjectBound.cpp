@@ -3,10 +3,10 @@
 #include "../utils/logger.h"
 namespace SEFL
 {
-     MQTTClient *clbwrapobj;
+    AsyncMqttClient *clbwrapobj;
 
     template <typename ObjT>
-    MQTTClientObjectBound<ObjT>::MQTTClientObjectBound(int bufSize) : MQTTClient(bufSize)
+    MQTTClientObjectBound<ObjT>::MQTTClientObjectBound(int bufSize) : AsyncMqttClient(bufSize)
     {
     }
 

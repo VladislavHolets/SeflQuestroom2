@@ -10,7 +10,7 @@
 namespace SEFL
 {
 
-	MQTTClient *MQTT_Two_Way_Interactor::getMqtt()
+	AsyncMqttClient *MQTT_Two_Way_Interactor::getMqtt()
 	{
 		return (mqtt_);
 	}
@@ -19,7 +19,7 @@ namespace SEFL
 	// 												 String subfeed, String pubfeed) : mqtt_(&mqtt), subfeed_(subfeed), pubfeed_(pubfeed), sub_(mqtt,
 	// 																																			subfeed_.c_str(), &SEFL::MQTT_Two_Way_Interactor::inputClb,
 	// 																																			this, 1)
-	MQTT_Two_Way_Interactor::MQTT_Two_Way_Interactor(MQTTClient &mqtt,
+	MQTT_Two_Way_Interactor::MQTT_Two_Way_Interactor(AsyncMqttClient &mqtt,
 													 String subfeed, String pubfeed) : mqtt_(&mqtt), subfeed_(subfeed), pubfeed_(pubfeed)
 	{
 		// this->mqtt_->subscribe(&sub_);
@@ -50,12 +50,12 @@ namespace SEFL
 	}
 	bool MQTT_Two_Way_Interactor::publish(String payload, int qos)
 	{
-		this->getMqtt()->publish(this->getPubfeed().c_str(), payload.c_str(), payload.length(), 0, qos);
+		this->getMqtt()->publish(this->getPubfeed().c_str(), qos, 0, payload.c_str(), payload.length());
 		return true;
 	}
 	bool MQTT_Two_Way_Interactor::publish(const char *payload, int qos)
 	{
-		this->getMqtt()->publish(this->getPubfeed().c_str(), payload, strlen(payload), 0, qos);
+		this->getMqtt()->publish(this->getPubfeed().c_str(), qos, 0, payload, strlen(payload));
 		return true;
 	}
 	// bool MQTT_Two_Way_Interactor::publish(const char *payload, unsigned int length, int qos)

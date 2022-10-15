@@ -7,7 +7,8 @@
 
 #ifndef MQTTTWOWAYINTERRACTOR_H_
 #define MQTTTWOWAYINTERRACTOR_H_
-#include <MQTT.h>
+
+#include <AsyncMqtt_Generic.h>
 #include <sys/_stdint.h>
 #include <WString.h>
 #include "../constants.h"
@@ -17,20 +18,20 @@ namespace SEFL
 	class MQTT_Two_Way_Interactor
 	{
 	private:
-		MQTTClient *mqtt_;
+		AsyncMqttClient *mqtt_;
 		String subfeed_;
 		String pubfeed_;
 		// SEFL::MQTT_Subscriber_Object_Bound<MQTT_Two_Way_Interactor> sub_;
 
 	protected:
 	public:
-		MQTTClient *getMqtt();
+		AsyncMqttClient *getMqtt();
 
 		virtual void inputClb(const char *data, uint16_t len) = 0;
 		// MQTT_Two_Way_Interactor(SEFL::MQTTClient &mqtt, String subfeed = "",
 		// 						String pubfeed = "");
 
-		MQTT_Two_Way_Interactor(MQTTClient &mqtt, String subfeed = "",
+		MQTT_Two_Way_Interactor(AsyncMqttClient &mqtt, String subfeed = "",
 								String pubfeed = "");
 		virtual ~MQTT_Two_Way_Interactor();
 

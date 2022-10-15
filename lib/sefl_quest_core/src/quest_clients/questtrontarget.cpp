@@ -8,7 +8,7 @@
 #include <ArduinoJson.h>
 #include <Array.h>
 #include <IRremote.h>
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 #include <sys/_stdint.h>
 #include <WString.h>
 #include "../constants.h"

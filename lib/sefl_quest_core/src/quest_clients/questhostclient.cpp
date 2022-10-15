@@ -7,7 +7,7 @@
 
 #include <ArduinoJson.h>
 #include "../utils/logger.h"
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 #include "questhostclient.h"
 #include <WString.h>
 

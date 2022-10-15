@@ -1,12 +1,12 @@
 #ifndef MQTTCLIENTOBJECTBOUND_H
 #define MQTTCLIENTOBJECTBOUND_H
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 
 #pragma once
 namespace SEFL
 {
     template <typename ObjT>
-    class MQTTClientObjectBound : public MQTTClient
+    class MQTTClientObjectBound : public AsyncMqttClient
     {
     public:
         typedef void (ObjT::*CallbackBufferT)(String &topic, String &payload);
@@ -20,7 +20,7 @@ namespace SEFL
     private:
     };
     void clbwrap(String &topic, String &payload);
-    extern     MQTTClient *clbwrapobj;
+    extern AsyncMqttClient *clbwrapobj;
 
 }
 #endif

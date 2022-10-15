@@ -8,7 +8,7 @@
 #include "../utils/logger.h"
 #include "questclient.h"
 
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 namespace SEFL
 {
 

@@ -6,7 +6,7 @@
  */
 
 #include <ArduinoJson.h>
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 #include "../peripherals/multpinsextender.h"
 #include "queststartbutton.h"
 #include <WString.h>

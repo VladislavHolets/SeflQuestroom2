@@ -6,7 +6,7 @@
  */
 
 #include <ArduinoJson.h>
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 #include "questsensorclient.h"
 #include <WString.h>
 

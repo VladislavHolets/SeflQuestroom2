@@ -15,10 +15,12 @@
 #include "custom_clients/tombstone.h"
 #include "custom_clients/contract.h"
 #include "custom_clients/magnet.h"
+#include <Ticker.h> // https://github.com/sstaub/Ticker
+
 #define Uniboard 1
 using namespace SEFL;
 
-extern MQTTClient *clbwrapobj;
+extern AsyncMqttClient *clbwrapobj;
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
 // PCA9685_ServoEval pwmServo1;

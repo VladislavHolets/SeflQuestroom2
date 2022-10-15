@@ -8,7 +8,7 @@
 #include <ArduinoJson.h>
 #include "questtimerclient.h"
 #include "../constants.h"
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 
 namespace SEFL
 {

@@ -11,7 +11,7 @@
 #include "../constants.h"
 #include "questclient.h"
 #include <sys/_stdint.h>
-#include <MQTT.h>
+#include <AsyncMqtt_Generic.h>
 namespace SEFL
 {
 

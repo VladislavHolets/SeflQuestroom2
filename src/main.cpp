@@ -124,34 +124,34 @@ void setup()
 
   SEFL::Logger::verbose("main", "Starting ethernet");
   Ethernet.begin(mac);
-  mqttclient.begin(SEFL::DEFAULT_MQTT_CONFIG.IP, client);
+  mqttclient.begin(SEFL::RYBALSKA3_MQTT_CONFIG.IP, client);
   SEFL::Logger::verbose("main", "Started ethernet");
 
   SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
 
 #if Uniboard == 1
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U1", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U1", "gr22");
 #endif
 
 #if Uniboard == 2
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U2", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U2", "gr22");
 #endif
 
 #if Uniboard == 3
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U3", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U3", "gr22");
 #endif
 
 #if Uniboard == 4
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U4", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U4", "gr22");
 #endif
 
 #if Uniboard == 5
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "U5", "gr22");
+  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U5", "gr22");
 #endif
 
   /*
   #if Uniboard == 10
-    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::DEFAULT_MQTT_CONFIG, "gbu4", "gb21");
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "gbu4", "gb21");
   #endif
   */
   SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");

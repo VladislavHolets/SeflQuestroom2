@@ -20,13 +20,8 @@ namespace SEFL
 		{
 			this->changed_status_ = false;
 			this->reportStatus();
-			for (int i = 0; i < anodes_amount; ++i)
-			{
-				for (int j = 0; j < cathodes_amount; ++j)
-				{
-					this->current[i][j] = 0;
-				}
-			}
+			initButtons();
+			refreshStrip();
 		}
 	}
 
@@ -45,7 +40,7 @@ namespace SEFL
 		{
 			this->setStatus(SEFL::BasicClientStatuses::FINISHED_STATUS);
 		}
-		delay(100);
+		// delay(100);
 	}
 
 	void TronLEDMatrixPuzzleNeopixel::onFinished()
@@ -109,6 +104,7 @@ namespace SEFL
 	void TronLEDMatrixPuzzleNeopixel::refreshStrip()
 	{
 		Mext.digitalRead(this->strip_pin);
+		strip.begin();
 		for (int i = 0; i < this->buttons_amount; i++)
 		{
 			this->strip.fill(this->getColor(this->buttons_colors[i]), i * segment_size, segment_size);
@@ -126,7 +122,14 @@ namespace SEFL
 		}
 		return true;
 	}
-	void TronLEDMatrixPuzzleNeopixel::setPattern(uint8_t *array, uint8_t size)
+	void TronLEDMatrixPuzzleNeopixel::setStripPin(uint8_t pin)
+	{
+		if (pin >= 0 && pin < 16)
+		{
+			this->strip_pin = pin;
+		}
+	}
+	void TronLEDMatrixPuzzleNeopixel::setPattern(const uint8_t *array, uint8_t size)
 	{
 		if (this->buttons_amount == size)
 		{
@@ -136,7 +139,7 @@ namespace SEFL
 			}
 		}
 	}
-	void TronLEDMatrixPuzzleNeopixel::setButtons(uint8_t *array, uint8_t size)
+	void TronLEDMatrixPuzzleNeopixel::setButtons(const uint8_t *array, uint8_t size)
 	{
 		this->buttons_amount = size;
 		if (this->buttons_pins != nullptr)
@@ -186,6 +189,7 @@ namespace SEFL
 			Adafruit_NeoPixel::Color(0, 255, 255),
 			Adafruit_NeoPixel::Color(255, 255, 255),
 		};
+		return (colors[color % colors_size]);
 	}
 
 } /* namespace SEFL */

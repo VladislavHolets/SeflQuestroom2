@@ -110,8 +110,17 @@ void setup()
 
   // board 1
 #if Uniboard == 1
-  TronLEDMatrixPuzzle matrix(mqttclient, "matrix", 1, "tr22");
-
+  TronLEDMatrixPuzzleNeopixel matrix(mqttclient, "matrix", 1, "tr22");
+  const uint8_t buttons[] = {
+      1, 2, 3, 4, 5, 6, 7, 8, 9};
+  const uint8_t correct_colors[] = {
+      1, 2, 3, 1, 2, 3, 1, 2, 3};
+  const uint8_t strip_pin = 0;
+  const uint8_t segment_size = 2;
+  matrix.setButtons(buttons, sizeof(buttons));
+  matrix.setPattern(correct_colors, sizeof(correct_colors));
+  matrix.setStripPin(strip_pin);
+  matrix.setStripSegmentSize(segment_size);
 #endif
 // board 2
 #if Uniboard == 2

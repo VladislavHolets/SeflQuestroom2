@@ -44,8 +44,8 @@ namespace SEFL
 		virtual ~TronLEDMatrixPuzzleNeopixel();
 		// user defined
 		void setStripPin(uint8_t pin);
-		void setButtons(uint8_t *array, uint8_t size);
-		void setPattern(uint8_t *array, uint8_t size);
+		void setButtons(const uint8_t *array, uint8_t size);
+		void setPattern(const uint8_t *array, uint8_t size);
 		uint8_t *getButtons();
 		uint8_t getButtonsSize();
 		Adafruit_NeoPixel *getStrip();

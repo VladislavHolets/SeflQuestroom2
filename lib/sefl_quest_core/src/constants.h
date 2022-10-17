@@ -164,8 +164,11 @@ namespace SEFL
 		uint8_t MANUAL_3_PIN;
 	};
 
-	static const MQTT_Config DEFAULT_MQTT_CONFIG = {"192.168.90.132", 1883,
-													"questroom", "likekadroom"};
+	static const MQTT_Config RYBALSKA3_MQTT_CONFIG = {"192.168.90.132", 1883,
+													  "questroom", "likekadroom"};
+
+	static const MQTT_Config EDMONTON_MQTT_CONFIG = {"192.168.10.10", 1883,
+													 "questroom", "likekadroom"};
 	static const uint8_t QOS_DEFAULT = 2;
 }
 #endif /* CONSTANTS_H_ */

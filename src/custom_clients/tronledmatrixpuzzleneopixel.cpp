@@ -36,7 +36,7 @@ namespace SEFL
 		}
 		this->scanButtons();
 		bool solved = checkPattern();
-		if (solved == true)
+		if (solved)
 		{
 			this->setStatus(SEFL::BasicClientStatuses::FINISHED_STATUS);
 		}
@@ -49,7 +49,7 @@ namespace SEFL
 		{
 			this->changed_status_ = false;
 			this->reportStatus();
-			pinMode(Mext.getCi(), INPUT_PULLDOWN);
+			pinMode(Mext.getCi(), INPUT_PULLUP);
 		}
 	}
 
@@ -59,7 +59,7 @@ namespace SEFL
 		{
 			this->changed_status_ = false;
 			this->reportStatus();
-			pinMode(Mext.getCi(), INPUT_PULLDOWN);
+			pinMode(Mext.getCi(), INPUT_PULLUP);
 		}
 	}
 
@@ -68,7 +68,19 @@ namespace SEFL
 															 const char *out_topic, SEFL::Language language) : Quest_Basic_Client(mqtt, name, reset_status, placement, in_topic,
 																																  out_topic, language)
 	{
-	}
+        this->buttons_colors= nullptr;
+        this->buttons_correct_colors= nullptr;
+        this->buttons_pins= nullptr;
+        this->buttons_states= nullptr;
+        this->buttons_amount=0;
+        this->strip.setPin(Mext.getCi());
+        this->strip.updateType(NEO_GRB + NEO_KHZ800);
+        Mext.digitalRead(this->strip_pin);
+        pinMode(Mext.getCi(),INPUT);
+        strip.begin();
+        strip.clear();
+        this->strip.show();
+    }
 	void TronLEDMatrixPuzzleNeopixel::initButtons()
 	{
 		for (int i = 0; i < this->buttons_amount; i++)
@@ -80,10 +92,15 @@ namespace SEFL
 
 	void TronLEDMatrixPuzzleNeopixel::scanButtons()
 	{
+       // SEFL::Logger::notice(this->getName(), "scanning buttons");
+        pinMode(Mext.getCi(), INPUT_PULLUP);
 		bool refreshFlag = false;
 		for (int i = 0; i < this->buttons_amount; i++)
 		{
 			bool value = Mext.digitalRead(this->buttons_pins[i]);
+
+           // SEFL::Logger::notice(this->getName(), buttons_pins[i]);
+           // SEFL::Logger::notice(this->getName(), value);
 			if (value == LOW && this->buttons_states[i] == ButtonState::RESETED)
 			{
 				this->buttons_states[i] = ButtonState::PRESSED;
@@ -98,24 +115,33 @@ namespace SEFL
 		}
 		if (refreshFlag)
 		{
+            SEFL::Logger::notice(this->getName(), "LED REFRESH TIME");
 			this->refreshStrip();
 		}
+        //this->refreshStrip();
 	}
 	void TronLEDMatrixPuzzleNeopixel::refreshStrip()
 	{
 		Mext.digitalRead(this->strip_pin);
+        pinMode(Mext.getCi(),INPUT);
 		strip.begin();
+        //strip.clear();
+       // this->strip.show();
 		for (int i = 0; i < this->buttons_amount; i++)
 		{
-			this->strip.fill(this->getColor(this->buttons_colors[i]), i * segment_size, segment_size);
-		}
+			//this->strip.fill(this->getColor(this->buttons_colors[i]), i * segment_size, segment_size);
+		for (int j=0;j<segment_size;j++){
+            this->strip.setPixelColor(i*segment_size+j,this->getColor(this->buttons_colors[i]));
+        }
+        }
+        this->strip.show();
 		this->strip.show();
 	}
 	bool TronLEDMatrixPuzzleNeopixel::checkPattern()
 	{
 		for (size_t i = 0; i < this->buttons_amount; i++)
 		{
-			if (this->buttons_colors != this->buttons_correct_colors)
+			if (this->buttons_colors[i] != this->buttons_correct_colors[i])
 			{
 				return false;
 			}
@@ -135,7 +161,7 @@ namespace SEFL
 		{
 			for (int i = 0; i < this->buttons_amount; i++)
 			{
-				this->buttons_correct_colors[i] = array[size];
+				this->buttons_correct_colors[i] = array[i];
 			}
 		}
 	}
@@ -156,11 +182,10 @@ namespace SEFL
 		this->strip.updateLength(this->buttons_amount * segment_size);
 		for (int i = 0; i < this->buttons_amount; i++)
 		{
-			this->buttons_pins[i] = array[size];
+			this->buttons_pins[i] = array[i];
 		}
 		this->initButtons();
 	}
-	void setPattern(uint8_t *array, uint8_t size);
 	uint8_t *TronLEDMatrixPuzzleNeopixel::getButtons()
 	{
 		return this->buttons_pins;
@@ -175,8 +200,10 @@ namespace SEFL
 		{
 			this->segment_size = segment_size;
 		}
+
+        this->strip.updateLength(this->buttons_amount * segment_size);
 	}
-	uint8_t TronLEDMatrixPuzzleNeopixel::getColor(uint8_t color)
+	uint32_t TronLEDMatrixPuzzleNeopixel::getColor(uint8_t color)
 	{
 
 		static const uint32_t colors[colors_size]{

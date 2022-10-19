@@ -20,7 +20,7 @@ void setup()
   delay(100);
   SEFL::Logger::getInstance()->setPrinter(&serial);
 
-  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::VERBOSE); // VERBOSE   NOTICE
+  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE
   SEFL::Logger::getInstance()->setPostMessage();
   SEFL::Logger::notice("main", "Initing board");
 #ifdef USE_DFPLAYER
@@ -114,7 +114,7 @@ void setup()
   const uint8_t buttons[] = {
       1, 2, 3, 4, 5, 6, 7, 8, 9};
   const uint8_t correct_colors[] = {
-      1, 2, 3, 1, 2, 3, 1, 2, 3};
+      1, 4, 1, 4, 2, 2, 1, 2, 4};
   const uint8_t strip_pin = 0;
   const uint8_t segment_size = 2;
   matrix.setButtons(buttons, sizeof(buttons));

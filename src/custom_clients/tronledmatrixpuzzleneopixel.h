@@ -38,26 +38,27 @@ namespace SEFL
 		bool checkPattern();
 
 	public:
-		TronLEDMatrixPuzzleNeopixel(MQTTClient &mqtt, const char *name = DEFAULT_DEVICE_NAME,
+		explicit TronLEDMatrixPuzzleNeopixel(MQTTClient &mqtt, const char *name = DEFAULT_DEVICE_NAME,
 									uint8_t reset_status = 1, const char *placement = DEFAULT_PLACEMENT,
 									const char *in_topic = DEFAUT_IN_TOPIC, const char *out_topic = DEFAUT_OUT_TOPIC, SEFL::Language language = UKR);
-		virtual ~TronLEDMatrixPuzzleNeopixel();
+		~TronLEDMatrixPuzzleNeopixel() override;
 		// user defined
 		void setStripPin(uint8_t pin);
 		void setButtons(const uint8_t *array, uint8_t size);
 		void setPattern(const uint8_t *array, uint8_t size);
 		uint8_t *getButtons();
 		uint8_t getButtonsSize();
-		Adafruit_NeoPixel *getStrip();
 		void setStripSegmentSize(uint8_t segment_size);
-		uint8_t getColor(uint8_t color);
+		uint32_t getColor(uint8_t color);
 
 		// predefined for the device type
-		virtual void onActive() override;
-		virtual void onFinished() override;
-		virtual void onManualFinished() override;
-		virtual void onDefault() override;
-	};
+		void onActive() override;
+		void onFinished() override;
+		void onManualFinished() override;
+		void onDefault() override;
+
+
+    };
 
 } /* namespace SEFL */
 

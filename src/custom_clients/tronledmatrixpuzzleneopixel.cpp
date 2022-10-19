@@ -97,6 +97,7 @@ namespace SEFL
 		bool refreshFlag = false;
 		for (int i = 0; i < this->buttons_amount; i++)
 		{
+
 			bool value = Mext.digitalRead(this->buttons_pins[i]);
 
            // SEFL::Logger::notice(this->getName(), buttons_pins[i]);

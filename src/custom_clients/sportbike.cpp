@@ -160,12 +160,12 @@ namespace SEFL
 				if (player != nullptr)
 				{
 					player->play(1);
-					flag = 1;
-					thtrottle_count = 1;
-					flagTachometer = 0;
-					flagThrottle = 0;
 					SEFL::Logger::verbose("Sportbike", "0001.mp3");
 				}
+				flag = 1;
+				thtrottle_count = 1;
+				flagTachometer = 0;
+				flagThrottle = 0;
 			}
 
 			//-------------------------------------------------------------------
@@ -420,7 +420,7 @@ namespace SEFL
 			Pext.digitalWrite(sportbikePowerRelay, HIGH);
 			Pext.analogWrite(tachometerPower, 0);
 
-			if (flag != 0)
+			if (flag != 0 && player != nullptr) 
 			{
 				player->play(6);
 			}
@@ -437,6 +437,10 @@ namespace SEFL
 		{
 			unsetChangedStatus();
 			this->reportStatus();
+			if (player != nullptr)
+			{
+				player->stop();
+			}
 			SEFL::Logger::verbose("Sportbike", "onFinished");
 			Pext.digitalWrite(sportbikeRideLight, HIGH);
 			Pext.digitalWrite(sportbikePowerRelay, HIGH);
@@ -458,6 +462,10 @@ namespace SEFL
 		{
 			unsetChangedStatus();
 			this->reportStatus();
+			if (player != nullptr)
+			{
+				player->stop();
+			}
 			SEFL::Logger::verbose("Sportbike", "onManualFinished");
 			Pext.digitalWrite(sportbikeRideLight, HIGH);
 			Pext.digitalWrite(sportbikePowerRelay, HIGH);
@@ -480,7 +488,10 @@ namespace SEFL
 			unsetChangedStatus();
 			this->reportStatus();
 			SEFL::Logger::verbose("Sportbike", "onDefault");
-			player->stop();
+			if (player != nullptr)
+			{
+				player->stop();
+			}
 			Pext.digitalWrite(sportbikeRideLight, HIGH);
 			Pext.digitalWrite(sportbikePowerRelay, HIGH);
 

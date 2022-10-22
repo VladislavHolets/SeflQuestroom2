@@ -11,24 +11,47 @@
 #include <wiring_time.h>
 #include <Wire.h>
 #include <sefl_quest_core.h>
+
+#define Uniboard 4
+
+#if Uniboard == 1
 #include "custom_clients/crypt.h"
 #include "custom_clients/tombstone.h"
 #include "custom_clients/contract.h"
+#endif
+#if Uniboard == 2
+#include "custom_clients/labyrinth.h"
+#include "custom_clients/elevatorout.h"
+#include "custom_clients/elevatorin.h"
+#include "custom_clients/tornado.h"
+#include "custom_clients/underwater.h"
+#include "custom_clients/home.h"
+#endif
+#if Uniboard == 3
+#include "custom_clients/motorcycles.h"
+#include "custom_clients/keyboard.h"
+#include "custom_clients/fireplace.h"
+#endif
+#if Uniboard == 4
+#include "custom_clients/sportbike.h"
+#include "custom_clients/sportbikeride.h"
+#endif
+#if Uniboard == 5
+#include "custom_clients/chains.h"
+#include "custom_clients/elevatorChopperDown.h"
+#include "custom_clients/elevatorChopperUp.h"
+#include "custom_clients/chopper.h"
+#include "custom_clients/chopperride.h"
+#endif
+
+
 #include "custom_clients/magnet.h"
-#define Uniboard 1
+
 using namespace SEFL;
 
 extern MQTTClient *clbwrapobj;
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
-// PCA9685_ServoEval pwmServo1;
-
-//#define PIN        PB_2 // On Trinket or Gemma, suggest changing this to 1
-//#define NUMPIXELS 16 // Popular NeoPixel ring size
-// Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
-////Adafruit_NeoPixel strip(27, PB_2, NEO_GRB + NEO_KHZ800);
-//
-//#define DELAYVAL 500 // Time (in milliseconds) to pause between pixels
 
 SoftwareSerial serial(PA_3, PA_2); // PA_12
 void setup()
@@ -45,7 +68,7 @@ void setup()
   delay(100);
   SEFL::Logger::getInstance()->setPrinter(&serial);
 
-  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::VERBOSE); // VERBOSE   NOTICE
+  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::VERBOSE); // VERBOSE   NOTICE SILENT
   SEFL::Logger::getInstance()->setPostMessage();
   SEFL::Logger::notice("main", "Initing board");
 
@@ -65,39 +88,29 @@ void setup()
   Pext.getHandler()->setPWMFrequency(1600); // 1600
   Pext.getHandler()->setAllChannelsPWM(4096);
   SEFL::Logger::verbose("main", String(Pext.getHandler()->getI2CAddress()));
-  // Pext.getHandler()->setChannelOn(9);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOff(14);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOn(9);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOff(9);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOn(9);
-  // delay(1000);
-  // Pext.getHandler()->setChannelOff(9);
-  // delay(1000);
 
   SEFL::Logger::verbose("main", "Initing ethernet");
 
+  //мак адреси для гб ідуть формату 30:16:00:00:00:ХХ
+  // для гр 30:16:00:00:01:ХХ
 #if Uniboard == 1
-  byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x03};
+  byte mac[] = {0x30, 0x16, 0x0A, 0x00, 0x01, 0x03};
 #endif
 
 #if Uniboard == 2
-  byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x04};
+  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x04};
 #endif
 
 #if Uniboard == 3
-  byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x06};
+  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x06};
 #endif
 
 #if Uniboard == 4
-  byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x07};
+  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x07};
 #endif
 
 #if Uniboard == 5
-  byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x08};
+  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x08};
 #endif
   /*
 
@@ -106,16 +119,11 @@ void setup()
   #endif
   */
 
-  //мак адреси для гб ідуть формату 30:16:00:00:00:ХХ
-  // для гр 30:16:00:00:01:ХХ
   Ethernet.init(PB12);
   EthernetClient client;
   SEFL::Logger::verbose("main", "Inited ethernet");
 
   SEFL::Logger::verbose("main", "Starting MQTT_Manager instance");
-  // SEFL::MQTT_Manager mqttclient(&client, SEFL::DEFAULT_MQTT_CONFIG.IP,
-  //                            SEFL::DEFAULT_MQTT_CONFIG.port, SEFL::DEFAULT_MQTT_CONFIG.username,
-  //                            SEFL::DEFAULT_MQTT_CONFIG.password);
 
   SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
   SEFL::clbwrapobj = &mqttclient;
@@ -295,6 +303,8 @@ void setup()
   labyrinth.setElevatorInSwith(12);
   labyrinth.setElevatorOutSwith(13);
 
+  SEFL::Home home(mqttclient, "home", 1, "gr22");
+
   //			 setup outputs
 
   //		labyrinth.setLabyrinthAddressLed(12); ---------->>  PB7
@@ -371,7 +381,7 @@ void setup()
   sportbike.setSportbikeKey(0);
   sportbike.setSportbikeLeftButton(1);
   sportbike.setSportbikeRightButton(2);
-  sportbike.setSportbikeRideThrottle(3);
+  sportbike.setSportbikeThrottle(3);
   sportbike.setSportbikeRideLightButton(6);
 
   // setup outputs
@@ -522,6 +532,7 @@ void setup()
   b_manager.addClient(&elevatorin);
   b_manager.addClient(&elevatorout);
   b_manager.addClient(&labyrinth);
+  b_manager.addClient(&home);
 #endif
 
   // board 3

@@ -18,6 +18,7 @@
 #include "custom_clients/crypt.h"
 #include "custom_clients/tombstone.h"
 #include "custom_clients/contract.h"
+<<<<<<< HEAD
 #endif
 #if Uniboard == 2
 #include "custom_clients/labyrinth.h"
@@ -43,6 +44,10 @@
 #include "custom_clients/chopper.h"
 #include "custom_clients/chopperride.h"
 #endif
+=======
+
+
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
 
 
 #include "custom_clients/magnet.h"
@@ -94,22 +99,43 @@ void setup()
   //мак адреси для гб ідуть формату 30:16:00:00:00:ХХ
   // для гр 30:16:00:00:01:ХХ
 #if Uniboard == 1
+<<<<<<< HEAD
   byte mac[] = {0x30, 0x16, 0x0A, 0x00, 0x01, 0x03};
 #endif
 
 #if Uniboard == 2
+=======
+  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x03};
+  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x03};
+#endif
+
+#if Uniboard == 2
+  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x04};
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
   byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x04};
 #endif
 
 #if Uniboard == 3
+<<<<<<< HEAD
+=======
+  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x06};
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
   byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x06};
 #endif
 
 #if Uniboard == 4
+<<<<<<< HEAD
+=======
+  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x07};
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
   byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x07};
 #endif
 
 #if Uniboard == 5
+<<<<<<< HEAD
+=======
+  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x08};
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
   byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x08};
 #endif
   /*

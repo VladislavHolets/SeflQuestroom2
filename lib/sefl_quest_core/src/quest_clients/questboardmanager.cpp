@@ -111,18 +111,28 @@ namespace SEFL
 		{
 			connect();
 		}
+<<<<<<< HEAD
 		static uint32_t timestamp_for_message_avaiting = 0;
 		timestamp_for_message_avaiting = millis();
 		while (millis() - timestamp_for_message_avaiting < message_awaiting_interval)
 		{
+=======
+		uint32_t timestamp_for_message_avaiting = millis();
+		//while (millis() - timestamp_for_message_avaiting < 100)
+		//{
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
 			this->getMqtt()->loop();
 			if (!this->getMqtt()->connected())
 			{
 				connect();
 			}
+<<<<<<< HEAD
 		}
 		static uint32_t timestamp_begining_of_loop=0;
 		timestamp_begining_of_loop=millis();
+=======
+		//}
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
 		this->processCallbackQueueAll();
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{

@@ -35,9 +35,9 @@ namespace SEFL {
 
         PextMextKeyboard();
 
-        void setPextPins(uint8_t *pextPins, uint8_t pextPinsSize);
-        void setMextPins(uint8_t *mextPins, uint8_t mextPinsSize);
-        void setKeymap(char **keymap, uint8_t keymapRowSize, uint8_t keymapCollSize);
+        void setPextPins(const uint8_t *pextPins, uint8_t pextPinsSize);
+        void setMextPins(const uint8_t *mextPins, uint8_t mextPinsSize);
+        void setKeymap(const char *keymap, uint8_t keymapRowSize, uint8_t keymapCollSize);
         int scanKeys();
         bool pollEvent();
         char getKey();

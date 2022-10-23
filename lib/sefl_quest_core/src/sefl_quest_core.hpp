@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "variants/blackpill_variant.hpp"
 #include "utils/logger.h"
+#include "utils/pextmextkeyboard.h"
 #include "peripherals/hc595driver.h"
 #include "peripherals/multpinsextender.h"
 #include "peripherals/pwmpinsextender.h"

@@ -110,17 +110,34 @@ void setup()
 
   // board 1
 #if Uniboard == 1
-  TronLEDMatrixPuzzleNeopixel matrix(mqttclient, "matrix", 1, "tr22");
-  const uint8_t buttons[] = {
-      1, 2, 3, 4, 5, 6, 7, 8, 9};
+  LEDMatrixPuzzleNeopixelKeyboard matrix(mqttclient, "matrix", 1, "tr22");
+  const uint8_t pext_pins[] = {
+            0, 1, 2};
+  const uint8_t mext_pins[] = {
+            0, 1, 2};
   const uint8_t correct_colors[] = {
       1, 4, 1, 4, 2, 2, 1, 2, 4};
-  const uint8_t strip_pin = 0;
+  const uint8_t cols=3,rows=3;
+  const char keyboard[cols*rows]={
+          '1','4','7',
+          '2','5','8',
+          '3','6','9',
+  };
+  const uint8_t strip_pin = 3;
   const uint8_t segment_size = 2;
-  matrix.setButtons(buttons, sizeof(buttons));
+  matrix.setKeyboardPextPins(pext_pins,sizeof (pext_pins));
+  matrix.setKeyboardMextPins(mext_pins,sizeof (mext_pins));
+  matrix.setKeyboardKeymap(keyboard, rows, cols);
   matrix.setPattern(correct_colors, sizeof(correct_colors));
   matrix.setStripPin(strip_pin);
   matrix.setStripSegmentSize(segment_size);
+
+
+//  PextMextKeyboard test_keyboard;
+//
+//    test_keyboard.setPextPins(pext_pins,sizeof (pext_pins));
+//    test_keyboard.setMextPins(mext_pins,sizeof (mext_pins));
+//    test_keyboard.setKeymap(keyboard, rows, cols);
 #endif
 // board 2
 #if Uniboard == 2
@@ -149,7 +166,7 @@ void setup()
   //	тут об'єкти пристроїв додаються до менеджера плати за прикладом
 // Board 1
 #if Uniboard == 1
-  b_manager.addClient(&matrix);
+ b_manager.addClient(&matrix);
 
 #endif
 
@@ -178,6 +195,8 @@ void setup()
   while (1)
   {
     b_manager.loop();
+//    Logger::notice("test_keyboard",test_keyboard.getKey());
+//    delay(500);
   }
 }
 void loop()

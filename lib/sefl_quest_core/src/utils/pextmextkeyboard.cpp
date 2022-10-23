@@ -5,9 +5,14 @@
 #include "pextmextkeyboard.h"
 
 namespace SEFL {
-    PextMextKeyboard::PextMextKeyboard() {}
+    PextMextKeyboard::PextMextKeyboard() {
+        pext_pins = nullptr;
+        mext_pins = nullptr;
+        key_map= nullptr;
+        state=0;
+    }
 
-    void PextMextKeyboard::setPextPins(uint8_t *pextPins,uint8_t pextPinsSize) {
+    void PextMextKeyboard::setPextPins(const uint8_t *pextPins,uint8_t pextPinsSize) {
         if (pext_pins!= nullptr){
             delete pext_pins;
         }
@@ -18,7 +23,7 @@ namespace SEFL {
         }
     }
 
-    void PextMextKeyboard::setMextPins(uint8_t *mextPins,uint8_t mextPinsSize) {
+    void PextMextKeyboard::setMextPins(const uint8_t *mextPins,uint8_t mextPinsSize) {
         if (mext_pins!= nullptr){
             delete mext_pins;
         }
@@ -30,8 +35,7 @@ namespace SEFL {
 
     }
 
-    void PextMextKeyboard::setKeymap(char **keyMap, uint8_t keymapRowSize,uint8_t keymapCollSize) {
-        PextMextKeyboard::key_map = keyMap;
+    void PextMextKeyboard::setKeymap(const char *keyMap, uint8_t keymapRowSize,uint8_t keymapCollSize) {
         if (key_map!= nullptr){
 
             for(int i=0;i<keymap_row_size;i++){
@@ -45,7 +49,8 @@ namespace SEFL {
         for(int i=0;i<keymap_row_size;i++){
             key_map[i] =new char [keymap_coll_size];
             for(int j=0;j<keymap_coll_size;j++){
-                key_map[i][j]=keyMap[i][j];
+                key_map[i][j]=keyMap[i*keymap_coll_size+j];
+               // Logger::notice("key_map",key_map[i][j]);
             }
         }
 
@@ -56,8 +61,12 @@ namespace SEFL {
             pinMode(Mext.getCi(), INPUT_PULLUP);
         for (int c = pext_pins_size - 1; c >= 0; c--) {
             Pext.digitalWrite(pext_pins[c], LOW);
+          //  delayMicroseconds(10);
             for (int r = mext_pins_size - 1; r >= 0; r--) {
                 temp_state = (temp_state << 1) | (!Mext.digitalRead(mext_pins[r]) & 1);
+                if(!Mext.digitalRead(mext_pins[r])){
+                   // Logger::notice("keyboard","noticed press");
+                }
             }
             Pext.digitalWrite(pext_pins[c], HIGH);
         }
@@ -73,6 +82,7 @@ namespace SEFL {
                 if (temp_state & 1 && !(lastState & 1)) {
                     event.type = KB_KEYDOWN;
                     event.c = key_map[r][c];
+                  //  Logger::notice("keyboard poll event",key_map[r][c]);
                     state |= 1 << i;
                     return true;
                 } else if (!(temp_state & 1) && lastState & 1) {

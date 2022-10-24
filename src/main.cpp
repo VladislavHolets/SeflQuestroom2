@@ -111,27 +111,32 @@ void setup()
   // board 1
 #if Uniboard == 1
   LEDMatrixPuzzleNeopixelKeyboard matrix(mqttclient, "matrix", 1, "tr22");
-  const uint8_t pext_pins[] = {
+  const uint8_t matrix_pext_pins[] = {
             0, 1, 2};
-  const uint8_t mext_pins[] = {
+  const uint8_t matrix_mext_pins[] = {
             0, 1, 2};
-  const uint8_t correct_colors[] = {
+  const uint8_t matrix_correct_colors[] = {
       1, 4, 1, 4, 2, 2, 1, 2, 4};
-  const uint8_t cols=3,rows=3;
-  const char keyboard[cols*rows]={
+  const uint8_t matrix_cols=3,matrix_rows=3;
+  const char matrix_keyboard[matrix_cols*matrix_rows]={
           '1','4','7',
           '2','5','8',
           '3','6','9',
   };
-  const uint8_t strip_pin = 3;
-  const uint8_t segment_size = 2;
-  matrix.setKeyboardPextPins(pext_pins,sizeof (pext_pins));
-  matrix.setKeyboardMextPins(mext_pins,sizeof (mext_pins));
-  matrix.setKeyboardKeymap(keyboard, rows, cols);
-  matrix.setPattern(correct_colors, sizeof(correct_colors));
-  matrix.setStripPin(strip_pin);
-  matrix.setStripSegmentSize(segment_size);
+  const uint8_t matrix_strip_pin = 3;
+  const uint8_t matrix_segment_size = 2;
+  matrix.setKeyboardPextPins(matrix_pext_pins,sizeof (matrix_pext_pins));
+  matrix.setKeyboardMextPins(matrix_mext_pins,sizeof (matrix_mext_pins));
+  matrix.setKeyboardKeymap(matrix_keyboard, matrix_rows, matrix_cols);
+  matrix.setPattern(matrix_correct_colors, sizeof(matrix_correct_colors));
+  matrix.setStripPin(matrix_strip_pin);
+  matrix.setStripSegmentSize(matrix_segment_size);
 
+  RAMPuzzle rampuzzle(mqttclient,"rampuzzle",1,"tr22");
+  const uint8_t ram_led_pins[]={3,4,5,6};
+  const uint8_t ram_sensor_pins[]={4,5,6,7};
+  rampuzzle.setLedPins(ram_led_pins,sizeof(ram_led_pins));
+  rampuzzle.setSensorPins(ram_sensor_pins,sizeof(ram_sensor_pins));
 
 //  PextMextKeyboard test_keyboard;
 //
@@ -166,7 +171,9 @@ void setup()
   //	тут об'єкти пристроїв додаються до менеджера плати за прикладом
 // Board 1
 #if Uniboard == 1
- b_manager.addClient(&matrix);
+
+    b_manager.addClient(&matrix);
+    b_manager.addClient(&rampuzzle);
 
 #endif
 

@@ -12,6 +12,8 @@ namespace SEFL {
     sensor_pins= nullptr;
     led_pins= nullptr;
     state=UNTRIGGERED;
+    sensor_pins_size=0;
+    led_pins_size=0;
     }
 
     void RAMPuzzle::onActive() {

@@ -5,9 +5,10 @@
 #ifndef SEFLQUESTROOM2_TRONLEGACYADAPTER_H
 #define SEFLQUESTROOM2_TRONLEGACYADAPTER_H
 
+#include "sefl_quest_core.h"
 
 #include <cstdint>
-#include "sefl_quest_core.h"
+
 
 class TronLegacyAdapter {
 

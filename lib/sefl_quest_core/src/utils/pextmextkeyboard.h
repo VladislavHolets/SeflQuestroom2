@@ -33,6 +33,8 @@ namespace SEFL {
     public:
         PextMextKeyboardEvent event;
 
+        virtual ~PextMextKeyboard();
+
         PextMextKeyboard();
 
         void setPextPins(const uint8_t *pextPins, uint8_t pextPinsSize);

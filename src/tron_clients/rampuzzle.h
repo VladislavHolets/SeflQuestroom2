@@ -9,17 +9,17 @@ namespace SEFL {
 
     class RAMPuzzle: public Quest_Basic_Client {
         uint8_t * sensor_pins;
-        uint8_t sensor_pins_size;
+        int8_t sensor_pins_size;
         bool state;
         const bool UNTRIGGERED=false;
         const bool TRIGGERED=true;
 
     public:
-        void setSensorPins(const uint8_t *sensorPins,uint8_t sensorPinsSize);
-        void setLedPins(const uint8_t *ledPins,uint8_t ledPinsSize);
+        void setSensorPins(const uint8_t *sensorPins,int8_t sensorPinsSize);
+        void setLedPins(const uint8_t *ledPins,int8_t ledPinsSize);
     private:
         uint8_t *led_pins;
-        uint8_t led_pins_size;
+        int8_t led_pins_size;
         void resetLeds();
         void setLeds();
         void updateLeds();

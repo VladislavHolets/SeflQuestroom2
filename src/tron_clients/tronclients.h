@@ -9,6 +9,7 @@
 #include "ledmatrixpuzzleneopixel.h"
 #include "ledmatrixpuzzleneopixelkeyboard.h"
 #include "rampuzzle.h"
+#include "gammapuzzle.h"
 #include "segmenttimer.h"
 //#include ""
 #endif //SEFLQUESTROOM2_TRONCLIENTS_H

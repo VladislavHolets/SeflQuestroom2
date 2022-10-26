@@ -138,14 +138,26 @@ void setup()
   rampuzzle.setLedPins(ram_led_pins,sizeof(ram_led_pins));
   rampuzzle.setSensorPins(ram_sensor_pins,sizeof(ram_sensor_pins));
 
-//  PextMextKeyboard test_keyboard;
-//
-//    test_keyboard.setPextPins(pext_pins,sizeof (pext_pins));
-//    test_keyboard.setMextPins(mext_pins,sizeof (mext_pins));
-//    test_keyboard.setKeymap(keyboard, rows, cols);
 #endif
 // board 2
 #if Uniboard == 2
+    GammaPuzzle gammapuzzle(mqttclient,"gammapuzzle");
+    const uint8_t gamma_buttons[]={
+            0,1,2,3,4,5,6
+    };
+    const uint8_t gamma_neons[]={
+            0,1,2,3,4,5,6
+    };
+    const int8_t gamma_correct_order[]={
+            0,1, 2,3,4,5,6
+    };
+    uint32_t gamma_correct_timeout=2000;
+    uint32_t gamma_incorrect_timeout=2000;
+    gammapuzzle.setButtonsPins(gamma_buttons,sizeof(gamma_buttons));
+    gammapuzzle.setNeonsPins(gamma_neons,sizeof(gamma_neons));
+    gammapuzzle.setCorrectOrder(gamma_correct_order,sizeof (gamma_correct_order));
+    gammapuzzle.setCorrectAnimationTimeout(gamma_correct_timeout);
+    gammapuzzle.setIncorrectAnimationTimeout(gamma_incorrect_timeout);
 
 #endif
 

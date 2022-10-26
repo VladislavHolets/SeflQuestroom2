@@ -20,7 +20,7 @@ namespace SEFL
 		uint8_t data_pin;
 		uint8_t clock_pin;
 		uint8_t latch_pin;
-		uint8_t chip_amount;
+		uint16_t chip_amount;
 	};
 
 	class HC595_Driver

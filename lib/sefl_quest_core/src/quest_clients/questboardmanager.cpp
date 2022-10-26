@@ -111,14 +111,14 @@ namespace SEFL
 			connect();
 		}
 		uint32_t timestamp_for_message_avaiting = millis();
-	//	while (millis() - timestamp_for_message_avaiting < 100)
-	//	{
+		while (millis() - timestamp_for_message_avaiting < 100)
+		{
 			this->getMqtt()->loop();
 			if (!this->getMqtt()->connected())
 			{
 				connect();
 			}
-	//	}
+		}
 		this->processCallbackQueueAll();
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{

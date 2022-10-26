@@ -183,7 +183,8 @@ namespace SEFL
 		this->strip.updateLength(this->buttons_amount * segment_size);
 		for (int i = 0; i < this->buttons_amount; i++)
 		{
-			this->buttons_pins[i] = array[i];
+            this->buttons_pins[i] = array[i];
+            this->buttons_states[i] = RESETED;
 		}
 		this->initButtons();
 	}

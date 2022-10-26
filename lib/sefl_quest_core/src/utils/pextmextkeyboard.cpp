@@ -14,7 +14,7 @@ namespace SEFL {
 
     void PextMextKeyboard::setPextPins(const uint8_t *pextPins,uint8_t pextPinsSize) {
         if (pext_pins!= nullptr){
-            delete pext_pins;
+            delete [] pext_pins;
         }
         pext_pins_size=pextPinsSize;
         pext_pins=new uint8_t [pext_pins_size];
@@ -25,7 +25,7 @@ namespace SEFL {
 
     void PextMextKeyboard::setMextPins(const uint8_t *mextPins,uint8_t mextPinsSize) {
         if (mext_pins!= nullptr){
-            delete mext_pins;
+            delete [] mext_pins;
         }
         mext_pins_size=mextPinsSize;
         mext_pins=new uint8_t [mext_pins_size];
@@ -39,9 +39,9 @@ namespace SEFL {
         if (key_map!= nullptr){
 
             for(int i=0;i<keymap_row_size;i++){
-                delete key_map[i];
+                delete [] key_map[i];
             }
-            delete key_map;
+            delete [] key_map;
         }
         keymap_row_size = keymapRowSize;
         keymap_coll_size = keymapCollSize;
@@ -108,4 +108,12 @@ namespace SEFL {
     }
 
 
+    PextMextKeyboard::~PextMextKeyboard() {
+        delete [] pext_pins;
+        delete [] mext_pins;
+        for(int i = 0; i < keymap_row_size; i++) {
+            delete [] key_map[i];
+        }
+        delete [] key_map;
+    }
 } // SEFL

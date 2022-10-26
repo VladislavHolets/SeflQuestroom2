@@ -12,8 +12,8 @@ namespace SEFL {
     sensor_pins= nullptr;
     led_pins= nullptr;
     state=UNTRIGGERED;
-    sensor_pins_size=0;
-    led_pins_size=0;
+    sensor_pins_size=-1;
+    led_pins_size=-1;
     }
 
     void RAMPuzzle::onActive() {
@@ -30,6 +30,9 @@ namespace SEFL {
                 setLeds();
             }
             pinMode(Mext.getCi(),INPUT_PULLUP);
+            if (sensor_pins_size == -1) {
+                return;
+            }
             for (int i = 0; i < sensor_pins_size; ++i) {
                 if(!Mext.digitalRead(sensor_pins[i])){
                     state=TRIGGERED;
@@ -67,7 +70,7 @@ namespace SEFL {
         onFinished();
     }
 
-    void RAMPuzzle::setSensorPins(const uint8_t *sensorPins,uint8_t sensorPinsSize) {
+    void RAMPuzzle::setSensorPins(const uint8_t *sensorPins,int8_t sensorPinsSize) {
         if(sensor_pins!= nullptr){
             delete sensor_pins;
         }
@@ -78,7 +81,7 @@ namespace SEFL {
         }
     }
 
-    void RAMPuzzle::setLedPins(const uint8_t *ledPins,uint8_t ledPinsSize) {
+    void RAMPuzzle::setLedPins(const uint8_t *ledPins,int8_t ledPinsSize) {
         if(led_pins!= nullptr){
             delete led_pins;
         }
@@ -90,7 +93,9 @@ namespace SEFL {
     }
 
     void RAMPuzzle::updateLeds() {
-        if(sensor_pins_size!=led_pins_size){
+        if(led_pins_size == -1 || sensor_pins_size == -1
+           || sensor_pins_size!=led_pins_size)
+        {
             return;
         }
         pinMode(Mext.getCi(),INPUT_PULLUP);
@@ -100,7 +105,9 @@ namespace SEFL {
     }
 
     bool RAMPuzzle::checkResults() {
-        if(sensor_pins_size!=led_pins_size){
+        if(led_pins_size == -1 || sensor_pins_size == -1
+           || sensor_pins_size!=led_pins_size)
+        {
             return false;
         }
         pinMode(Mext.getCi(),INPUT_PULLUP);
@@ -113,7 +120,9 @@ namespace SEFL {
     }
 
     void RAMPuzzle::resetLeds() {
-        if(sensor_pins_size!=led_pins_size){
+        if(led_pins_size == -1 || sensor_pins_size == -1
+            || sensor_pins_size!=led_pins_size)
+        {
             return;
         }
         for (int i = 0; i < sensor_pins_size; ++i) {
@@ -122,7 +131,9 @@ namespace SEFL {
     }
 
     void RAMPuzzle::setLeds() {
-        if(sensor_pins_size!=led_pins_size){
+        if(led_pins_size == -1 || sensor_pins_size == -1
+            || sensor_pins_size!=led_pins_size)
+        {
             return;
         }
         for (int i = 0; i < sensor_pins_size; ++i) {

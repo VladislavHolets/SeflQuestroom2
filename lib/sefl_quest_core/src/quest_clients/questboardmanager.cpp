@@ -106,19 +106,33 @@ namespace SEFL
 
 	void Quest_Board_Manager::loop()
 	{
+		static uint32_t message_awaiting_interval=100;
 		if (!this->getMqtt()->connected())
 		{
 			connect();
 		}
-		uint32_t timestamp_for_message_avaiting = millis();
-		while (millis() - timestamp_for_message_avaiting < 100)
+<<<<<<< HEAD
+		static uint32_t timestamp_for_message_avaiting = 0;
+		timestamp_for_message_avaiting = millis();
+		while (millis() - timestamp_for_message_avaiting < message_awaiting_interval)
 		{
+=======
+		uint32_t timestamp_for_message_avaiting = millis();
+		//while (millis() - timestamp_for_message_avaiting < 100)
+		//{
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
 			this->getMqtt()->loop();
 			if (!this->getMqtt()->connected())
 			{
 				connect();
 			}
+<<<<<<< HEAD
 		}
+		static uint32_t timestamp_begining_of_loop=0;
+		timestamp_begining_of_loop=millis();
+=======
+		//}
+>>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
 		this->processCallbackQueueAll();
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{
@@ -165,6 +179,9 @@ namespace SEFL
 				}
 			}
 		}
+
+		message_awaiting_interval=(millis()-timestamp_begining_of_loop)*3;
+		Logger::notice(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
 	}
 
 	bool Quest_Board_Manager::addClient(SEFL::Quest_Client *client)
@@ -314,7 +331,7 @@ namespace SEFL
 		while (!this->getMqtt()->connected())
 		{
 			Logger::notice(this->name_, F("Connecting to MQTT... "));
-			while (this->getMqtt()->connect(room_config_.IP, room_config_.username, room_config_.password) == 0)
+			while (this->getMqtt()->connect(this->getHost()->getPubfeed().c_str(), room_config_.username, room_config_.password) == 0)
 			{
 				Logger::notice(this->name_,
 							   F("Retrying MQTT connection in 1 second..."));

@@ -82,6 +82,7 @@ namespace SEFL
 		//------------------------------------------------------
 		if (countTurn == 0 && millis() - timer > 7000)
 		{
+			Pext.digitalWrite(sportbikeRideLight, HIGH);
 			// Pext.analogWrite(sportbikeServo, 1000);
 			Pext.getHandler()->setChannelPWM(sportbikeServo,
 											 pwmServo1.pwmForAngle(-43));
@@ -89,7 +90,7 @@ namespace SEFL
 			throttleFlag = 0;
 			countTurn = 1;
 			timer = millis();
-			Pext.digitalWrite(sportbikeRideLight, HIGH);
+			
 		}
 
 		if (countTurn == 1 && millis() - timer > 3000)
@@ -104,6 +105,7 @@ namespace SEFL
 		}
 		if (countTurn == 2 && millis() - timer > 3000)
 		{
+			Pext.digitalWrite(sportbikeRideLight, LOW);
 			// Pext.analogWrite(sportbikeServo, 1000);
 			Pext.getHandler()->setChannelPWM(sportbikeServo,
 											 pwmServo1.pwmForAngle(-3));
@@ -111,10 +113,11 @@ namespace SEFL
 			turnSignalsFlag = 0;
 			countTurn = 3;
 			timer = millis();
-			Pext.digitalWrite(sportbikeRideLight, LOW);
+			
 		}
 		if (countTurn == 3 && millis() - timer > 3000)
 		{
+			Pext.digitalWrite(sportbikeRideLight, HIGH);
 			// Pext.analogWrite(sportbikeServo, 1000);
 			Pext.getHandler()->setChannelPWM(sportbikeServo,
 											 pwmServo1.pwmForAngle(-43));
@@ -122,7 +125,7 @@ namespace SEFL
 			turnSignalsFlag = 1;
 			countTurn = 4;
 			timer = millis();
-			Pext.digitalWrite(sportbikeRideLight, HIGH);
+			
 		}
 		if (countTurn == 4 && millis() - timer > 3000)
 		{
@@ -136,6 +139,7 @@ namespace SEFL
 		}
 		if (countTurn == 5 && millis() - timer > 3000)
 		{
+			Pext.digitalWrite(sportbikeRideLight, LOW);
 			// Pext.analogWrite(sportbikeServo, 1000);
 			Pext.getHandler()->setChannelPWM(sportbikeServo,
 											 pwmServo1.pwmForAngle(-3));
@@ -143,7 +147,7 @@ namespace SEFL
 			turnSignalsFlag = 0;
 			countTurn = 6;
 			timer = millis();
-			Pext.digitalWrite(sportbikeRideLight, LOW);
+			
 		}
 		if (countTurn == 6 && millis() - timer > 2000)
 		{
@@ -223,8 +227,9 @@ namespace SEFL
 			unsetChangedStatus();
 			this->reportStatus();
 			SEFL::Logger::verbose("Sportbikeride", "onFinished");
+			if (player != nullptr){
 			player->stop();
-
+			}
 			Pext.digitalWrite(dashboardLight, HIGH);
 			Pext.digitalWrite(sportbikePowerRelay, HIGH);
 			Pext.digitalWrite(sportbikeRideLight, HIGH);
@@ -246,7 +251,9 @@ namespace SEFL
 			unsetChangedStatus();
 			this->reportStatus();
 			SEFL::Logger::verbose("Sportbikeride", "onManualFinished");
+			if (player != nullptr){
 			player->stop();
+			}
 
 			Pext.digitalWrite(dashboardLight, HIGH);
 			Pext.digitalWrite(sportbikePowerRelay, HIGH);
@@ -269,7 +276,9 @@ namespace SEFL
 			unsetChangedStatus();
 			this->reportStatus();
 			SEFL::Logger::verbose("Sportbikeride", "onDefault");
+			if (player != nullptr){
 			player->stop();
+			}
 
 			Pext.digitalWrite(dashboardLight, HIGH);
 			Pext.digitalWrite(sportbikePowerRelay, HIGH);

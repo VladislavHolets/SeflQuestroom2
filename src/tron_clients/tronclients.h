@@ -11,5 +11,6 @@
 #include "rampuzzle.h"
 #include "gammapuzzle.h"
 #include "segmenttimer.h"
+#include "statusbar.h"
 //#include ""
 #endif //SEFLQUESTROOM2_TRONCLIENTS_H

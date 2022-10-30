@@ -141,7 +141,7 @@ void setup()
 #endif
 // board 2
 #if Uniboard == 2
-    GammaPuzzle gammapuzzle(mqttclient,"gammapuzzle");
+    GammaPuzzle gamma_puzzle(mqttclient,"gammapuzzle",1,"tr22");
     const uint8_t gamma_buttons[]={
             0,1,2,3,4,5,6
     };
@@ -151,13 +151,18 @@ void setup()
     const int8_t gamma_correct_order[]={
             0,1, 2,3,4,5,6
     };
-    uint32_t gamma_correct_timeout=2000;
+    uint32_t gamma_correct_timeout=5000;
     uint32_t gamma_incorrect_timeout=2000;
-    gammapuzzle.setButtonsPins(gamma_buttons,sizeof(gamma_buttons));
-    gammapuzzle.setNeonsPins(gamma_neons,sizeof(gamma_neons));
-    gammapuzzle.setCorrectOrder(gamma_correct_order,sizeof (gamma_correct_order));
-    gammapuzzle.setCorrectAnimationTimeout(gamma_correct_timeout);
-    gammapuzzle.setIncorrectAnimationTimeout(gamma_incorrect_timeout);
+    gamma_puzzle.setButtonsPins(gamma_buttons,sizeof(gamma_buttons));
+    gamma_puzzle.setNeonsPins(gamma_neons,sizeof(gamma_neons));
+    gamma_puzzle.setCorrectOrder(gamma_correct_order,sizeof (gamma_correct_order));
+    gamma_puzzle.setCorrectAnimationTimeout(gamma_correct_timeout);
+    gamma_puzzle.setIncorrectAnimationTimeout(gamma_incorrect_timeout);
+    StatusBar status_bar_1(mqttclient,"statusbar_1",1,"tr22");
+    const uint8_t status_bar_led_pins[]={
+            9,10,11,12,13,14
+    };
+    status_bar_1.setStatusLampsPins(status_bar_led_pins,sizeof(status_bar_led_pins));
 
 #endif
 
@@ -191,7 +196,8 @@ void setup()
 
   // board 2
 #if Uniboard == 2
-
+    b_manager.addClient(&gamma_puzzle);
+    b_manager.addClient(&status_bar_1);
 #endif
 
   // board 3

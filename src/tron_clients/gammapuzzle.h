@@ -34,6 +34,7 @@ namespace SEFL {
         uint32_t incorrect_animation_timeout;
         uint32_t correct_animation_timestamp;
         uint32_t correct_animation_timeout;
+        bool refresh_neon_flag;
     public:
         void setIncorrectAnimationTimeout(uint32_t incorrectAnimationTimeout);
         void setCorrectAnimationTimeout(uint32_t correctAnimationTimeout);

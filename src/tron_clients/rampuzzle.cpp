@@ -72,7 +72,7 @@ namespace SEFL {
 
     void RAMPuzzle::setSensorPins(const uint8_t *sensorPins,int8_t sensorPinsSize) {
         if(sensor_pins!= nullptr){
-            delete sensor_pins;
+            delete [] sensor_pins;
         }
         sensor_pins_size=sensorPinsSize;
         sensor_pins=new uint8_t [sensor_pins_size];
@@ -83,7 +83,7 @@ namespace SEFL {
 
     void RAMPuzzle::setLedPins(const uint8_t *ledPins,int8_t ledPinsSize) {
         if(led_pins!= nullptr){
-            delete led_pins;
+            delete [] led_pins;
         }
         led_pins_size=ledPinsSize;
         led_pins=new uint8_t [led_pins_size];

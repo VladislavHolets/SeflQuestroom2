@@ -163,7 +163,34 @@ void setup()
             9,10,11,12,13,14
     };
     status_bar_1.setStatusLampsPins(status_bar_led_pins,sizeof(status_bar_led_pins));
+    //HC595_Driver driver(uext_config,2);
+    HC595_cfg cfg{};
+    cfg.data_pin=uext_config.MOSI;
+    cfg.latch_pin=uext_config.SCLK;
+    cfg.clock_pin=uext_config.SSEL;
+    cfg.chip_amount=4;
+    HC595_Driver hc595_driver(cfg.data_pin,cfg.clock_pin,cfg.latch_pin,cfg.chip_amount);
+    Pext.digitalWrite(7,LOW);
+    //uint8_t data=0b11111100;
+   // hc595_driver.setDataFrame(0,&data,1);
+   // hc595_driver.sendData();
+   // while(1){}
+    //hc595_driver.sendData();
+    Tron_Segment_Timer timer_1(mqttclient,"timer1",1,"tr22");
+    timer_1.setDriver(hc595_driver);
+    timer_1.setOverflowPeriod(1000);
+    timer_1.setStartingValue(60);
+    timer_1.setStoppingValue(0);
+    timer_1.setIncreasingOrder(false);
+    uint8_t timer_1_segments[]{
+        2,3
+    };
+    uint8_t timer_1_segments_base[]{
+        DEC,DEC
+    };
+    timer_1.setSegments(timer_1_segments,sizeof (timer_1_segments));
 
+    timer_1.setSegmentsBase(timer_1_segments_base,sizeof (timer_1_segments_base));
 #endif
 
 // board 3
@@ -198,6 +225,7 @@ void setup()
 #if Uniboard == 2
     b_manager.addClient(&gamma_puzzle);
     b_manager.addClient(&status_bar_1);
+    b_manager.addClient(&timer_1);
 #endif
 
   // board 3
@@ -217,17 +245,8 @@ void setup()
 
   //	тут об'єкти пристроїв додаються до менеджера плати за прикладом вище
 
-    //HC595_Driver driver(uext_config,2);
-    HC595_cfg cfg{};
-    cfg.data_pin=uext_config.MOSI;
-    cfg.latch_pin=uext_config.SCLK;
-    cfg.clock_pin=uext_config.SSEL;
-    cfg.chip_amount=2;
-    HC595_Driver driver(cfg.data_pin,cfg.clock_pin,cfg.latch_pin,cfg.chip_amount);
-    Pext.digitalWrite(7,LOW);
-    uint8_t data_sample[2]{0,0};
-    driver.setDataFrame(data_sample,2);
-    driver.sendData();
+
+
   while (1)
   {
     b_manager.loop();

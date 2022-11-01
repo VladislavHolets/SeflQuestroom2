@@ -39,9 +39,10 @@ namespace SEFL
         explicit HC595_Driver(UEXT_Config cfg, int16_t chip_amount = HC595_BUFFER_SIZE);
         explicit HC595_Driver(SPIClass& spi,HC595_cfg cfg);
 		virtual ~HC595_Driver();
-		void setDataItem(uint16_t item, uint8_t state);
+        void setDataItem(int16_t position, bool state);
+        void setDataByte(int16_t position, uint8_t state);
 		void cleanData();
-		void setDataFrame(uint8_t *data_frame, uint16_t length = HC595_BUFFER_SIZE, uint16_t start_byte = 0);
+		void setDataFrame(uint16_t position, uint8_t *data_frame, uint16_t length);
 		void sendData();
 		void setOrder(BitOrder order_);
 	};

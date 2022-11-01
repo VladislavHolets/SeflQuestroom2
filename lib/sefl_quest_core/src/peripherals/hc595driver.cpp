@@ -67,13 +67,13 @@ SEFL::HC595_Driver::~HC595_Driver()
     delete [] data;
 }
 
-void SEFL::HC595_Driver::setDataItem(uint16_t item, uint8_t state)
+void SEFL::HC595_Driver::setDataItem(int16_t position, bool state)
 {
-    if (item >= this->cfg_.chip_amount * 8)
+    if (position >= this->cfg_.chip_amount * 8)
     {
         return;
     }
-    this->data[item / 8] = this->data[item / 8] | state << (item % 8);
+    this->data[position / 8] = this->data[position / 8] | state << (position % 8);
 }
 
 void SEFL::HC595_Driver::cleanData()
@@ -84,14 +84,13 @@ void SEFL::HC595_Driver::cleanData()
     }
 }
 
-void SEFL::HC595_Driver::setDataFrame(uint8_t *data_frame, uint16_t length,
-                                 uint16_t start_byte)
+void SEFL::HC595_Driver::setDataFrame(uint16_t position, uint8_t *data_frame, uint16_t length)
 {
-    if ((start_byte + length) > this->cfg_.chip_amount)
+    if ((position + length) > this->cfg_.chip_amount)
     {
         return;
     }
-    memcpy(this->data + start_byte, data_frame, length);
+    memcpy(this->data + position, data_frame, length);
 }
 
 void SEFL::HC595_Driver::sendData()
@@ -128,4 +127,12 @@ SEFL::HC595_Driver::HC595_Driver(SPIClass& spi,HC595_cfg cfg):using_spi(true), s
     data=new uint8_t[data_length];
     cfg_.latch_pin=cfg.latch_pin;
     cfg_.data_pin=cfg.data_pin;
+}
+
+void SEFL::HC595_Driver::setDataByte(int16_t position, uint8_t state) {
+    if (position >= data_length)
+    {
+        return;
+    }
+    this->data[position] =state;
 }

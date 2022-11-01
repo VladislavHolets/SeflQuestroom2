@@ -53,6 +53,7 @@ bool TronLegacyAdapter::is_solved() {
         pinMode(Mext.getCi(), INPUT_PULLUP);
         return !Mext.digitalRead(solved_state_pin);
     }
+    return false;
 }
 
 TronLegacyAdapter::TronLegacyAdapter() {

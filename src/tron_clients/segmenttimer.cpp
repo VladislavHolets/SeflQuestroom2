@@ -50,6 +50,7 @@ namespace SEFL
         for (int i = 0; i < segments_size_; ++i) {
             segments_[i]=segments[i];
             segments_value_[i]=0;
+            segments_base_[i]=DEC;
         }
     }
 

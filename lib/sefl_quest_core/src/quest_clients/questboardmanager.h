@@ -39,7 +39,7 @@ namespace SEFL
 		Vector<Quest_Client *> clients_;
 		void send_config();
 		void setLanguage(Language language_);
-		void setPowerStatus(bool power_status_);
+		void setPowerStatus(bool powerStatus);
 		MQTT_Config room_config_;
 
 		bool connect();
@@ -59,7 +59,7 @@ namespace SEFL
 		Quest_Host_Client *getHost();
 		Language getLanguage();
 		const char *getName();
-		bool isPowerStatus();
+		bool isPowerStatus() const;
 		void pushToCallbacksQueue(String &topic_name, String &payload_val);
 		void processCallbackQueueOne();
 		void processCallbackQueueAll();

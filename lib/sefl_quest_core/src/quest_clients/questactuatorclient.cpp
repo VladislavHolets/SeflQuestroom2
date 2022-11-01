@@ -155,14 +155,13 @@ namespace SEFL
 		int tstatus = static_cast<int>(this->getStatus());
 		repDoc["SubcommandId"] = tstatus;
 		JsonArray jdata = repDoc.createNestedArray("Data");
-		for (unsigned int i = 0; i < this->data.size(); i++)
+		for (auto & i : this->data)
 		{
-			if (this->data[i].length())
-				jdata.add(this->data[i]);
+			if (i.length())
+				jdata.add(i);
 		}
 		// TODO stuff
 		serializeJson(repDoc, output);
-		// this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
 		publish(output);
 	}
 

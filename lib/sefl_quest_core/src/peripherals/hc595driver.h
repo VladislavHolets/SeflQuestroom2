@@ -20,25 +20,29 @@ namespace SEFL
 		uint8_t data_pin;
 		uint8_t clock_pin;
 		uint8_t latch_pin;
-		uint16_t chip_amount;
+		int16_t chip_amount;
 	};
 
 	class HC595_Driver
 	{
-		SPIClass spi;
+		SPIClass *spi_;
 		BitOrder order_;
-		HC595_cfg cfg_;
-		uint8_t data[HC595_BUFFER_SIZE];
+		HC595_cfg cfg_{};
+        const bool using_spi;
+        const bool shared_spi;
+        uint8_t *data;
+        int16_t data_length;
 		void shiftOut(uint16_t length);
 
 	public:
-		HC595_Driver(HC595_cfg cfg);
-		HC595_Driver(uint8_t data_pin, uint8_t clock_pin, uint8_t latch_pin, uint16_t chip_amount = HC595_BUFFER_SIZE);
+		HC595_Driver(uint8_t data_pin, uint8_t clock_pin, uint8_t latch_pin, int16_t chip_amount = HC595_BUFFER_SIZE);
+        explicit HC595_Driver(UEXT_Config cfg, int16_t chip_amount = HC595_BUFFER_SIZE);
+        explicit HC595_Driver(SPIClass& spi,HC595_cfg cfg);
 		virtual ~HC595_Driver();
-		void setData(uint16_t item, uint8_t state);
+		void setDataItem(uint16_t item, uint8_t state);
 		void cleanData();
-		void setData(uint8_t *data, uint16_t length = HC595_BUFFER_SIZE, uint16_t start_byte = 0);
-		void sendData(uint16_t length = HC595_BUFFER_SIZE);
+		void setDataFrame(uint8_t *data_frame, uint16_t length = HC595_BUFFER_SIZE, uint16_t start_byte = 0);
+		void sendData();
 		void setOrder(BitOrder order_);
 	};
 

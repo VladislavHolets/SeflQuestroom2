@@ -217,11 +217,20 @@ void setup()
 
   //	тут об'єкти пристроїв додаються до менеджера плати за прикладом вище
 
+    //HC595_Driver driver(uext_config,2);
+    HC595_cfg cfg{};
+    cfg.data_pin=uext_config.MOSI;
+    cfg.latch_pin=uext_config.SCLK;
+    cfg.clock_pin=uext_config.SSEL;
+    cfg.chip_amount=2;
+    HC595_Driver driver(cfg.data_pin,cfg.clock_pin,cfg.latch_pin,cfg.chip_amount);
+    Pext.digitalWrite(7,LOW);
+    uint8_t data_sample[2]{0,0};
+    driver.setDataFrame(data_sample,2);
+    driver.sendData();
   while (1)
   {
     b_manager.loop();
-//    Logger::notice("test_keyboard",test_keyboard.getKey());
-//    delay(500);
   }
 }
 void loop()

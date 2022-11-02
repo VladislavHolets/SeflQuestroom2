@@ -13,6 +13,16 @@ namespace SEFL {
                                                                                                             outTopic,
                                                                                                             language) {
         puzzle_status=INITIAL;
+        wires_pins= nullptr;
+        correct_pattern= nullptr;
+        current_pattern= nullptr;
+        wires_pins_size=-1;
+        frame_light_pin=-1;
+        generator_motors_pin=-1;
+        generator_leds_pin=-1;
+        animation_timestamp=0;
+        correct_animation_timeout=1500;
+        solved_animation_timeout=10000;
     }
 
     void Generator::setWiresPins(const uint8_t *wiresPins,uint8_t size) {
@@ -48,7 +58,9 @@ namespace SEFL {
         }
         scan_inputs();
         refresh_outputs();
-
+        if(puzzle_status==SOLVED){
+            this->setStatus(FINISHED_STATUS);
+        }
     }
 
     void Generator::onDefault() {
@@ -93,6 +105,9 @@ namespace SEFL {
     }
 
     void Generator::refresh_outputs() {
+        if(generator_leds_pin==-1 || generator_motors_pin==-1 || frame_light_pin==-1){
+            return;
+        }
         switch (puzzle_status) {
             case INITIAL:{
 
@@ -146,7 +161,7 @@ namespace SEFL {
         generator_motors_pin = generatorMotorsPin;
     }
 
-    void Generator::setLedsPin(uint8_t ledsPin) {
-        generator_leds_pin = ledsPin;
+    void Generator::setGeneratorLedsPin(uint8_t generatorLedsPin) {
+        generator_leds_pin = generatorLedsPin;
     }
 } // SEFL

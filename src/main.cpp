@@ -1,6 +1,6 @@
 
 #include "main.h"
-extern MQTTClient *clbwrapobj;
+//extern MQTTClient *clbwrapobj;
 #ifdef USE_DFPLAYER
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
@@ -9,108 +9,107 @@ SoftwareSerial serial(PA_3, PA_2); // PA_12
 void setup()
 {
 
-  SPI.setMOSI(PB15);
-  SPI.setMISO(PB14);
-  SPI.setSCLK(PB13);
+    SPI.setMOSI(PB15);
+    SPI.setMISO(PB14);
+    SPI.setSCLK(PB13);
 
-  pinMode(PA1, OUTPUT);
-  digitalWrite(PA1, LOW);
+    pinMode(PA1, OUTPUT);
+    digitalWrite(PA1, LOW);
 
-  serial.begin(9600);
-  delay(100);
-  SEFL::Logger::getInstance()->setPrinter(&serial);
-
-  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE
-  SEFL::Logger::getInstance()->setPostMessage();
-  SEFL::Logger::notice("main", "Initing board");
+    serial.begin(9600);
+    delay(100);
+    SEFL::Logger::getInstance()->setPrinter(&serial);
+    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE
+    SEFL::Logger::getInstance()->setPostMessage();
+    SEFL::Logger::notice("main", "Initing board");
 #ifdef USE_DFPLAYER
-  dfserial.begin(9600);
+    dfserial.begin(9600);
   player.begin(dfserial);
   player.volume(25);
   player.enableDAC();
 #endif
-  delay(100);
+    delay(100);
 
-  pinMode(PB10, OUTPUT);
-  digitalWrite(PB10, LOW);
-  Wire.setSCL(PB6);
-  Wire.setSDA(PB7);
-  Wire.begin();
-  Pext.getHandler()->resetDevices();
-  Pext.getHandler()->init();
-  Pext.getHandler()->setPWMFrequency(1600); // 1600
-  Pext.getHandler()->setAllChannelsPWM(4096);
-  SEFL::Logger::notice("main", "Initing ethernet");
+    pinMode(PB10, OUTPUT);
+    digitalWrite(PB10, LOW);
+    Wire.setSCL(PB6);
+    Wire.setSDA(PB7);
+    Wire.begin();
+    Pext.getHandler()->resetDevices();
+    Pext.getHandler()->init();
+    Pext.getHandler()->setPWMFrequency(1600); // 1600
+    Pext.getHandler()->setAllChannelsPWM(4096);
+    SEFL::Logger::notice("main", "Initing ethernet");
 
 #if Uniboard == 1
-  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x03};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x03};
 #endif
 
 #if Uniboard == 2
-  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x04};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x04};
 #endif
 
 #if Uniboard == 3
-  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x06};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x06};
 #endif
 
 #if Uniboard == 4
-  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x07};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x07};
 #endif
 
 #if Uniboard == 5
-  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x08};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x08};
 #endif
-  //мак адреси для гб ідуть формату 30:16:00:00:00:ХХ
-  // для гр 30:16:00:00:01:ХХ
-  // для трону 30:16:00:00:02:ХХ
-  Ethernet.init(PB12);
-  EthernetClient client;
-  SEFL::Logger::verbose("main", "Inited ethernet");
+    //мак адреси для гб ідуть формату 30:16:00:00:00:ХХ
+    // для гр 30:16:00:00:01:ХХ
+    // для трону 30:16:00:00:02:ХХ
+    Ethernet.init(PB12);
+    EthernetClient client;
+    SEFL::Logger::verbose("main", "Inited ethernet");
 
-  SEFL::Logger::verbose("main", "Starting MQTT_Manager instance");
+    SEFL::Logger::verbose("main", "Starting MQTT_Manager instance");
 
-  SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
-  SEFL::clbwrapobj = &mqttclient;
+    SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
+    SEFL::clbwrapobj = &mqttclient;
 
-  SEFL::Logger::verbose("main", "Started MQTT_Manager instance");
+    SEFL::Logger::verbose("main", "Started MQTT_Manager instance");
 
-  SEFL::Logger::verbose("main", "Starting ethernet");
-  Ethernet.begin(mac);
-  mqttclient.begin(SEFL::EDMONTON_MQTT_CONFIG.IP, client);
-  SEFL::Logger::verbose("main", "Started ethernet");
+    SEFL::Logger::verbose("main", "Starting ethernet");
+    Ethernet.begin(mac);
+    mqttclient.begin(SEFL::EDMONTON_MQTT_CONFIG.IP, client);
+    SEFL::Logger::verbose("main", "Started ethernet");
 
-  SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
+    SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
 
 #if Uniboard == 1
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U1", "tr22");
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U1", "tr22");
 #endif
 
 #if Uniboard == 2
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U2", "tr22");
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U2", "tr22");
 #endif
 
 #if Uniboard == 3
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U3", "tr22");
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U3", "tr22");
 #endif
 
 #if Uniboard == 4
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U4", "tr22");
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U4", "tr22");
 #endif
 
 #if Uniboard == 5
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U5", "tr22");
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U5", "tr22");
 #endif
 
-  SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");
+    SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");
 
-  //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////
+    //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
 
-  // board 1
+    // board 1
 #if Uniboard == 1
-  LEDMatrixPuzzleNeopixelKeyboard matrix(mqttclient, "matrix", 1, "tr22");
+    LEDMatrixPuzzleNeopixelKeyboard matrix(mqttclient, "matrix", 1, "tr22");
   const uint8_t matrix_pext_pins[] = {
             0, 1, 2};
   const uint8_t matrix_mext_pins[] = {
@@ -203,6 +202,21 @@ void setup()
 
 // board 3
 #if Uniboard == 3
+    Generator generator_puzzle(mqttclient,"generator_puzzle",1,"tr22");
+    generator_puzzle.setCorrectAnimationTimeout(1500);
+    generator_puzzle.setSolvedAnimationTimeout(2000);
+    uint8_t generator_wires_pins[]{
+            0,1,2
+    };
+    uint8_t generator_correct_pattern[]{
+            0,0,0
+    };
+    generator_puzzle.setWiresPins(generator_wires_pins,sizeof (generator_wires_pins));
+    generator_puzzle.setCorrectPattern(generator_correct_pattern,sizeof (generator_correct_pattern));
+    generator_puzzle.setFrameLightPin(0);
+    generator_puzzle.setGeneratorLedsPin(1);
+    generator_puzzle.setGeneratorMotorsPin(2);
+
 
 #endif
 
@@ -216,11 +230,11 @@ void setup()
 
 #endif
 
-  //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
+    //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
 
-  SEFL::Logger::notice("main", "Starting Quest_Start_Button instance");
+    SEFL::Logger::notice("main", "Starting Quest_Start_Button instance");
 
-  //	тут об'єкти пристроїв додаються до менеджера плати за прикладом
+    //	тут об'єкти пристроїв додаються до менеджера плати за прикладом
 // Board 1
 #if Uniboard == 1
 
@@ -229,7 +243,7 @@ void setup()
 
 #endif
 
-  // board 2
+    // board 2
 #if Uniboard == 2
     b_manager.addClient(gamma_puzzle);
     b_manager.addClient(status_bar_1);
@@ -237,29 +251,29 @@ void setup()
     b_manager.addClient(timer_2);
 #endif
 
-  // board 3
+    // board 3
 #if Uniboard == 3
-
+    b_manager.addClient(generator_puzzle);
 #endif
 
-  // board 4
+    // board 4
 #if Uniboard == 4
 
 #endif
 
-  // board 5
+    // board 5
 #if Uniboard == 5
 
 #endif
 
-  //	тут об'єкти пристроїв додаються до менеджера плати за прикладом вище
+    //	тут об'єкти пристроїв додаються до менеджера плати за прикладом вище
 
 
 
-  while (1)
-  {
-    b_manager.loop();
-  }
+    while (true)
+    {
+        b_manager.loop();
+    }
 }
 void loop()
 {

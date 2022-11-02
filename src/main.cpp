@@ -170,7 +170,7 @@ void setup()
     cfg.chip_amount=4;
     HC595_Driver hc595_driver(cfg.data_pin,cfg.clock_pin,cfg.latch_pin,cfg.chip_amount);
     Pext.digitalWrite(7,LOW);
-    Tron_Segment_Timer timer_1(mqttclient,"timer1",1,"tr22");
+    Tron_Segment_Timer timer_1(mqttclient,"timer_1",1,"tr22");
     timer_1.setDriver(hc595_driver);
     timer_1.setOverflowPeriod(60000);
     timer_1.setStartingValue(60);
@@ -222,7 +222,9 @@ void setup()
 
 // board 4
 #if Uniboard == 4
-
+    Quest_Tron_Target target_11(mqttclient,0,"target_11",1,"tr22");
+    uint8_t target_11_led_pins[]{0,1,2,3,4,5,6,7,8,9,10,11};
+    target_11.setLedPins(target_11_led_pins, sizeof(target_11_led_pins));
 #endif
 
 // board 5
@@ -258,7 +260,7 @@ void setup()
 
     // board 4
 #if Uniboard == 4
-
+    b_manager.addClient(target_11);
 #endif
 
     // board 5

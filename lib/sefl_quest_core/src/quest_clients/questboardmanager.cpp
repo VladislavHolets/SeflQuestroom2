@@ -176,19 +176,32 @@ namespace SEFL
 		Logger::notice(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
 	}
 
-	bool Quest_Board_Manager::addClient(SEFL::Quest_Client *client)
-	{
+    bool Quest_Board_Manager::addClient(SEFL::Quest_Client *client)
+    {
 
-		for (auto & i : this->clients_)
-		{
-			if (i == client)
-			{
-				return (true);
-			}
-		}
-		this->clients_.push_back(client);
-		return (false);
-	}
+        for (auto & i : this->clients_)
+        {
+            if (i == client)
+            {
+                return (true);
+            }
+        }
+        this->clients_.push_back(client);
+        return (false);
+    }
+    bool Quest_Board_Manager::addClient(SEFL::Quest_Client &client)
+    {
+
+        for (auto & i : this->clients_)
+        {
+            if (i == &client)
+            {
+                return (true);
+            }
+        }
+        this->clients_.push_back(&client);
+        return (false);
+    }
 
 	bool Quest_Board_Manager::isPowerStatus() const
 	{

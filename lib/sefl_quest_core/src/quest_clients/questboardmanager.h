@@ -55,7 +55,8 @@ namespace SEFL
 		virtual ~Quest_Board_Manager();
 		virtual void inputClb(const char *data, uint16_t len) override;
 		void loop();
-		bool addClient(SEFL::Quest_Client *client);
+        bool addClient(SEFL::Quest_Client *client);
+        bool addClient(SEFL::Quest_Client &client);
 		Quest_Host_Client *getHost();
 		Language getLanguage();
 		const char *getName();

@@ -171,14 +171,9 @@ void setup()
     cfg.chip_amount=4;
     HC595_Driver hc595_driver(cfg.data_pin,cfg.clock_pin,cfg.latch_pin,cfg.chip_amount);
     Pext.digitalWrite(7,LOW);
-    //uint8_t data=0b11111100;
-   // hc595_driver.setDataFrame(0,&data,1);
-   // hc595_driver.sendData();
-   // while(1){}
-    //hc595_driver.sendData();
     Tron_Segment_Timer timer_1(mqttclient,"timer1",1,"tr22");
     timer_1.setDriver(hc595_driver);
-    timer_1.setOverflowPeriod(1000);
+    timer_1.setOverflowPeriod(60000);
     timer_1.setStartingValue(60);
     timer_1.setStoppingValue(0);
     timer_1.setIncreasingOrder(false);
@@ -189,8 +184,21 @@ void setup()
         DEC,DEC
     };
     timer_1.setSegments(timer_1_segments,sizeof (timer_1_segments));
-
     timer_1.setSegmentsBase(timer_1_segments_base,sizeof (timer_1_segments_base));
+    Tron_Segment_Timer timer_2(mqttclient,"timer_2",1,"tr22");
+    timer_2.setDriver(hc595_driver);
+    timer_2.setOverflowPeriod(60000);
+    timer_2.setStartingValue(60);
+    timer_2.setStoppingValue(0);
+    timer_2.setIncreasingOrder(false);
+    uint8_t timer_2_segments[]{
+            0,1
+    };
+    uint8_t timer_2_segments_base[]{
+            DEC,DEC
+    };
+    timer_2.setSegments(timer_2_segments,sizeof (timer_2_segments));
+    timer_2.setSegmentsBase(timer_2_segments_base,sizeof (timer_2_segments_base));
 #endif
 
 // board 3
@@ -216,16 +224,17 @@ void setup()
 // Board 1
 #if Uniboard == 1
 
-    b_manager.addClient(&matrix);
-    b_manager.addClient(&rampuzzle);
+    b_manager.addClient(matrix);
+    b_manager.addClient(rampuzzle);
 
 #endif
 
   // board 2
 #if Uniboard == 2
-    b_manager.addClient(&gamma_puzzle);
-    b_manager.addClient(&status_bar_1);
-    b_manager.addClient(&timer_1);
+    b_manager.addClient(gamma_puzzle);
+    b_manager.addClient(status_bar_1);
+    b_manager.addClient(timer_1);
+    b_manager.addClient(timer_2);
 #endif
 
   // board 3

@@ -203,8 +203,9 @@ namespace SEFL
 
             displayHealth();
 		}
-		if (health == 0)
+		if (health <= 0)
 		{
+            health=0;
 			this->setStatus(SEFL::TronTargetClientStatuses::DEAD_STATUS);
 		}
 		SEFL::Logger::notice("target", "alive");
@@ -238,7 +239,9 @@ namespace SEFL
         }
         for (int i = 0; i < led_pins_size; ++i) {
             int temp =this->health-(this->max_health / led_pins_size * i);
-            int value=((temp>=0)?temp:0) * 4096 / (max_health / led_pins_size);
+            temp=(temp>this->max_health / led_pins_size)?(this->max_health / led_pins_size):(temp);
+            int value=((temp>0)?temp:0) * 4096 / (max_health / led_pins_size);
+            Logger::notice(this->getName(),value);
             Pext.analogWrite(led_pins[i], (led_pins[i]>8)?value:(4096-value));
         }
     }

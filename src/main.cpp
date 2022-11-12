@@ -1,6 +1,5 @@
 
 #include "main.h"
-//extern MQTTClient *clbwrapobj;
 #ifdef USE_DFPLAYER
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
@@ -19,7 +18,7 @@ void setup()
     serial.begin(9600);
     delay(100);
     SEFL::Logger::getInstance()->setPrinter(&serial);
-    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE
+    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::SILENT); // VERBOSE   NOTICE SILENT9
     SEFL::Logger::getInstance()->setPostMessage();
     SEFL::Logger::notice("main", "Initing board");
 #ifdef USE_DFPLAYER
@@ -40,26 +39,87 @@ void setup()
     Pext.getHandler()->setPWMFrequency(1600); // 1600
     Pext.getHandler()->setAllChannelsPWM(4096);
     SEFL::Logger::notice("main", "Initing ethernet");
-
+#if defined(TRON_ROOM)
+    const char placement[]="tr22";
+#endif
 #if Uniboard == 1
-    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x03};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x01};
+    const char uniboard_name[]="U1";
+
 #endif
 
 #if Uniboard == 2
-    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x04};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x02};
+    const char uniboard_name[]="U2";
 #endif
 
 #if Uniboard == 3
-    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x06};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x03};
+    const char uniboard_name[]="U3";
 #endif
 
 #if Uniboard == 4
-    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x07};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x04};
+    const char uniboard_name[]="U4";
 #endif
 
 #if Uniboard == 5
-    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x08};
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x05};
+    const char uniboard_name[]="U5";
 #endif
+#if Uniboard == 6
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x06};
+    const char uniboard_name[]="U6";
+#endif
+#if Uniboard == 7
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x07};
+    const char uniboard_name[]="U7";
+#endif
+#if Uniboard == 8
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x08};
+    const char uniboard_name[]="U8";
+#endif
+#if Uniboard == 9
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x09};
+    const char uniboard_name[]="U9";
+#endif
+#if Uniboard == 10
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x0A};
+    const char uniboard_name[]="U10";
+#endif
+#if Uniboard == 11
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x0B};
+    const char uniboard_name[]="U11";
+#endif
+#if Uniboard == 12
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x0C};
+    const char uniboard_name[]="U12";
+#endif
+#if Uniboard == 13
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x0D};
+    const char uniboard_name[]="U13";
+#endif
+#if Uniboard == 14
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x0E};
+    const char uniboard_name[]="U14";
+#endif
+#if Uniboard == 15
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0xF};
+    const char uniboard_name[]="U15";
+#endif
+#if Uniboard == 16
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x10};
+    const char uniboard_name[]="U16";
+#endif
+#if Uniboard == 17
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x11};
+    const char uniboard_name[]="U17";
+#endif
+#if Uniboard == 18
+    byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x12};
+    const char uniboard_name[]="U18";
+#endif
+
     //мак адреси для гб ідуть формату 30:16:00:00:00:ХХ
     // для гр 30:16:00:00:01:ХХ
     // для трону 30:16:00:00:02:ХХ
@@ -81,25 +141,7 @@ void setup()
 
     SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
 
-#if Uniboard == 1
-    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U1", "tr22");
-#endif
-
-#if Uniboard == 2
-    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U2", "tr22");
-#endif
-
-#if Uniboard == 3
-    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U3", "tr22");
-#endif
-
-#if Uniboard == 4
-    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U4", "tr22");
-#endif
-
-#if Uniboard == 5
-    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, "U5", "tr22");
-#endif
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, uniboard_name, placement);
 
     SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");
 
@@ -109,7 +151,7 @@ void setup()
 
     // board 1
 #if Uniboard == 1
-    LEDMatrixPuzzleNeopixelKeyboard matrix(mqttclient, "matrix", 1, "tr22");
+    LEDMatrixPuzzleNeopixelKeyboard matrix(mqttclient, "matrix", 1, placement);
   const uint8_t matrix_pext_pins[] = {
             0, 1, 2};
   const uint8_t matrix_mext_pins[] = {
@@ -131,7 +173,7 @@ void setup()
   matrix.setStripPin(matrix_strip_pin);
   matrix.setStripSegmentSize(matrix_segment_size);
 
-  RAMPuzzle rampuzzle(mqttclient,"rampuzzle",1,"tr22");
+  RAMPuzzle rampuzzle(mqttclient,"rampuzzle",1,placement);
   const uint8_t ram_led_pins[]={3,4,5,6};
   const uint8_t ram_sensor_pins[]={4,5,6,7};
   rampuzzle.setLedPins(ram_led_pins,sizeof(ram_led_pins));
@@ -140,7 +182,7 @@ void setup()
 #endif
 // board 2
 #if Uniboard == 2
-    GammaPuzzle gamma_puzzle(mqttclient,"gammapuzzle",1,"tr22");
+    GammaPuzzle gamma_puzzle(mqttclient,"gammapuzzle",1,placement);
     const uint8_t gamma_buttons[]={
             0,1,2,3,4,5,6
     };
@@ -157,7 +199,7 @@ void setup()
     gamma_puzzle.setCorrectOrder(gamma_correct_order,sizeof (gamma_correct_order));
     gamma_puzzle.setCorrectAnimationTimeout(gamma_correct_timeout);
     gamma_puzzle.setIncorrectAnimationTimeout(gamma_incorrect_timeout);
-    StatusBar status_bar_1(mqttclient,"statusbar_1",1,"tr22");
+    StatusBar status_bar_1(mqttclient,"statusbar_1",1,placement);
     const uint8_t status_bar_led_pins[]={
             9,10,11,12,13,14
     };
@@ -170,7 +212,7 @@ void setup()
     cfg.chip_amount=4;
     HC595_Driver hc595_driver(cfg.data_pin,cfg.clock_pin,cfg.latch_pin,cfg.chip_amount);
     Pext.digitalWrite(7,LOW);
-    Tron_Segment_Timer timer_1(mqttclient,"timer_1",1,"tr22");
+    Tron_Segment_Timer timer_1(mqttclient,"timer_1",1,placement);
     timer_1.setDriver(hc595_driver);
     timer_1.setOverflowPeriod(60000);
     timer_1.setStartingValue(60);
@@ -184,7 +226,7 @@ void setup()
     };
     timer_1.setSegments(timer_1_segments,sizeof (timer_1_segments));
     timer_1.setSegmentsBase(timer_1_segments_base,sizeof (timer_1_segments_base));
-    Tron_Segment_Timer timer_2(mqttclient,"timer_2",1,"tr22");
+    Tron_Segment_Timer timer_2(mqttclient,"timer_2",1,placement);
     timer_2.setDriver(hc595_driver);
     timer_2.setOverflowPeriod(60000);
     timer_2.setStartingValue(60);
@@ -202,7 +244,7 @@ void setup()
 
 // board 3
 #if Uniboard == 3
-    Generator generator_puzzle(mqttclient,"generator_puzzle",1,"tr22");
+    Generator generator_puzzle(mqttclient,"generator_puzzle",1,placement);
     generator_puzzle.setCorrectAnimationTimeout(1500);
     generator_puzzle.setSolvedAnimationTimeout(2000);
     uint8_t generator_wires_pins[]{
@@ -222,15 +264,69 @@ void setup()
 
 // board 4
 #if Uniboard == 4
-    Quest_Tron_Target target_11(mqttclient,0,"target_11",1,"tr22");
-    uint8_t target_11_led_pins[]{0,1,2,3,4,5,6,7,8,9,10,11};
-    target_11.setLedPins(target_11_led_pins, sizeof(target_11_led_pins));
+
 #endif
 
 // board 5
 #if Uniboard == 5
 
 #endif
+#if Uniboard == 6
+
+#endif
+#if Uniboard == 7
+
+#endif
+#if Uniboard == 8
+
+#endif
+#if Uniboard == 9
+
+#endif
+#if Uniboard == 10
+
+#endif
+#if Uniboard == 11
+    Quest_Tron_Target target_11(mqttclient,0,"target_11",1,placement);
+    uint8_t target_11_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    target_11.setLedPins(target_11_led_pins, sizeof(target_11_led_pins));
+#endif
+#if Uniboard == 12
+    Quest_Tron_Target target_12(mqttclient,0,"target_12",1,placement);
+    uint8_t target_12_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    target_12.setLedPins(target_12_led_pins, sizeof(target_12_led_pins));
+#endif
+#if Uniboard == 13
+    Quest_Tron_Target target_13(mqttclient,0,"target_13",1,placement);
+    uint8_t target_13_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    target_13.setLedPins(target_13_led_pins, sizeof(target_13_led_pins));
+#endif
+#if Uniboard == 14
+    Quest_Tron_Target target_14(mqttclient,0,"target_14",1,placement);
+    uint8_t target_14_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    target_14.setLedPins(target_14_led_pins, sizeof(target_14_led_pins));
+#endif
+#if Uniboard == 15
+    Quest_Tron_Target target_21(mqttclient,0,"target_21",1,placement);
+    uint8_t target_21_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    target_21.setLedPins(target_21_led_pins, sizeof(target_21_led_pins));
+#endif
+#if Uniboard == 16
+    Quest_Tron_Target target_22(mqttclient,0,"target_22",1,placement);
+    uint8_t target_22_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    target_22.setLedPins(target_22_led_pins, sizeof(target_22_led_pins));
+#endif
+#if Uniboard == 17
+    Quest_Tron_Target target_23(mqttclient,0,"target_23",1,placement);
+    uint8_t target_23_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    target_23.setLedPins(target_23_led_pins, sizeof(target_23_led_pins));
+#endif
+#if Uniboard == 18
+    Quest_Tron_Target target_24(mqttclient,0,"target_24",1,placement);
+    uint8_t target_24_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    target_24.setLedPins(target_24_led_pins, sizeof(target_24_led_pins));
+#endif
+
 
     //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
 
@@ -260,13 +356,52 @@ void setup()
 
     // board 4
 #if Uniboard == 4
-    b_manager.addClient(target_11);
 #endif
 
     // board 5
 #if Uniboard == 5
 
 #endif
+#if Uniboard == 6
+
+#endif
+#if Uniboard == 7
+
+#endif
+#if Uniboard == 8
+
+#endif
+#if Uniboard == 9
+
+#endif
+#if Uniboard == 10
+
+#endif
+#if Uniboard == 11
+    b_manager.addClient(target_11);
+#endif
+#if Uniboard == 12
+    b_manager.addClient(target_12);
+#endif
+#if Uniboard == 13
+    b_manager.addClient(target_13);
+#endif
+#if Uniboard == 14
+    b_manager.addClient(target_14);
+#endif
+#if Uniboard == 15
+    b_manager.addClient(target_21);
+#endif
+#if Uniboard == 16
+    b_manager.addClient(target_22);
+#endif
+#if Uniboard == 17
+    b_manager.addClient(target_23);
+#endif
+#if Uniboard == 18
+    b_manager.addClient(target_24);
+#endif
+
 
     //	тут об'єкти пристроїв додаються до менеджера плати за прикладом вище
 

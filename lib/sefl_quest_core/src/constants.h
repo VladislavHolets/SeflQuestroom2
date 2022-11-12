@@ -9,7 +9,9 @@
 #define CONSTANTS_H_
 
 #include <sys/_stdint.h>
+#if defined(ARDUINO_ARCH_STM32)
 #include <wiring_constants.h>
+#endif
 #include <Wire.h>
 
 #if defined(ARDUINO_ARCH_AVR)

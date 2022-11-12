@@ -191,6 +191,7 @@ namespace SEFL
 			unsetChangedStatus();
 			reportStatus();
 
+            SEFL::Logger::notice("target", "alive");
             displayHealth();
 		}
 		while (!this->data.empty())
@@ -208,15 +209,12 @@ namespace SEFL
             health=0;
 			this->setStatus(SEFL::TronTargetClientStatuses::DEAD_STATUS);
 		}
-		SEFL::Logger::notice("target", "alive");
+        if(health>=max_health){
+            health=max_health;
+        }
 		if (IrReceiver.decode())
 		{
 			health = health - 1;
-			SEFL::Logger::verbose(this->name_, health);
-			String message = String("health left:") + String(health);
-			this->data.push_back(message);
-			this->data.pop_back();
-			reportStatus();
 			IrReceiver.resume();
             displayHealth();
 		}

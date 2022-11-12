@@ -128,14 +128,14 @@ namespace SEFL
 		this->processCallbackQueueAll();
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{
-			Logger::notice(this->name_, "shut down");
+			Logger::warning(this->name_, "shut down");
 			this->shutdown_timestamp = 0;
 		}
 
 		if (this->power_status_ && this->shutdown_timestamp)
 		{
 
-			Logger::notice(this->name_, "clients initial stuff");
+			Logger::warning(this->name_, "clients initial stuff");
 			for (auto & client : this->clients_)
 			{
 				if (client != nullptr)
@@ -149,7 +149,7 @@ namespace SEFL
 		if (this->power_status_ && !this->shutdown_timestamp)
 		{
 
-			Logger::notice(this->name_, "clients stuff");
+			Logger::warning(this->name_, "clients stuff");
 			for (auto & client : this->clients_)
 			{
 				if (client != nullptr)
@@ -157,7 +157,7 @@ namespace SEFL
 					client->act();
 				}
 			}
-			Logger::notice(this->name_, "clients done");
+			Logger::warning(this->name_, "clients done");
 		}
 		if (this->host_.reset_trigger_)
 		{
@@ -172,8 +172,9 @@ namespace SEFL
 			}
 		}
 
-		message_awaiting_interval=(millis()-timestamp_beginning_of_loop)*3;
-		Logger::notice(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
+		message_awaiting_interval=(millis()-timestamp_beginning_of_loop)/2;
+        message_awaiting_interval=(message_awaiting_interval<100)?100:message_awaiting_interval;
+		Logger::warning(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
 	}
 
     bool Quest_Board_Manager::addClient(SEFL::Quest_Client *client)
@@ -289,9 +290,9 @@ namespace SEFL
 	{
 		if (this->callbacksQueue.empty())
 			return;
-		Logger::notice(this->name_, callbacksQueue[0]->subfeed->c_str());
+		Logger::warning(this->name_, callbacksQueue[0]->subfeed->c_str());
 
-		Logger::notice(this->name_, "started");
+		Logger::warning(this->name_, "started");
 		if (this->callbacksQueue[0]->subfeed->equals(this->getSubfeed()))
 		{
 			this->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());

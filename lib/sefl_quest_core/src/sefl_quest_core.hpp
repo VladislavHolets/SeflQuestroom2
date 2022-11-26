@@ -7,6 +7,7 @@
 #include "peripherals/pwmpinsextender.h"
 #include "peripherals/rfid1.h"
 #include "peripherals/softspi.h"
+#include "peripherals/pextservo.h"
 #include "mqtt_wrappers/MQTTClientObjectBound.h"
 #include "mqtt_wrappers/mqtttwowayinteractor.h"
 #include "quest_clients/questclient.h"

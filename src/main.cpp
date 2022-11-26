@@ -264,7 +264,18 @@ void setup()
 
 // board 4
 #if Uniboard == 4
-
+//PextServo servo1;
+//servo1.attach(0);
+//while(1){
+//    servo1.write(1);
+//    delay(2000);
+//    servo1.write(90);
+//    delay(2000);
+//    servo1.write(180);
+//    delay(2000);
+//    servo1.write(90);
+//    delay(2000);
+//}
 #endif
 
 // board 5
@@ -356,6 +367,7 @@ void setup()
 
     // board 4
 #if Uniboard == 4
+
 #endif
 
     // board 5

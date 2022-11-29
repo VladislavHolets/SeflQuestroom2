@@ -18,7 +18,7 @@ void setup()
     serial.begin(9600);
     delay(100);
     SEFL::Logger::getInstance()->setPrinter(&serial);
-    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::SILENT); // VERBOSE   NOTICE SILENT9
+    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE SILENT
     SEFL::Logger::getInstance()->setPostMessage();
     SEFL::Logger::notice("main", "Initing board");
 #ifdef USE_DFPLAYER
@@ -264,18 +264,14 @@ void setup()
 
 // board 4
 #if Uniboard == 4
-//PextServo servo1;
-//servo1.attach(0);
-//while(1){
-//    servo1.write(1);
-//    delay(2000);
-//    servo1.write(90);
-//    delay(2000);
-//    servo1.write(180);
-//    delay(2000);
-//    servo1.write(90);
-//    delay(2000);
-//}
+ANDPuzzle and_puzzle(mqttclient,"&_puzzle",1,"tr22");
+TronLegacyAdapter tronLegacyAdapter;
+tronLegacyAdapter.setResetPin(0);
+tronLegacyAdapter.setManualPin(1);
+tronLegacyAdapter.setSolvedStatePin(0);
+and_puzzle.setAdapter(&tronLegacyAdapter);
+
+
 #endif
 
 // board 5
@@ -286,6 +282,16 @@ void setup()
 
 #endif
 #if Uniboard == 7
+    DiskHolderArray disk_receiver_1(mqttclient,"disk_receiver_1",1,"tr22");
+    HolderPins pins[6]{
+            {6,0,0,0},
+            {7,1,1,0},
+            {8,2,2,0},
+            {9,3,3,0},
+            {10,4,4,0},
+            {11,5,5,0}
+    };
+    disk_receiver_1.setHolders(pins,6);
 
 #endif
 #if Uniboard == 8
@@ -367,7 +373,7 @@ void setup()
 
     // board 4
 #if Uniboard == 4
-
+b_manager.addClient(and_puzzle);
 #endif
 
     // board 5
@@ -378,7 +384,7 @@ void setup()
 
 #endif
 #if Uniboard == 7
-
+b_manager.addClient(disk_receiver_1);
 #endif
 #if Uniboard == 8
 

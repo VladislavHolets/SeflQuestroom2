@@ -48,7 +48,7 @@ void TronLegacyAdapter::unSolveDevice() {
         Pext.digitalWrite(manual_pin, HIGH);
 }
 
-bool TronLegacyAdapter::is_solved() {
+bool TronLegacyAdapter::isSolved() {
     if (solved_state_pin != -1) {
         pinMode(Mext.getCi(), INPUT_PULLUP);
         return !Mext.digitalRead(solved_state_pin);

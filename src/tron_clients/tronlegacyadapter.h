@@ -33,7 +33,7 @@ public:
     void setDevice();
     void solveDevice();
     void unSolveDevice();
-    bool is_solved();
+    bool isSolved();
 
 };
 

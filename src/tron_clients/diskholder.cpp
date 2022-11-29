@@ -3,15 +3,10 @@
 //
 
 #include "diskholder.h"
+#include "ArduinoJson.h"
 
 namespace SEFL {
-    void DiskHolderArray::onOn() {
 
-    }
-
-    void DiskHolderArray::onOff() {
-
-    }
 
     DiskHolderArray::DiskHolderArray(MQTTClient &mqtt, const char *name, uint8_t resetStatus, const char *placement,
                                      const char *inTopic, const char *outTopic, Language language)
@@ -19,6 +14,10 @@ namespace SEFL {
         holders_ = nullptr;
         holders_size_ = -1;
         holdertype_ = DISPENCER;
+        holders_servos_ = nullptr;
+        led_state_ = false;
+        dispence_angle = 150;
+        receive_angle = 0;
     }
 
     void DiskHolderArray::setHolders(HolderPins *holders, uint8_t size) {
@@ -32,26 +31,123 @@ namespace SEFL {
             holders_[i].led_pin = holders[i].led_pin;
             holders_[i].sensor_pin = holders[i].sensor_pin;
             holders_[i].servo_pin = holders[i].servo_pin;
+            holders_[i].attached_timestamp = holders[i].attached_timestamp;
         }
     }
 
     bool DiskHolderArray::check_disk(uint8_t index) {
         if (index >= holders_size_)
             return false;
+        pinMode(Mext.getCi(),INPUT_PULLUP);
         bool pin_value = Mext.digitalRead(holders_[index].sensor_pin);
+        Logger::notice(this->name_, pin_value);
+        if (led_state_) {
+            Pext.digitalWrite(holders_[index].led_pin, pin_value);
+        } else {
+            Pext.digitalWrite(holders_[index].led_pin, HIGH);
+        }
         return !pin_value;
     }
 
-    void DiskHolderArray::extract_disk(uint8_t index) {
+    void DiskHolderArray::dispence_disk(uint8_t index) {
         if (index >= holders_size_)
-            return ;
+            return;
+        holders_servos_[index].attach(holders_[index].servo_pin);
+        holders_servos_[index].write(dispence_angle);
+        holders_[index].attached_timestamp = millis();
     }
 
-    void DiskHolderArray::extract_disk() {
+    void DiskHolderArray::dispence_disk() {
         for (int i = 0; i < holders_size_; ++i) {
-            if(check_disk(i)){
-                extract_disk(i);
+            if (check_disk(i)) {
+                dispence_disk(i);
+                return;
             }
         }
+    }
+
+    void DiskHolderArray::set_led_state(bool led_state) {
+        this->led_state_ = led_state;
+    }
+
+    void DiskHolderArray::detach_servos(uint32_t timeout) {
+        for (int i = 0; i < holders_size_; ++i) {
+            if (holders_[i].attached_timestamp && (millis() - holders_[i].attached_timestamp) > timeout) {
+                holders_servos_[i].detach();
+                holders_[i].attached_timestamp=0;
+                return;
+            }
+        }
+    }
+
+    void DiskHolderArray::onActive() {
+        if (isChangedStatus()) {
+            unsetChangedStatus();
+            Quest_Basic_Client::reportStatus();
+            set_led_state(true);
+        }
+        if (!data.empty()) {
+
+            StaticJsonDocument<192> doc;
+            DeserializationError error = deserializeJson(doc, data.front());
+            if (error) {
+                Logger::notice(F("deserializeJson() failed: "));
+                Logger::notice(error.f_str());
+                return;
+            }
+            JsonArray holders = doc["holders"];
+            for (auto &&holder: holders) {
+                if (holder[0] < holders_size_) {
+                    if (holder[1]) {
+                        dispence_disk(holder[0]);
+                    } else {
+                        receive_disk(holder[0]);
+                    }
+                }
+            }
+            data.remove(0);
+        }
+        int result = 0;
+        for (int holder = 0; holder < holders_size_; ++holder) {
+            result += check_disk(holder) ? 1 : 0;
+        }
+        if ((holdertype_ == RECEIVER && result == holders_size_) || (holdertype_ == DISPENCER && result == 0)) {
+            Quest_Basic_Client::setStatus(FINISHED_STATUS);
+        }
+        detach_servos(2000);
+    }
+
+    void DiskHolderArray::onDefault() {
+        if (isChangedStatus()) {
+            unsetChangedStatus();
+            Quest_Basic_Client::reportStatus();
+            set_led_state(false);
+            for (int holder = 0; holder < holders_size_; ++holder) {
+                 check_disk(holder);
+            }
+        }
+    }
+
+    void DiskHolderArray::onFinished() {
+        if (isChangedStatus()) {
+            unsetChangedStatus();
+            Quest_Basic_Client::reportStatus();
+            set_led_state(false);
+            for (int holder = 0; holder < holders_size_; ++holder) {
+                check_disk(holder);
+            }
+        }
+    }
+
+    void DiskHolderArray::onManualFinished() {
+        onFinished();
+    }
+
+    void DiskHolderArray::receive_disk(uint8_t index) {
+        if (index >= holders_size_)
+            return;
+        holders_servos_[index].attach(holders_[index].servo_pin);
+        holders_servos_[index].write(receive_angle);
+        holders_[index].attached_timestamp = millis();
     }
 } // SEFL

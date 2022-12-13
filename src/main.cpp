@@ -18,7 +18,7 @@ void setup()
     serial.begin(9600);
     delay(100);
     SEFL::Logger::getInstance()->setPrinter(&serial);
-    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE SILENT
+    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NONE); // VERBOSE   NOTICE SILENT
     SEFL::Logger::getInstance()->setPostMessage();
     SEFL::Logger::notice("main", "Initing board");
 #ifdef USE_DFPLAYER
@@ -151,7 +151,7 @@ void setup()
 
     // board 1
 #if Uniboard == 1
-    LEDMatrixPuzzleNeopixelKeyboard matrix(mqttclient, "matrix", 1, placement);
+    LEDMatrixPuzzleNeopixelKeyboard matrix(mqttclient, "matrix_puzzle", 1, placement);
   const uint8_t matrix_pext_pins[] = {
             0, 1, 2};
   const uint8_t matrix_mext_pins[] = {
@@ -173,12 +173,18 @@ void setup()
   matrix.setStripPin(matrix_strip_pin);
   matrix.setStripSegmentSize(matrix_segment_size);
 
-  RAMPuzzle rampuzzle(mqttclient,"rampuzzle",1,placement);
+  RAMPuzzle rampuzzle(mqttclient,"ram_puzzle",1,placement);
   const uint8_t ram_led_pins[]={3,4,5,6};
   const uint8_t ram_sensor_pins[]={4,5,6,7};
   rampuzzle.setLedPins(ram_led_pins,sizeof(ram_led_pins));
   rampuzzle.setSensorPins(ram_sensor_pins,sizeof(ram_sensor_pins));
-
+  ChipsPuzzle chips_puzzle(mqttclient,"chips_puzzle",1,placement);
+  TronLegacyAdapter chips_adapter;
+  chips_adapter.setResetPin(7);
+  chips_adapter.setManualPin(8);
+  chips_adapter.setSolvedStatePin(8);
+  chips_adapter.setResetTimeout(3000);
+  chips_puzzle.setAdapter(chips_adapter);
 #endif
 // board 2
 #if Uniboard == 2
@@ -269,7 +275,7 @@ TronLegacyAdapter tronLegacyAdapter;
 tronLegacyAdapter.setResetPin(0);
 tronLegacyAdapter.setManualPin(1);
 tronLegacyAdapter.setSolvedStatePin(0);
-and_puzzle.setAdapter(&tronLegacyAdapter);
+and_puzzle.setAdapter(tronLegacyAdapter);
 
 
 #endif
@@ -355,7 +361,7 @@ and_puzzle.setAdapter(&tronLegacyAdapter);
 
     b_manager.addClient(matrix);
     b_manager.addClient(rampuzzle);
-
+    b_manager.addClient(chips_puzzle);
 #endif
 
     // board 2

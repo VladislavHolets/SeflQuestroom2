@@ -16,10 +16,14 @@ private:
     int8_t reset_pin;
     int8_t manual_pin;
     int8_t solved_state_pin;
-
+    uint32_t reset_timeout;
 public:
     TronLegacyAdapter();
     virtual ~TronLegacyAdapter();
+
+    uint32_t getResetTimeout() const;
+
+    void setResetTimeout(uint32_t resetTimeout);
 
     void setResetPin(uint8_t resetPin);
     void setManualPin(uint8_t manualPin);

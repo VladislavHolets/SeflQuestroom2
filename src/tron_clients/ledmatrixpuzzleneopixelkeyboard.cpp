@@ -29,8 +29,8 @@ namespace SEFL {
         {
             this->changed_status_ = false;
             this->reportStatus();
-            //initButtons();
-            //refreshStrip();
+            initButtons();
+            refreshStrip();
         }
     }
 

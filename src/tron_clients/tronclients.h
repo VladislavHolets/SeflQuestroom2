@@ -15,5 +15,6 @@
 #include "generator.h"
 #include "diskholder.h"
 #include "andpuzzle.h"
+#include "chipspuzzle.h"
 //#include ""
 #endif //SEFLQUESTROOM2_TRONCLIENTS_H

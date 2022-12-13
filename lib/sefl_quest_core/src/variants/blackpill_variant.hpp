@@ -11,7 +11,6 @@
 #include <sys/_stdint.h>
 #include <wiring_constants.h>
 #include <Wire.h>
-
 #define MEM_TYPE PROGMEM
 namespace SEFL {
 const uint16_t HC595_BUFFER_SIZE=10;

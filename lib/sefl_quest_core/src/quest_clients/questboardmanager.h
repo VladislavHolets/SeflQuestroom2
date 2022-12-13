@@ -13,7 +13,7 @@
 #include "questhostclient.h"
 #include <sys/_stdint.h>
 #include <Vector.h>
-
+#include "IWatchdog.h"
 namespace SEFL
 {
 	class Quest_Board_Manager : public MQTT_Two_Way_Interactor

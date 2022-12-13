@@ -40,17 +40,17 @@ void TronLegacyAdapter::setDevice() {
 
 void TronLegacyAdapter::solveDevice() {
     if(manual_pin != -1)
-        Pext.digitalWrite(manual_pin, LOW);
+        Pext.digitalWrite(manual_pin, HIGH);
 }
 
 void TronLegacyAdapter::unSolveDevice() {
     if(manual_pin != -1)
-        Pext.digitalWrite(manual_pin, HIGH);
+        Pext.digitalWrite(manual_pin, LOW);
 }
 
 bool TronLegacyAdapter::isSolved() {
     if (solved_state_pin != -1) {
-        pinMode(Mext.getCi(), INPUT_PULLUP);
+        pinMode(Mext.getCi(), INPUT);
         return !Mext.digitalRead(solved_state_pin);
     }
     return false;
@@ -60,8 +60,17 @@ TronLegacyAdapter::TronLegacyAdapter() {
     this->reset_pin = -1;
     this->manual_pin = -1;
     this->solved_state_pin = -1;
+    this->reset_timeout=2000;
 }
 
 TronLegacyAdapter::~TronLegacyAdapter() {
 
+}
+
+uint32_t TronLegacyAdapter::getResetTimeout() const {
+    return reset_timeout;
+}
+
+void TronLegacyAdapter::setResetTimeout(uint32_t resetTimeout) {
+    reset_timeout = resetTimeout;
 }

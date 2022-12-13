@@ -23,7 +23,7 @@ namespace SEFL {
 
         void onManualFinished() override;
 
-        void setAdapter(TronLegacyAdapter *adapter);
+        void setAdapter(TronLegacyAdapter &adapter);
     };
 
 } // SEFL

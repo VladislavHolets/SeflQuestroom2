@@ -23,7 +23,7 @@ namespace SEFL {
 class Logger {
 public:
 	enum Level {
-		VERBOSE = 0, NOTICE, WARNING, ERROR, FATAL, SILENT
+		NONE=0, VERBOSE, NOTICE, WARNING, ERROR, FATAL, SILENT
 	};
 	const char *PRE_LEVEL = "[", *POST_LEVEL = "]", *PRE_MODULE = ":",
 			*POST_MODULE = " ", *PRE_MESSAGE = " ", *POST_MESSAGE = "\n";

@@ -17,14 +17,14 @@ namespace SEFL {
     }
 
 
-    void ANDPuzzle::setAdapter(TronLegacyAdapter *adapter) {
+    void ANDPuzzle::setAdapter(TronLegacyAdapter &adapter) {
         if (adapter_ != nullptr) {
             delete adapter_;
         }
         adapter_ = new TronLegacyAdapter;
-        adapter_->setManualPin(adapter->getManualPin());
-        adapter_->setResetPin(adapter->getResetPin());
-        adapter_->setSolvedStatePin(adapter->getSolvedStatePin());
+        adapter_->setManualPin(adapter.getManualPin());
+        adapter_->setResetPin(adapter.getResetPin());
+        adapter_->setSolvedStatePin(adapter.getSolvedStatePin());
 
     }
 

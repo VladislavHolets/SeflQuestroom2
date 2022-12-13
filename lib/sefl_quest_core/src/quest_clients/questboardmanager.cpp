@@ -41,7 +41,7 @@ namespace SEFL
 		this->callbacksQueue.clear();
 		mqtt.onMessage(this, &SEFL::Quest_Board_Manager::pushToCallbacksQueue);
 		Logger::notice("board_manager", F("constructor_done"));
-		
+		IWatchdog.begin(5000000);
 	}
 
 	Quest_Board_Manager::~Quest_Board_Manager(){
@@ -106,6 +106,7 @@ namespace SEFL
 
 	void Quest_Board_Manager::loop()
 	{
+        IWatchdog.reload();
 		static uint32_t message_awaiting_interval=100;
 		if (!this->getMqtt()->connected())
 		{

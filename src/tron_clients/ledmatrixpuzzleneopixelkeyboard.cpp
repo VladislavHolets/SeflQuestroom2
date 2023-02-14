@@ -101,7 +101,7 @@ namespace SEFL {
     }
 
 
-    void LEDMatrixPuzzleNeopixelKeyboard::setPattern(const uint8_t *array, uint8_t size) {
+    void LEDMatrixPuzzleNeopixelKeyboard::setPattern(const uint8_t *array, int8_t size) {
         if (this->buttons_amount == size)
         {
             for (int i = 0; i < this->buttons_amount; i++)
@@ -111,7 +111,7 @@ namespace SEFL {
         }
     }
 
-    void LEDMatrixPuzzleNeopixelKeyboard::setStripSegmentSize(uint8_t segment_size) {
+    void LEDMatrixPuzzleNeopixelKeyboard::setStripSegmentSize(int8_t segment_size) {
         if (segment_size != 0)
         {
             this->segment_size = segment_size;
@@ -206,7 +206,7 @@ namespace SEFL {
         return true;
     }
 
-    uint8_t LEDMatrixPuzzleNeopixelKeyboard::getButtonsSize() {
+    uint8_t LEDMatrixPuzzleNeopixelKeyboard::getButtonsSize() const {
         return this->buttons_amount;
     }
 

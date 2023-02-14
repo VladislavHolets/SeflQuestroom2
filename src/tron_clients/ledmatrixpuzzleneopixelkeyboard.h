@@ -17,12 +17,12 @@ namespace SEFL {
 
         static const uint8_t colors_size = 8;
 
-        uint8_t buttons_amount;
+        int8_t buttons_amount;
         uint8_t *buttons_states;
         uint8_t *buttons_colors;
         uint8_t *buttons_correct_colors;
         Adafruit_NeoPixel strip;
-        uint8_t segment_size;
+        int8_t segment_size;
         uint8_t strip_pin;
         enum ButtonState
         {
@@ -44,10 +44,10 @@ namespace SEFL {
         void setKeyboardKeymap(const char *keyMap, uint8_t keymapRowSize, uint8_t keymapCollSize);
         // user defined
         void setStripPin(uint8_t pin);
-        void setPattern(const uint8_t *array, uint8_t size);
-        uint8_t getButtonsSize();
-        void setStripSegmentSize(uint8_t segment_size);
-        uint32_t getColor(uint8_t color);
+        void setPattern(const uint8_t *array, int8_t size);
+        uint8_t getButtonsSize() const;
+        void setStripSegmentSize(int8_t segment_size);
+        static uint32_t getColor(uint8_t color);
 
         // predefined for the device type
         void onActive() override;

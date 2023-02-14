@@ -13,5 +13,5 @@
 #include <sefl_quest_core.h>
 #include "tron_clients/tronclients.h"
 #define TRON_ROOM
-#define Uniboard (1)
+#define Uniboard (2)
 using namespace SEFL;

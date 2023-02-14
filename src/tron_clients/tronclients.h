@@ -12,9 +12,10 @@
 #include "gammapuzzle.h"
 #include "segmenttimer.h"
 #include "statusbar.h"
+#include "statusbarhc595.h"
 #include "generator.h"
 #include "diskholder.h"
 #include "andpuzzle.h"
-#include "chipspuzzle.h"
+#include "tronlegacypuzzle.h"
 //#include ""
 #endif //SEFLQUESTROOM2_TRONCLIENTS_H

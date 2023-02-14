@@ -27,16 +27,12 @@ void SEFL::HC595_Driver::shiftOut(uint16_t length)
         for (int i = 0; i < 8; i++)
         {
             digitalWrite(cfg_.clock_pin, 0);
-//            if (data[l] & (1 << (7 - i + 0)))
-//            {
-//                pinState = 1;
-//            }
-//            else
-//            {
-//                pinState = 0;
-//            }
+
             digitalWrite(cfg_.data_pin,  (data[l] & (1 << (7 - i + 0))));
+            delayMicroseconds(50);
             digitalWrite(cfg_.clock_pin, 1);
+
+            delayMicroseconds(50);
             //digitalWrite(cfg_.data_pin, 0);
         }
     }
@@ -67,13 +63,18 @@ SEFL::HC595_Driver::~HC595_Driver()
     delete [] data;
 }
 
-void SEFL::HC595_Driver::setDataItem(int16_t position, bool state)
+void SEFL::HC595_Driver::setDataItem(unsigned int position, bool state)
 {
     if (position >= this->cfg_.chip_amount * 8)
     {
         return;
     }
-    this->data[position / 8] = this->data[position / 8] | state << (position % 8);
+    if (state) {
+        this->data[position / 8] |= 1UL << (position -(position / 8) * 8);
+    }
+    else{
+        this->data[position / 8] &= ~(1UL << (position - (position / 8)*8));
+    }
 }
 
 void SEFL::HC595_Driver::cleanData()
@@ -135,4 +136,12 @@ void SEFL::HC595_Driver::setDataByte(int16_t position, uint8_t state) {
         return;
     }
     this->data[position] =state;
+}
+
+uint8_t *SEFL::HC595_Driver::getData() const {
+    return data;
+}
+
+int16_t SEFL::HC595_Driver::getDataLength() const {
+    return data_length;
 }

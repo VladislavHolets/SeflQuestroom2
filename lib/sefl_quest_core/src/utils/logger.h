@@ -256,7 +256,7 @@ public:
 
 	static const char* asString(Level level);
 	void setLevel(Level level_);
-	Print* getPrinter();
+	static Print* getPrinter();
 	void setPrinter(Print *printer_);
 	void setPostLevel(const char *post_level_ = "]");
 	void setPostMessage(const char *post_message_ = "\n");

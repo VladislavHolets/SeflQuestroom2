@@ -2,10 +2,10 @@
 // Created by vladi on 04.12.2022.
 //
 
-#include "chipspuzzle.h"
+#include "tronlegacypuzzle.h"
 
 namespace SEFL {
-    void ChipsPuzzle::onActive() {
+    void TronLegacyPuzzle::onActive() {
 
         static uint32_t reset_timestamp = 0;
         if (isChangedStatus()) {
@@ -28,7 +28,7 @@ namespace SEFL {
         }
     }
 
-    void ChipsPuzzle::onDefault() {
+    void TronLegacyPuzzle::onDefault() {
         static uint32_t reset_timestamp = 0;
         if (isChangedStatus()) {
             reset_timestamp = millis();
@@ -44,7 +44,7 @@ namespace SEFL {
         }
     }
 
-    void ChipsPuzzle::onFinished() {
+    void TronLegacyPuzzle::onFinished() {
         if (isChangedStatus()) {
             adapter_->setDevice();
             adapter_->unSolveDevice();
@@ -52,21 +52,21 @@ namespace SEFL {
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
         }
-        Logger::notice("ChipsPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
+        Logger::notice("TronLegacyPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
 
     }
 
-    void ChipsPuzzle::onManualFinished() {
+    void TronLegacyPuzzle::onManualFinished() {
         if (isChangedStatus()) {
             adapter_->solveDevice();
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
         }
-        Logger::notice("ChipsPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
+        Logger::notice("TronLegacyPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
 
     }
 
-    void ChipsPuzzle::setAdapter(TronLegacyAdapter &adapter) {
+    void TronLegacyPuzzle::setAdapter(TronLegacyAdapter &adapter) {
         if (adapter_ != nullptr) {
             delete adapter_;
         }
@@ -76,8 +76,8 @@ namespace SEFL {
         adapter_->setSolvedStatePin(adapter.getSolvedStatePin());
     }
 
-    ChipsPuzzle::ChipsPuzzle(MQTTClient &mqtt, const char *name, uint8_t resetStatus, const char *placement,
-                             const char *inTopic, const char *outTopic, Language language)
+    TronLegacyPuzzle::TronLegacyPuzzle(MQTTClient &mqtt, const char *name, uint8_t resetStatus, const char *placement,
+                                       const char *inTopic, const char *outTopic, Language language)
             : Quest_Basic_Client(mqtt, name, resetStatus, placement, inTopic, outTopic, language) {
         adapter_ = nullptr;
     }

@@ -1,12 +1,12 @@
 
 #include "main.h"
+
 #ifdef USE_DFPLAYER
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
 #endif
 SoftwareSerial serial(PA_3, PA_2); // PA_12
-void setup()
-{
+void setup() {
 
     SPI.setMOSI(PB15);
     SPI.setMISO(PB14);
@@ -18,7 +18,7 @@ void setup()
     serial.begin(9600);
     delay(100);
     SEFL::Logger::getInstance()->setPrinter(&serial);
-    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NONE); // VERBOSE   NOTICE SILENT
+    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE SILENT
     SEFL::Logger::getInstance()->setPostMessage();
     SEFL::Logger::notice("main", "Initing board");
 #ifdef USE_DFPLAYER
@@ -40,7 +40,7 @@ void setup()
     Pext.getHandler()->setAllChannelsPWM(4096);
     SEFL::Logger::notice("main", "Initing ethernet");
 #if defined(TRON_ROOM)
-    const char placement[]="tr22";
+    const char placement[] = "tr22";
 #endif
 #if Uniboard == 1
     byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x01};
@@ -50,7 +50,7 @@ void setup()
 
 #if Uniboard == 2
     byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x02};
-    const char uniboard_name[]="U2";
+    const char uniboard_name[] = "U2";
 #endif
 
 #if Uniboard == 3
@@ -178,7 +178,7 @@ void setup()
   const uint8_t ram_sensor_pins[]={4,5,6,7};
   rampuzzle.setLedPins(ram_led_pins,sizeof(ram_led_pins));
   rampuzzle.setSensorPins(ram_sensor_pins,sizeof(ram_sensor_pins));
-  ChipsPuzzle chips_puzzle(mqttclient,"chips_puzzle",1,placement);
+  TronLegacyPuzzle chips_puzzle(mqttclient,"chips_puzzle",1,placement);
   TronLegacyAdapter chips_adapter;
   chips_adapter.setResetPin(7);
   chips_adapter.setManualPin(8);
@@ -188,64 +188,102 @@ void setup()
 #endif
 // board 2
 #if Uniboard == 2
-    GammaPuzzle gamma_puzzle(mqttclient,"gammapuzzle",1,placement);
-    const uint8_t gamma_buttons[]={
-            0,1,2,3,4,5,6
+/*
+ * гамма
+ * таймери 2
+ * статус бари 2
+ * аларм лампи 2
+ * сонік дальномір
+ * лазерний промінь
+ *
+ *
+ */
+    GammaPuzzle gamma_puzzle(mqttclient, "gammapuzzle", 1, placement);
+    const uint8_t gamma_buttons[] = {
+            0, 1, 2, 3, 4, 5, 6
     };
-    const uint8_t gamma_neons[]={
-            0,1,2,3,4,5,6
+    const uint8_t gamma_neons[] = {
+            0, 1, 2, 3, 4, 5, 6
     };
-    const int8_t gamma_correct_order[]={
-            0,1, 2,3,4,5,6
+    const int8_t gamma_correct_order[] = {
+            0, 1, 2, 3, 4, 5, 6
     };
-    uint32_t gamma_correct_timeout=5000;
-    uint32_t gamma_incorrect_timeout=2000;
-    gamma_puzzle.setButtonsPins(gamma_buttons,sizeof(gamma_buttons));
-    gamma_puzzle.setNeonsPins(gamma_neons,sizeof(gamma_neons));
-    gamma_puzzle.setCorrectOrder(gamma_correct_order,sizeof (gamma_correct_order));
+    uint32_t gamma_correct_timeout = 5000;
+    uint32_t gamma_incorrect_timeout = 2000;
+    gamma_puzzle.setButtonsPins(gamma_buttons, sizeof(gamma_buttons));
+    gamma_puzzle.setNeonsPins(gamma_neons, sizeof(gamma_neons));
+    gamma_puzzle.setCorrectOrder(gamma_correct_order, sizeof(gamma_correct_order));
     gamma_puzzle.setCorrectAnimationTimeout(gamma_correct_timeout);
     gamma_puzzle.setIncorrectAnimationTimeout(gamma_incorrect_timeout);
-    StatusBar status_bar_1(mqttclient,"statusbar_1",1,placement);
-    const uint8_t status_bar_led_pins[]={
-            9,10,11,12,13,14
-    };
-    status_bar_1.setStatusLampsPins(status_bar_led_pins,sizeof(status_bar_led_pins));
     //HC595_Driver driver(uext_config,2);
+
+    /*******************************************************************************************************************
+     * BEGINING of HC595 dependent classes initialisation!
+     ******************************************************************************************************************/
+
     HC595_cfg cfg{};
-    cfg.data_pin=uext_config.MOSI;
-    cfg.latch_pin=uext_config.SCLK;
-    cfg.clock_pin=uext_config.SSEL;
-    cfg.chip_amount=4;
-    HC595_Driver hc595_driver(cfg.data_pin,cfg.clock_pin,cfg.latch_pin,cfg.chip_amount);
-    Pext.digitalWrite(7,LOW);
-    Tron_Segment_Timer timer_1(mqttclient,"timer_1",1,placement);
+    cfg.data_pin = uext_config.MOSI;
+    cfg.latch_pin = uext_config.SCLK;
+    cfg.clock_pin = uext_config.SSEL;
+    cfg.chip_amount = 6;
+    HC595_Driver hc595_driver(cfg.data_pin, cfg.clock_pin, cfg.latch_pin, cfg.chip_amount);
+    Tron_Segment_Timer timer_1(mqttclient, "timer_1", 1, placement);
     timer_1.setDriver(hc595_driver);
     timer_1.setOverflowPeriod(60000);
     timer_1.setStartingValue(60);
     timer_1.setStoppingValue(0);
     timer_1.setIncreasingOrder(false);
     uint8_t timer_1_segments[]{
-        2,3
+            2, 3
     };
     uint8_t timer_1_segments_base[]{
-        DEC,DEC
+            DEC, DEC
     };
-    timer_1.setSegments(timer_1_segments,sizeof (timer_1_segments));
-    timer_1.setSegmentsBase(timer_1_segments_base,sizeof (timer_1_segments_base));
-    Tron_Segment_Timer timer_2(mqttclient,"timer_2",1,placement);
+    timer_1.setSegments(timer_1_segments, sizeof(timer_1_segments));
+    timer_1.setSegmentsBase(timer_1_segments_base, sizeof(timer_1_segments_base));
+
+
+    Tron_Segment_Timer timer_2(mqttclient, "timer_2", 1, placement);
     timer_2.setDriver(hc595_driver);
     timer_2.setOverflowPeriod(60000);
     timer_2.setStartingValue(60);
     timer_2.setStoppingValue(0);
     timer_2.setIncreasingOrder(false);
     uint8_t timer_2_segments[]{
-            0,1
+            0, 1
     };
     uint8_t timer_2_segments_base[]{
-            DEC,DEC
+            DEC, DEC
     };
-    timer_2.setSegments(timer_2_segments,sizeof (timer_2_segments));
-    timer_2.setSegmentsBase(timer_2_segments_base,sizeof (timer_2_segments_base));
+    timer_2.setSegments(timer_2_segments, sizeof(timer_2_segments));
+    timer_2.setSegmentsBase(timer_2_segments_base, sizeof(timer_2_segments_base));
+
+    StatusBarHC595 status_bar_1(mqttclient,"status_bar_1",1,placement);
+    status_bar_1.setDriver(hc595_driver);
+    status_bar_1.setStatusLampsChip(4);
+    const uint8_t status_bar_1_led_pins[]={
+            7,6,5,4,3,2
+    };
+    status_bar_1.setStatusLampsPins(status_bar_1_led_pins,sizeof(status_bar_1_led_pins));
+
+    StatusBarHC595 status_bar_2(mqttclient,"status_bar_2",1,placement);
+    status_bar_2.setDriver(hc595_driver);
+    status_bar_2.setStatusLampsChip(5);
+    const uint8_t status_bar_2_led_pins[]={
+            7,6,5,4,3,2
+    };
+    status_bar_2.setStatusLampsPins(status_bar_2_led_pins,sizeof(status_bar_2_led_pins));
+    /*******************************************************************************************************************
+     * ENDING of HC595 dependent classes initialisation!
+     ******************************************************************************************************************/
+
+
+    TronLegacyAdapter sonic_adapter;
+    sonic_adapter.setResetPin(7);
+    sonic_adapter.setManualPin(8);
+    sonic_adapter.setSolvedStatePin(7);
+
+
 #endif
 
 // board 3
@@ -265,24 +303,28 @@ void setup()
     generator_puzzle.setGeneratorLedsPin(1);
     generator_puzzle.setGeneratorMotorsPin(2);
 
+    ANDPuzzle and_puzzle(mqttclient,"&_puzzle",1,"tr22");
+    TronLegacyAdapter tronLegacyAdapter;
+    tronLegacyAdapter.setResetPin(0);
+    tronLegacyAdapter.setManualPin(1);
+    tronLegacyAdapter.setSolvedStatePin(0);
+    and_puzzle.setAdapter(tronLegacyAdapter);
 
 #endif
 
 // board 4
 #if Uniboard == 4
-ANDPuzzle and_puzzle(mqttclient,"&_puzzle",1,"tr22");
-TronLegacyAdapter tronLegacyAdapter;
-tronLegacyAdapter.setResetPin(0);
-tronLegacyAdapter.setManualPin(1);
-tronLegacyAdapter.setSolvedStatePin(0);
-and_puzzle.setAdapter(tronLegacyAdapter);
-
+/*
+ * laser barier
+ */
 
 #endif
 
 // board 5
 #if Uniboard == 5
-
+/*
+ * pressing floor
+ */
 #endif
 #if Uniboard == 6
 
@@ -301,13 +343,41 @@ and_puzzle.setAdapter(tronLegacyAdapter);
 
 #endif
 #if Uniboard == 8
-
+    DiskHolderArray disk_dispencer_1(mqttclient,"disk_dispencer_1",1,"tr22");
+    HolderPins pins[6]{
+            {6,0,0,0},
+            {7,1,1,0},
+            {8,2,2,0},
+            {9,3,3,0},
+            {10,4,4,0},
+            {11,5,5,0}
+    };
+    disk_dispencer_1.setHolders(pins,6);
 #endif
 #if Uniboard == 9
+    DiskHolderArray disk_receiver_2(mqttclient,"disk_receiver_2",1,"tr22");
+    HolderPins pins[6]{
+            {6,0,0,0},
+            {7,1,1,0},
+            {8,2,2,0},
+            {9,3,3,0},
+            {10,4,4,0},
+            {11,5,5,0}
+    };
+    disk_receiver_2.setHolders(pins,6);
 
 #endif
 #if Uniboard == 10
-
+    DiskHolderArray disk_dispencer_2(mqttclient,"disk_dispencer_2",1,"tr22");
+    HolderPins pins[6]{
+            {6,0,0,0},
+            {7,1,1,0},
+            {8,2,2,0},
+            {9,3,3,0},
+            {10,4,4,0},
+            {11,5,5,0}
+    };
+    disk_dispencer_2 .setHolders(pins,6);
 #endif
 #if Uniboard == 11
     Quest_Tron_Target target_11(mqttclient,0,"target_11",1,placement);
@@ -368,7 +438,7 @@ and_puzzle.setAdapter(tronLegacyAdapter);
 #if Uniboard == 2
     b_manager.addClient(gamma_puzzle);
     b_manager.addClient(status_bar_1);
-    b_manager.addClient(timer_1);
+    //b_manager.addClient(timer_1);
     b_manager.addClient(timer_2);
 #endif
 
@@ -379,7 +449,7 @@ and_puzzle.setAdapter(tronLegacyAdapter);
 
     // board 4
 #if Uniboard == 4
-b_manager.addClient(and_puzzle);
+    b_manager.addClient(and_puzzle);
 #endif
 
     // board 5
@@ -390,7 +460,7 @@ b_manager.addClient(and_puzzle);
 
 #endif
 #if Uniboard == 7
-b_manager.addClient(disk_receiver_1);
+    b_manager.addClient(disk_receiver_1);
 #endif
 #if Uniboard == 8
 
@@ -431,11 +501,10 @@ b_manager.addClient(disk_receiver_1);
 
 
 
-    while (true)
-    {
+    while (true) {
         b_manager.loop();
     }
 }
-void loop()
-{
+
+void loop() {
 }

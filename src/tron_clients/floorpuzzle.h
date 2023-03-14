@@ -7,14 +7,18 @@
 #include "sefl_quest_core.h"
 namespace SEFL {
 
+    struct Panel{
+        uint8_t sensor_pin;
+        uint8_t led_pin;
+        int8_t press_order;
+        int8_t pressed_number;
+    };
+
     class FloorPuzzle: public Quest_Basic_Client {
-        struct Panel{
-            uint8_t sensor_pin;
-            uint8_t led_pin;
-            int8_t press_order;
-            int8_t pressed_number;
-        }*panels_array;
+
+        Panel *panels_array;
         int8_t panels_array_size;
+        uint8_t panels_power_pin;
         enum PuzzleState{
             INITIAL,
             CORRECT_ORDER,
@@ -39,10 +43,11 @@ namespace SEFL {
         void show_pause();
     public:
 
-        FloorPuzzle(MQTTClient &mqtt, const char *name, uint8_t resetStatus, const char *placement, const char *inTopic=DEFAUT_IN_TOPIC, const char *outTopic=DEFAUT_OUT_TOPIC,
+        FloorPuzzle(MQTTClient &mqtt, const char *name, uint8_t resetStatus, const char *placement,
+                    const char *inTopic=DEFAUT_IN_TOPIC, const char *outTopic=DEFAUT_OUT_TOPIC,
                     Language language=ENG);
 
-        void setPanels(Panel *panelsArray, int8_t panelsArraySize);
+        void setPanels(Panel *panelsArray, int8_t panelsArraySize, uint8_t power_pin);
 
         void onActive() override;
 

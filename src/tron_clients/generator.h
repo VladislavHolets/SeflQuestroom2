@@ -9,15 +9,23 @@ namespace SEFL {
 
     class Generator:public Quest_Basic_Client{
         uint8_t *wires_pins;
+        int16_t *generator_motors_pins;
         bool *correct_pattern;
         bool *current_pattern;
         int16_t wires_pins_size;
+        int16_t motors_pins_size;
         int16_t frame_light_pin;
-        int16_t generator_motors_pin;
         int16_t generator_leds_pin;
+        int16_t motors_enable_pin;
+    public:
+        void setMotorsEnablePin(int16_t motorsEnablePin);
+
+    private:
         uint32_t animation_timestamp;
         uint32_t correct_animation_timeout;
         uint32_t solved_animation_timeout;
+        uint32_t second_motor_start_time;
+        uint32_t last_motor_start_time;
         enum PuzzleStatus{
             INITIAL,CORRECT_INSERTION,SOLVING,SOLVED
         }puzzle_status;
@@ -26,7 +34,7 @@ namespace SEFL {
     public:
         void setFrameLightPin(uint8_t frameLightPin);
 
-        void setGeneratorMotorsPin(uint8_t generatorMotorsPin);
+        void setGeneratorMotorsPin(const int16_t * generatorMotorsPins, int16_t size);
 
         void setGeneratorLedsPin(uint8_t generatorLedsPin);
 

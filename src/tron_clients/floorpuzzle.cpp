@@ -12,7 +12,21 @@ namespace SEFL {
                                                                                                                 placement,
                                                                                                                 inTopic,
                                                                                                                 outTopic,
-                                                                                                                language) {}
+                                                                                                                language) {
+        panels_array = nullptr;
+        panels_array_size = 0;
+        puzzle_state=INITIAL;
+        animation_start_flag=false;
+        current_press_number=0;
+        animation_timestamp=0;
+        pause_timestamp=0;
+        animation_pattern_timeout = 0;
+        animation_correct_timeout = 0;
+        animation_incorrect_timeout = 0;
+        animation_pause_timeout=0;
+        pattern_size=0;
+        panels_power_pin=-1;
+    }
 
     void FloorPuzzle::onActive() {
         if (this->changed_status_)
@@ -21,12 +35,13 @@ namespace SEFL {
             this->reportStatus();
             init_puzzle();
         }
-        if(current_press_number >=0){
-            check_panels();
-        }else{
-            show_pattern();
-            scan_panels();
-        }
+        scan_panels(true);
+//        if(current_press_number >=0){
+//            check_panels();
+//        }else{
+//            show_pattern();
+//            scan_panels();
+//        }
 
     }
 
@@ -35,6 +50,10 @@ namespace SEFL {
         {
             this->changed_status_ = false;
             this->reportStatus();
+        }
+        Pext.digitalWrite(panels_power_pin, HIGH);
+        for(int i = 0; i < panels_array_size; i++) {
+            Pext.digitalWrite(panels_array[i].led_pin, HIGH);
         }
     }
 
@@ -78,6 +97,7 @@ namespace SEFL {
             }
         }
         current_press_number=-1;
+        Pext.digitalWrite(panels_power_pin, LOW);
         delete[] pattern_reservoir;
     }
 
@@ -152,16 +172,18 @@ namespace SEFL {
         }
     }
 
-    void FloorPuzzle::setPanels(FloorPuzzle::Panel *panelsArray, int8_t panelsArraySize) {
+    void FloorPuzzle::setPanels(Panel *panelsArray, int8_t panelsArraySize, uint8_t power_pin) {
         if (panels_array!= nullptr){
-            delete panels_array;
+            delete [] panels_array;
         }
+        panels_power_pin=power_pin;
         panels_array_size=panelsArraySize;
         panels_array=new Panel[panels_array_size];
         for(int i=0;i<panels_array_size;i++){
             panels_array[i].led_pin=panelsArray[i].led_pin;
             panels_array[i].sensor_pin=panelsArray[i].sensor_pin;
             panels_array[i].press_order=panelsArray[i].press_order;
+            panels_array[i].pressed_number=0;
         }
     }
 
@@ -169,12 +191,12 @@ namespace SEFL {
         pinMode(Mext.getCi(),INPUT_PULLUP);
         for(int i=0;i<panels_array_size;i++){
             bool temp=Mext.digitalRead(panels_array[i].sensor_pin);
-            if (temp && panels_array[i].pressed_number!=(current_press_number-1)){
+            if (!temp && panels_array[i].pressed_number!=(current_press_number-1)){
                 //react on press
                 panels_array[i].pressed_number=current_press_number++;
             }
             if(trigger_LED){
-                Pext.digitalWrite(panels_array->led_pin,temp);
+                Pext.digitalWrite(panels_array[i].led_pin,!temp);
             }
 
         }

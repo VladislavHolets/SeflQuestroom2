@@ -61,7 +61,7 @@ namespace SEFL
 	{
 		DynamicJsonDocument doc(SEFL::DOC_SIZE);
 		deserializeJson(doc, data, len);
-		if (!doc["Data"].getElement(0))
+		if (!doc["Data"][0])
 		{
 
 			JsonArray arr = doc["Data"].as<JsonArray>();

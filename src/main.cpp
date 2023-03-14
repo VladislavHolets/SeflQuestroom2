@@ -290,25 +290,34 @@ void setup() {
 #if Uniboard == 3
     Generator generator_puzzle(mqttclient,"generator_puzzle",1,placement);
     generator_puzzle.setCorrectAnimationTimeout(1500);
-    generator_puzzle.setSolvedAnimationTimeout(2000);
+    generator_puzzle.setSolvedAnimationTimeout(10000);
     uint8_t generator_wires_pins[]{
             0,1,2
     };
     uint8_t generator_correct_pattern[]{
             0,0,0
     };
+    int16_t motor_pins[] {
+        12,13,14
+    };
+    //4
     generator_puzzle.setWiresPins(generator_wires_pins,sizeof (generator_wires_pins));
     generator_puzzle.setCorrectPattern(generator_correct_pattern,sizeof (generator_correct_pattern));
-    generator_puzzle.setFrameLightPin(0);
-    generator_puzzle.setGeneratorLedsPin(1);
-    generator_puzzle.setGeneratorMotorsPin(2);
+    generator_puzzle.setFrameLightPin(1);
+    generator_puzzle.setGeneratorLedsPin(0);
+    generator_puzzle.setMotorsEnablePin(4);
+    generator_puzzle.setGeneratorMotorsPin(motor_pins, sizeof(motor_pins)/sizeof(motor_pins[0]));
 
-    ANDPuzzle and_puzzle(mqttclient,"&_puzzle",1,"tr22");
-    TronLegacyAdapter tronLegacyAdapter;
-    tronLegacyAdapter.setResetPin(0);
-    tronLegacyAdapter.setManualPin(1);
-    tronLegacyAdapter.setSolvedStatePin(0);
-    and_puzzle.setAdapter(tronLegacyAdapter);
+
+
+    //Mext white, Pext green
+
+//    ANDPuzzle and_puzzle(mqttclient,"&_puzzle",1,"tr22");
+//    TronLegacyAdapter tronLegacyAdapter;
+//    tronLegacyAdapter.setResetPin(0);
+//    tronLegacyAdapter.setManualPin(1);
+//    tronLegacyAdapter.setSolvedStatePin(0);
+//    and_puzzle.setAdapter(tronLegacyAdapter);
 
 #endif
 
@@ -325,6 +334,20 @@ void setup() {
 /*
  * pressing floor
  */
+
+Panel panels[] =  {
+        {.sensor_pin = 0, .led_pin = 1},
+        {.sensor_pin = 1, .led_pin = 2},
+        {.sensor_pin = 2, .led_pin = 3},
+        {.sensor_pin = 3, .led_pin = 4},
+        {.sensor_pin = 4, .led_pin = 5}
+
+};
+
+FloorPuzzle floor_puzzle(mqttclient, "floor_puzzle", 1, placement);
+floor_puzzle.setPanels(panels, sizeof(panels)/sizeof(panels[0]),0);
+
+
 #endif
 #if Uniboard == 6
 
@@ -454,7 +477,7 @@ void setup() {
 
     // board 5
 #if Uniboard == 5
-
+    b_manager.addClient(floor_puzzle);
 #endif
 #if Uniboard == 6
 

@@ -16,13 +16,17 @@ namespace SEFL {
         wires_pins= nullptr;
         correct_pattern= nullptr;
         current_pattern= nullptr;
+        motors_pins_size=-1;
         wires_pins_size=-1;
         frame_light_pin=-1;
-        generator_motors_pin=-1;
+        generator_motors_pins= nullptr;
         generator_leds_pin=-1;
+        motors_enable_pin=-1;
         animation_timestamp=0;
         correct_animation_timeout=1500;
         solved_animation_timeout=10000;
+        second_motor_start_time = 2000;
+        last_motor_start_time = 5000;
     }
 
     void Generator::setWiresPins(const uint8_t *wiresPins,uint8_t size) {
@@ -55,8 +59,11 @@ namespace SEFL {
         if(isChangedStatus()){
             unsetChangedStatus();
             reportStatus();
+            puzzle_status=INITIAL;
         }
-        scan_inputs();
+        if(puzzle_status==INITIAL) {
+            scan_inputs();
+        }
         refresh_outputs();
         if(puzzle_status==SOLVED){
             this->setStatus(FINISHED_STATUS);
@@ -69,6 +76,11 @@ namespace SEFL {
             reportStatus();
             puzzle_status=INITIAL;
             refresh_outputs();
+
+            //magnet 3 , light 2
+            Pext.digitalWrite(2, HIGH);
+            Pext.digitalWrite(3, LOW);
+
         }
     }
 
@@ -77,11 +89,26 @@ namespace SEFL {
             unsetChangedStatus();
             reportStatus();
             refresh_outputs();
+
+            //magnet 3 , light 2
+            Pext.digitalWrite(2, LOW);
+            Pext.digitalWrite(3, HIGH);
         }
+
     }
 
     void Generator::onManualFinished() {
-        onFinished();
+        if(isChangedStatus()) {
+            unsetChangedStatus();
+            reportStatus();
+            puzzle_status = SOLVING;
+            animation_timestamp=millis();
+        }
+        if(puzzle_status==SOLVED) {
+            Pext.digitalWrite(2, LOW);
+            Pext.digitalWrite(3, HIGH);
+        }
+        refresh_outputs();
     }
 
     void Generator::scan_inputs() {
@@ -99,21 +126,25 @@ namespace SEFL {
             }
         }
         if(solved_flag==true){
-            puzzle_status=SOLVED;
+            puzzle_status=SOLVING;
             animation_timestamp=millis();
         }
     }
 
     void Generator::refresh_outputs() {
-        if(generator_leds_pin==-1 || generator_motors_pin==-1 || frame_light_pin==-1){
+        if(generator_leds_pin==-1 || generator_motors_pins == nullptr || frame_light_pin==-1){
             return;
         }
         switch (puzzle_status) {
             case INITIAL:{
 
-                Pext.digitalWrite(generator_leds_pin,LOW);
-                Pext.digitalWrite(generator_motors_pin,LOW);
-                Pext.digitalWrite(frame_light_pin,LOW);
+                Pext.digitalWrite(generator_leds_pin,HIGH);
+
+                Pext.digitalWrite(motors_enable_pin, HIGH);
+                for(int i = 0; i < motors_pins_size; i++) {
+                    Pext.digitalWrite(generator_motors_pins[i], LOW);
+                }
+                Pext.digitalWrite(frame_light_pin,HIGH);
                 break;
             }
             case CORRECT_INSERTION:{
@@ -125,18 +156,32 @@ namespace SEFL {
                 break;
             }
             case SOLVED:{
-                Pext.digitalWrite(generator_leds_pin,HIGH);
-                Pext.digitalWrite(frame_light_pin,HIGH);
+                Pext.digitalWrite(generator_leds_pin,LOW);
+                Pext.digitalWrite(frame_light_pin,LOW);
                 break;
             }
 
             case SOLVING:{
-                if(millis()-animation_timestamp<solved_animation_timeout){
-                    Pext.digitalWrite(generator_leds_pin,HIGH);
-                    Pext.digitalWrite(generator_motors_pin,HIGH);
-                    Pext.digitalWrite(frame_light_pin,HIGH);
+                uint32_t current = millis()-animation_timestamp;
+                if(current < solved_animation_timeout){
+                    Pext.digitalWrite(generator_leds_pin,LOW);
+                    Pext.digitalWrite(frame_light_pin,LOW);
+                    Pext.digitalWrite(motors_enable_pin, LOW);
+
+                    Pext.digitalWrite(generator_motors_pins[0], HIGH);
+                    if(current > second_motor_start_time) {
+                        Pext.digitalWrite(generator_motors_pins[1], HIGH);
+                    }
+                    if (current > last_motor_start_time) {
+                        Pext.digitalWrite(generator_motors_pins[2], HIGH);
+                    }
+
                 }else{
                     puzzle_status=SOLVED;
+                    for(int i = 0; i < motors_pins_size; i++) {
+                        Pext.digitalWrite(generator_motors_pins[i], LOW);
+                    }
+                    Pext.digitalWrite(motors_enable_pin, HIGH);
                 }
 
                 break;
@@ -157,11 +202,23 @@ namespace SEFL {
         frame_light_pin = frameLightPin;
     }
 
-    void Generator::setGeneratorMotorsPin(uint8_t generatorMotorsPin) {
-        generator_motors_pin = generatorMotorsPin;
+    void Generator::setGeneratorMotorsPin(const int16_t * generatorMotorsPins, int16_t size) {
+        if(generatorMotorsPins!= nullptr){
+            delete [] generator_motors_pins;
+        }
+        motors_pins_size=size;
+        generator_motors_pins = new int16_t[motors_pins_size];
+
+        for (int i = 0; i < motors_pins_size; i++) {
+            generator_motors_pins[i]=generatorMotorsPins[i];
+        }
     }
 
     void Generator::setGeneratorLedsPin(uint8_t generatorLedsPin) {
         generator_leds_pin = generatorLedsPin;
+    }
+
+    void Generator::setMotorsEnablePin(int16_t motorsEnablePin) {
+        motors_enable_pin = motorsEnablePin;
     }
 } // SEFL

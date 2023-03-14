@@ -17,5 +17,6 @@
 #include "diskholder.h"
 #include "andpuzzle.h"
 #include "tronlegacypuzzle.h"
+#include "floorpuzzle.h"
 //#include ""
 #endif //SEFLQUESTROOM2_TRONCLIENTS_H

@@ -14,6 +14,8 @@ namespace SEFL {
                                                                                                              outTopic,
                                                                                                              language) {
         adapter_ = nullptr;
+        led_on_timeout=60000;
+        led_on_timestamp=0;
     }
 
 
@@ -25,21 +27,30 @@ namespace SEFL {
         adapter_->setManualPin(adapter.getManualPin());
         adapter_->setResetPin(adapter.getResetPin());
         adapter_->setSolvedStatePin(adapter.getSolvedStatePin());
+        adapter_->setPowerPin(adapter.getPowerPin());
 
     }
 
     void ANDPuzzle::onActive() {
         if(isChangedStatus()){
             adapter_->setDevice();
+            Pext.digitalWrite(adapter_->getPowerPin(),LOW);
+            adapter_->unSolveDevice();
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
         }
-        Logger::notice("ANDPuzzle",Mext.analogRead(adapter_->getSolvedStatePin()));
+        pinMode(Mext.getCi(),INPUT);
+        //Logger::notice("ANDPuzzle",Mext.analogRead(adapter_->getSolvedStatePin()));
+        if(Mext.analogRead(adapter_->getSolvedStatePin())>380){
+            this->setStatus(FINISHED_STATUS);
+        }
     }
 
     void ANDPuzzle::onDefault() {
         if(isChangedStatus()){
             adapter_->resetDevice();
+            Pext.digitalWrite(adapter_->getPowerPin(),HIGH);
+            adapter_->unSolveDevice();
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
         }
@@ -47,14 +58,34 @@ namespace SEFL {
 
     void ANDPuzzle::onFinished() {
         if(isChangedStatus()){
-            adapter_->resetDevice();
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
+            led_on_timestamp=millis();
+        }
+        if(led_on_timestamp && (millis()-led_on_timestamp)>led_on_timeout){
+            adapter_->resetDevice();
+            Pext.digitalWrite(adapter_->getPowerPin(),HIGH);
+            adapter_->unSolveDevice();
+            led_on_timestamp=0;
         }
     }
 
     void ANDPuzzle::onManualFinished() {
-        onFinished();
+        if(isChangedStatus()){
+            unsetChangedStatus();
+            Quest_Basic_Client::reportStatus();
+            adapter_->resetDevice();
+            Pext.digitalWrite(adapter_->getPowerPin(),HIGH);
+            adapter_->unSolveDevice();
+        }
+    }
+
+    uint32_t ANDPuzzle::getLedOnTimeout() const {
+        return led_on_timeout;
+    }
+
+    void ANDPuzzle::setLedOnTimeout(uint32_t ledOnTimeout) {
+        led_on_timeout = ledOnTimeout;
     }
 
 } // SEFL

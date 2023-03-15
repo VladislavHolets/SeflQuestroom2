@@ -60,6 +60,7 @@ TronLegacyAdapter::TronLegacyAdapter() {
     this->reset_pin = -1;
     this->manual_pin = -1;
     this->solved_state_pin = -1;
+    this->power_pin=-1;
     this->reset_timeout=2000;
 }
 
@@ -73,4 +74,12 @@ uint32_t TronLegacyAdapter::getResetTimeout() const {
 
 void TronLegacyAdapter::setResetTimeout(uint32_t resetTimeout) {
     reset_timeout = resetTimeout;
+}
+
+int16_t TronLegacyAdapter::getPowerPin() const {
+    return power_pin;
+}
+
+void TronLegacyAdapter::setPowerPin(int16_t powerPin) {
+    power_pin = powerPin;
 }

@@ -16,6 +16,7 @@ private:
     int8_t reset_pin;
     int8_t manual_pin;
     int8_t solved_state_pin;
+    int16_t power_pin;
     uint32_t reset_timeout;
 public:
     TronLegacyAdapter();
@@ -32,6 +33,10 @@ public:
     uint8_t getResetPin() const;
     uint8_t getManualPin() const;
     uint8_t getSolvedStatePin() const;
+
+    int16_t getPowerPin() const;
+
+    void setPowerPin(int16_t powerPin);
 
     void resetDevice();
     void setDevice();

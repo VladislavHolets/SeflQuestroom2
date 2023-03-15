@@ -17,6 +17,8 @@ namespace SEFL {
         int16_t frame_light_pin;
         int16_t generator_leds_pin;
         int16_t motors_enable_pin;
+        int16_t locker_magnet_pin;
+        int16_t locker_light_pin;
     public:
         void setMotorsEnablePin(int16_t motorsEnablePin);
 

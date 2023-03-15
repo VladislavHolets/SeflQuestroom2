@@ -22,6 +22,10 @@ namespace SEFL {
         uint8_t *buttons_states;
         uint8_t *buttons_pins;
         int8_t buttons_pins_size;
+        //TODO
+        //  TANIA
+        //  neons should be replaced with mirror_led_anodes(6), and mirror_led_cathodes(3), arrays with dynamic sizes,
+        //  reference can be found in the LEDMatrixPuzzle class, it had similar connection
         uint8_t *neons_pins;
         int8_t neons_pins_size;
         int8_t *correct_order;

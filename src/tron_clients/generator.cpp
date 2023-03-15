@@ -19,6 +19,8 @@ namespace SEFL {
         motors_pins_size=-1;
         wires_pins_size=-1;
         frame_light_pin=-1;
+        locker_light_pin=-1;
+        locker_magnet_pin=-1;
         generator_motors_pins= nullptr;
         generator_leds_pin=-1;
         motors_enable_pin=-1;
@@ -78,8 +80,8 @@ namespace SEFL {
             refresh_outputs();
 
             //magnet 3 , light 2
-            Pext.digitalWrite(2, HIGH);
-            Pext.digitalWrite(3, LOW);
+            Pext.digitalWrite(locker_light_pin, HIGH);
+            Pext.digitalWrite(locker_magnet_pin, LOW);
 
         }
     }
@@ -91,8 +93,8 @@ namespace SEFL {
             refresh_outputs();
 
             //magnet 3 , light 2
-            Pext.digitalWrite(2, LOW);
-            Pext.digitalWrite(3, HIGH);
+            Pext.digitalWrite(locker_light_pin, LOW);
+            Pext.digitalWrite(locker_magnet_pin, HIGH);
         }
 
     }
@@ -105,8 +107,8 @@ namespace SEFL {
             animation_timestamp=millis();
         }
         if(puzzle_status==SOLVED) {
-            Pext.digitalWrite(2, LOW);
-            Pext.digitalWrite(3, HIGH);
+            Pext.digitalWrite(locker_light_pin, LOW);
+            Pext.digitalWrite(locker_magnet_pin, HIGH);
         }
         refresh_outputs();
     }

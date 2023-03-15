@@ -312,13 +312,14 @@ void setup() {
 
     //Mext white, Pext green
 
-//    ANDPuzzle and_puzzle(mqttclient,"&_puzzle",1,"tr22");
-//    TronLegacyAdapter tronLegacyAdapter;
-//    tronLegacyAdapter.setResetPin(0);
-//    tronLegacyAdapter.setManualPin(1);
-//    tronLegacyAdapter.setSolvedStatePin(0);
-//    and_puzzle.setAdapter(tronLegacyAdapter);
-
+    ANDPuzzle and_puzzle(mqttclient,"&_puzzle",1,"tr22");
+    TronLegacyAdapter tronLegacyAdapter;
+    tronLegacyAdapter.setResetPin(6);
+    tronLegacyAdapter.setManualPin(7);
+    tronLegacyAdapter.setSolvedStatePin(3);
+    tronLegacyAdapter.setPowerPin(-1);
+    and_puzzle.setAdapter(tronLegacyAdapter);
+    and_puzzle.setLedOnTimeout(60000);
 #endif
 
 // board 4
@@ -346,8 +347,9 @@ Panel panels[] =  {
 
 FloorPuzzle floor_puzzle(mqttclient, "floor_puzzle", 1, placement);
 floor_puzzle.setPanels(panels, sizeof(panels)/sizeof(panels[0]),0);
-
-
+InfiniteMirror infiniteMirror(mqttclient, "infinite_mirror", 1, placement);
+int16_t mirror_cathodes[3]{12,13,14};
+    infiniteMirror.setLedCathodes(mirror_cathodes,sizeof(mirror_cathodes)/sizeof(mirror_cathodes[0]));
 #endif
 #if Uniboard == 6
 
@@ -468,6 +470,7 @@ floor_puzzle.setPanels(panels, sizeof(panels)/sizeof(panels[0]),0);
     // board 3
 #if Uniboard == 3
     b_manager.addClient(generator_puzzle);
+    b_manager.addClient(and_puzzle);
 #endif
 
     // board 4
@@ -478,6 +481,7 @@ floor_puzzle.setPanels(panels, sizeof(panels)/sizeof(panels[0]),0);
     // board 5
 #if Uniboard == 5
     b_manager.addClient(floor_puzzle);
+    b_manager.addClient(infiniteMirror);
 #endif
 #if Uniboard == 6
 

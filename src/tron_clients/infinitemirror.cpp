@@ -35,7 +35,8 @@ namespace SEFL {
         Quest_Actuator_Client::reportStatus();
     }
     while(!data.empty()){
-        led_mode=data.front()[1];
+        led_mode=data.front()[0];
+        data.remove(0);
         animation_start_timestamp=millis();
     }
     cycleMode(led_mode);
@@ -47,7 +48,7 @@ namespace SEFL {
             Quest_Actuator_Client::reportStatus();
         }
         for (int i = 0; i < led_cathodes_size; ++i) {
-            Pext.digitalWrite(led_cathodes[i],HIGH);
+            Pext.digitalWrite(led_cathodes[i],LOW);
         }
     }
 
@@ -55,36 +56,36 @@ namespace SEFL {
         switch (ledMode) {
             case 'w':{
                 for (int i = 0; i < led_cathodes_size; ++i) {
-                    Pext.digitalWrite(led_cathodes[i],LOW);
+                    Pext.digitalWrite(led_cathodes[i],HIGH);
                 }
             }break;
             case 'r':{
-                Pext.digitalWrite(led_cathodes[0],LOW);
-                Pext.digitalWrite(led_cathodes[1],HIGH);
-                Pext.digitalWrite(led_cathodes[2],HIGH);
+                Pext.digitalWrite(led_cathodes[0],HIGH);
+                Pext.digitalWrite(led_cathodes[1],LOW);
+                Pext.digitalWrite(led_cathodes[2],LOW);
             }
                 break;
             case 'g':{
-                Pext.digitalWrite(led_cathodes[0],HIGH);
-                Pext.digitalWrite(led_cathodes[1],LOW);
-                Pext.digitalWrite(led_cathodes[2],HIGH);
-            }
-                break;
-            case 'b':{
-                Pext.digitalWrite(led_cathodes[0],HIGH);
+                Pext.digitalWrite(led_cathodes[0],LOW);
                 Pext.digitalWrite(led_cathodes[1],HIGH);
                 Pext.digitalWrite(led_cathodes[2],LOW);
             }
                 break;
-            case 'a':{
-                Pext.analogWrite(led_cathodes[0],(sin(millis()*TWO_PI/5000)));
-                Pext.digitalWrite(led_cathodes[1],HIGH);
+            case 'b':{
+                Pext.digitalWrite(led_cathodes[0],LOW);
+                Pext.digitalWrite(led_cathodes[1],LOW);
                 Pext.digitalWrite(led_cathodes[2],HIGH);
+            }
+                break;
+            case 'a':{
+                Pext.analogWrite(led_cathodes[0],(sin(millis()*TWO_PI/500)+1)*2048);
+                Pext.digitalWrite(led_cathodes[1],LOW);
+                Pext.digitalWrite(led_cathodes[2],LOW);
             }
                 break;
             default:{
                 for (int i = 0; i < led_cathodes_size; ++i) {
-                    Pext.digitalWrite(led_cathodes[i],HIGH);
+                    Pext.digitalWrite(led_cathodes[i],LOW);
                 }
             }
                 break;

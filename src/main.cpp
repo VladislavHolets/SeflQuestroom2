@@ -347,6 +347,7 @@ Panel panels[] =  {
 
 FloorPuzzle floor_puzzle(mqttclient, "floor_puzzle", 1, placement);
 floor_puzzle.setPanels(panels, sizeof(panels)/sizeof(panels[0]),0);
+
 InfiniteMirror infiniteMirror(mqttclient, "infinite_mirror", 1, placement);
 int16_t mirror_cathodes[3]{12,13,14};
     infiniteMirror.setLedCathodes(mirror_cathodes,sizeof(mirror_cathodes)/sizeof(mirror_cathodes[0]));

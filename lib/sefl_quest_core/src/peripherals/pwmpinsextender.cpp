@@ -60,7 +60,7 @@ void SEFL::PWM_Pins_Extender::analogWrite(uint8_t pin, uint16_t val)
 	if (pin > 15)
 		return;
 
-	pins_values[pin] = (val > 4096) ? 4096 : val;
+	pins_values[pin] = (val > 4095) ? 4095 : val;
 	this->handler_->setChannelPWM(pin, pins_values[pin]);
 }
 

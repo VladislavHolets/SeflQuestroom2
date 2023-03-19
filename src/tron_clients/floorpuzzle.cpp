@@ -17,12 +17,12 @@ namespace SEFL {
         panels_array_size = 0;
         puzzle_state=INITIAL;
         animation_start_flag=false;
-        current_press_number=-1;
+        current_press_number=0;
         animation_timestamp=0;
         pause_timestamp=0;
         animation_pattern_timeout = 0;
         animation_correct_timeout = 0;
-        animation_incorrect_timeout = 0;
+        animation_incorrect_timeout = 5000;
         animation_pause_timeout= 0;
         pattern_size=0;
         panels_power_pin=-1;
@@ -33,17 +33,12 @@ namespace SEFL {
         {
             this->changed_status_ = false;
             this->reportStatus();
-            init_puzzle(5);
             animation_timestamp = millis();
+            Pext.digitalWrite(panels_power_pin, LOW);
+            puzzle_state=INITIAL;
         }
-        show_pattern();
-//        if(current_press_number >=0){
-//            check_panels();
-//        }else{
-//            show_pattern();
-//            scan_panels(true);
-//        }
-
+        show_failure();
+        //refresh_state();
     }
 
     void FloorPuzzle::onDefault() {
@@ -51,6 +46,7 @@ namespace SEFL {
         {
             this->changed_status_ = false;
             this->reportStatus();
+            init_puzzle();
         }
         Pext.digitalWrite(panels_power_pin, HIGH);
         for(int i = 0; i < panels_array_size; i++) {
@@ -74,13 +70,29 @@ namespace SEFL {
         }
     }
 
-
-    void FloorPuzzle::init_puzzle(uint8_t patternSize) {
-        if(patternSize==0){
-            pattern_size=panels_array_size;
-        }else{
-            pattern_size=patternSize;
+    void FloorPuzzle::refresh_state() {
+        switch(puzzle_state) {
+            case INITIAL: {
+                if(current_press_number >= pattern_size){
+                    check_panels();
+                }else{
+                    show_pattern();
+                }
+            }
+            case CORRECT_ORDER:{
+                show_success();
+                if(pause_timestamp != 0)
+                    show_pause();
+            }
+            case INCORRECT_ORDER:{
+                show_failure();
+                if (pause_timestamp != 0)
+                    show_pause();
+            }
         }
+    }
+
+    void FloorPuzzle::init_puzzle() {
         auto *pattern_reservoir= new int8_t[pattern_size];
         for(int i=0;i<panels_array_size;i++){
             panels_array[i].press_order=-1;
@@ -89,10 +101,12 @@ namespace SEFL {
                 pattern_reservoir[i] = i;
             }
         }
-        for(int i=0;i<pattern_size;) {
+
+        int i = 0;
+        while( i < pattern_size){
             int8_t r = rand() % panels_array_size + 1;
             if (panels_array[r - 1].press_order == -1) {
-                panels_array[r - 1].press_order = pattern_reservoir[i++];
+                panels_array[r - 1].press_order = pattern_reservoir[i];
 
                 i++;
             }
@@ -100,19 +114,28 @@ namespace SEFL {
 
         current_press_number=-1;
         Pext.digitalWrite(panels_power_pin, LOW);
+        pinMode(Mext.getCi(),INPUT_PULLUP);
 
-        animation_pattern_timeout = 1000 * patternSize;
+        animation_pattern_timeout = 1000 * pattern_size;
+
+        String panelsorder;
+        for(int i = 0; i < pattern_size; i++) {
+            panelsorder += String(panels_array[i].press_order) + " ";
+
+        }
+        SEFL::Logger::notice("floor_puzzle", panelsorder);
 
         delete[] pattern_reservoir;
     }
 
     void FloorPuzzle::show_pattern() {
         if(animation_timestamp==0){
+            scan_panels(true);
             return;
         }
         if(millis()-animation_timestamp>animation_pattern_timeout){
             for(int i=0;i<panels_array_size;i++){
-                Pext.digitalWrite(panels_array[i].led_pin,false);
+                Pext.digitalWrite(panels_array[i].led_pin,true);
             }
             animation_timestamp=0;
             pause_timestamp=millis();
@@ -120,7 +143,7 @@ namespace SEFL {
         }
         auto state=(millis()-animation_timestamp)/(animation_pattern_timeout/pattern_size);
         for(int i=0;i<panels_array_size;i++){
-            Pext.digitalWrite(panels_array[i].led_pin,(state==panels_array[i].press_order));
+            Pext.digitalWrite(panels_array[i].led_pin,!(state==panels_array[i].press_order));
         }
     }
 
@@ -134,14 +157,13 @@ namespace SEFL {
                 Pext.digitalWrite(panels_array[i].led_pin,false);
             }
             animation_timestamp=0;
-            init_puzzle();
             pause_timestamp=millis();
             return;
         }
-//        auto state=(millis()-animation_timestamp)/(animation_pattern_timeout/pattern_size);
-//        for(int i=0;i<panels_array_size;i++){
-//            Pext.digitalWrite(panels_array[i].led_pin,(state==panels_array[i].press_order));
-//        }
+        //auto state=(millis()-animation_timestamp)/(animation_pattern_timeout/pattern_size);
+        for(int i=0;i<panels_array_size;i++){
+            Pext.digitalWrite(panels_array[i].led_pin,(millis()-animation_timestamp)/300%2);
+        }
 
     }
 
@@ -158,10 +180,10 @@ namespace SEFL {
             pause_timestamp=millis();
             return;
         }
-//        auto state=(millis()-animation_timestamp)/(animation_pattern_timeout/pattern_size);
-//        for(int i=0;i<panels_array_size;i++){
-//            Pext.digitalWrite(panels_array[i].led_pin,(state==panels_array[i].press_order));
-//        }
+        //auto state=(millis()-animation_timestamp)/(animation_pattern_timeout/pattern_size);
+        for(int i=0;i<panels_array_size;i++){
+            Pext.digitalWrite(panels_array[i].led_pin, LOW);
+        }
     }
 
     void FloorPuzzle::show_pause() {
@@ -173,7 +195,7 @@ namespace SEFL {
             return;
         }
         for(int i=0;i<panels_array_size;i++){
-            Pext.digitalWrite(panels_array[i].led_pin,false);
+            Pext.digitalWrite(panels_array[i].led_pin,true);
         }
     }
 
@@ -193,7 +215,6 @@ namespace SEFL {
     }
 
     void FloorPuzzle::scan_panels(bool trigger_LED) {
-        pinMode(Mext.getCi(),INPUT_PULLUP);
         for(int i=0;i<panels_array_size;i++){
             bool temp=Mext.digitalRead(panels_array[i].sensor_pin);
             if (!temp && panels_array[i].pressed_number!=(current_press_number-1)){
@@ -210,7 +231,8 @@ namespace SEFL {
     void FloorPuzzle::check_panels() {
         if(current_press_number>=pattern_size){
             for(int i=0;i<panels_array_size;i++){
-                if(panels_array[i].press_order!=panels_array[i].pressed_number){
+                int curr_state = Mext.digitalRead(panels_array[i].sensor_pin);
+                if(!curr_state || panels_array[i].press_order!=panels_array[i].pressed_number){
                     puzzle_state=INCORRECT_ORDER;
                     animation_timestamp=millis();
                     return;
@@ -219,7 +241,11 @@ namespace SEFL {
             puzzle_state=CORRECT_ORDER;
             animation_timestamp=millis();
         }
-        scan_panels(true);
-        puzzle_state=INITIAL;
+//        scan_panels(true);
+//        puzzle_state=INITIAL;
+    }
+
+    void FloorPuzzle::setPatternSize(uint8_t patternSize) {
+        pattern_size = patternSize;
     }
 } // SEFL

@@ -17,13 +17,13 @@ namespace SEFL {
         panels_array_size = 0;
         puzzle_state=INITIAL;
         animation_start_flag=false;
-        current_press_number=0;
+        current_press_number=-1;
         animation_timestamp=0;
         pause_timestamp=0;
         animation_pattern_timeout = 0;
         animation_correct_timeout = 0;
         animation_incorrect_timeout = 0;
-        animation_pause_timeout=0;
+        animation_pause_timeout= 0;
         pattern_size=0;
         panels_power_pin=-1;
     }
@@ -33,14 +33,15 @@ namespace SEFL {
         {
             this->changed_status_ = false;
             this->reportStatus();
-            init_puzzle();
+            init_puzzle(5);
+            animation_timestamp = millis();
         }
-        scan_panels(true);
+        show_pattern();
 //        if(current_press_number >=0){
 //            check_panels();
 //        }else{
 //            show_pattern();
-//            scan_panels();
+//            scan_panels(true);
 //        }
 
     }
@@ -88,16 +89,20 @@ namespace SEFL {
                 pattern_reservoir[i] = i;
             }
         }
-        for(int i=0;i<pattern_size;){
+        for(int i=0;i<pattern_size;) {
             int8_t r = rand() % panels_array_size + 1;
-            if (panels_array[r - 1].press_order==-1) {
+            if (panels_array[r - 1].press_order == -1) {
                 panels_array[r - 1].press_order = pattern_reservoir[i++];
 
                 i++;
             }
         }
+
         current_press_number=-1;
         Pext.digitalWrite(panels_power_pin, LOW);
+
+        animation_pattern_timeout = 1000 * patternSize;
+
         delete[] pattern_reservoir;
     }
 

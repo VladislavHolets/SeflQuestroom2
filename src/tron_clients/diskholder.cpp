@@ -38,14 +38,16 @@ namespace SEFL {
     bool DiskHolderArray::check_disk(uint8_t index) {
         if (index >= holders_size_)
             return false;
-        pinMode(Mext.getCi(),INPUT_PULLUP);
+        pinMode(Mext.getCi(),INPUT);
         bool pin_value = Mext.digitalRead(holders_[index].sensor_pin);
         Logger::notice(this->name_, pin_value);
-        if (led_state_) {
-            Pext.digitalWrite(holders_[index].led_pin, pin_value);
-        } else {
-            Pext.digitalWrite(holders_[index].led_pin, HIGH);
-        }
+
+        Pext.digitalWrite(holders_[index].led_pin, pin_value);
+//        if (led_state_) {
+//            Pext.digitalWrite(holders_[index].led_pin, pin_value);
+//        } else {
+//            Pext.digitalWrite(holders_[index].led_pin, HIGH);
+//        }
         return !pin_value;
     }
 
@@ -87,12 +89,15 @@ namespace SEFL {
             set_led_state(true);
         }
         if (!data.empty()) {
+            Logger::notice(data[0]);
+            StaticJsonDocument<SEFL::DOC_SIZE> doc;
 
-            StaticJsonDocument<192> doc;
             DeserializationError error = deserializeJson(doc, data.front());
             if (error) {
+                Logger::notice(data[0]);
                 Logger::notice(F("deserializeJson() failed: "));
                 Logger::notice(error.f_str());
+                data.remove(0);
                 return;
             }
             JsonArray holders = doc["holders"];
@@ -111,7 +116,7 @@ namespace SEFL {
         for (int holder = 0; holder < holders_size_; ++holder) {
             result += check_disk(holder) ? 1 : 0;
         }
-        if ((holdertype_ == RECEIVER && result == holders_size_) || (holdertype_ == DISPENCER && result == 0)) {
+        if ((holdertype_ == DISPENCER  && result == holders_size_) || (holdertype_ == RECEIVER && result == 0)) {
             Quest_Basic_Client::setStatus(FINISHED_STATUS);
         }
         detach_servos(2000);
@@ -133,10 +138,13 @@ namespace SEFL {
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
             set_led_state(false);
+
             for (int holder = 0; holder < holders_size_; ++holder) {
                 check_disk(holder);
             }
         }
+
+        detach_servos(2000);
     }
 
     void DiskHolderArray::onManualFinished() {
@@ -149,5 +157,13 @@ namespace SEFL {
         holders_servos_[index].attach(holders_[index].servo_pin);
         holders_servos_[index].write(receive_angle);
         holders_[index].attached_timestamp = millis();
+    }
+
+    DiskHolderArrayType DiskHolderArray::getHoldertype() const {
+        return holdertype_;
+    }
+
+    void DiskHolderArray::setHoldertype(DiskHolderArrayType holdertype) {
+        holdertype_ = holdertype;
     }
 } // SEFL

@@ -42,7 +42,7 @@ namespace SEFL
 		//    "Data": ["0"]
 		//  }
 		// Serial.println("Actuator got a mail:");
-		DynamicJsonDocument doc(SEFL::DOC_SIZE);
+        StaticJsonDocument<SEFL::DOC_SIZE> doc;
 		deserializeJson(doc, data, len);
 		JsonArray arr = doc["Data"].as<JsonArray>();
 		for (JsonVariant value : arr)
@@ -63,7 +63,7 @@ namespace SEFL
 		{
 
 			char output[128];
-			DynamicJsonDocument repDoc(SEFL::DOC_SIZE);
+            StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 			repDoc["CommandId"] =
 				static_cast<int>(SEFL::DirectCommands::STATUS_TRIGGER_COMMAND);
 			repDoc["SubcommandId"] = 0;
@@ -79,7 +79,7 @@ namespace SEFL
 		{
 
 			char output[128];
-			DynamicJsonDocument repDoc(SEFL::DOC_SIZE);
+            StaticJsonDocument<SEFL::DOC_SIZE> repDoc(SEFL::DOC_SIZE);
 			repDoc["CommandId"] =
 				static_cast<int>(SEFL::DirectCommands::STATUS_COMMAND);
 			int tstatus = static_cast<int>(this->getStatus());
@@ -149,7 +149,7 @@ namespace SEFL
 	void Quest_Actuator_Client::reportStatus()
 	{
 		char output[128];
-		DynamicJsonDocument repDoc(SEFL::DOC_SIZE);
+        StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 		repDoc["CommandId"] =
 			static_cast<int>(SEFL::DirectCommands::STATUS_TRIGGER_COMMAND);
 		int tstatus = static_cast<int>(this->getStatus());

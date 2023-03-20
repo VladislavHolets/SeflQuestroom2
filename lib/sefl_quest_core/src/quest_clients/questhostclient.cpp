@@ -29,7 +29,7 @@ namespace SEFL
 		//	  "SubcommandId":0,
 		//    "Data": ["0"]
 		//  }
-		DynamicJsonDocument doc(SEFL::DOC_SIZE);
+		StaticJsonDocument<SEFL::DOC_SIZE> doc;
 		deserializeJson(doc, data, len);
 		if (!doc["Data"][0])
 		{

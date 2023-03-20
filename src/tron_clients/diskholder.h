@@ -42,6 +42,9 @@ namespace SEFL {
         void detach_servos(uint32_t timeout);
         void setHolders(HolderPins *holders,uint8_t size);
 
+        DiskHolderArrayType getHoldertype() const;
+
+        void setHoldertype(DiskHolderArrayType holdertype);
 
     };
 

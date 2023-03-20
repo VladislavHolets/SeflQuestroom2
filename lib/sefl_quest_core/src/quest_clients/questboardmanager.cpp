@@ -70,7 +70,7 @@ namespace SEFL
 
 	void Quest_Board_Manager::send_config()
 	{
-		DynamicJsonDocument repDoc(JSON_ARRAY_SIZE(33) + JSON_OBJECT_SIZE(2) + 40);
+		DynamicJsonDocument repDoc(JSON_ARRAY_SIZE((this->clients_.size()+1)*4) + JSON_OBJECT_SIZE(2) + 80);
 		repDoc["CommandId"] = static_cast<int>(REQUEST_CONFIG_COMMAND);
 		JsonArray data = repDoc.createNestedArray("Data");
 		data.add(this->host_.getName());
@@ -221,8 +221,8 @@ namespace SEFL
 		//    "Arguments": []
 		//  }
 
-		const size_t capacity = JSON_ARRAY_SIZE(0) + JSON_OBJECT_SIZE(2) + 40;
-		DynamicJsonDocument doc(capacity);
+		//const size_t capacity = JSON_ARRAY_SIZE(0) + JSON_OBJECT_SIZE(2) + 40;
+        StaticJsonDocument<SEFL::DOC_SIZE> doc;
 		deserializeJson(doc, data, len);
 		SEFL::BroadcastComands command =
 			static_cast<SEFL::BroadcastComands>(doc["CommandId"].as<uint8_t>());

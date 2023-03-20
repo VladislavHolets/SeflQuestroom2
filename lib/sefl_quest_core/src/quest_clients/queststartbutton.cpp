@@ -59,7 +59,7 @@ namespace SEFL
 
 	void Quest_Start_Button::inputClb(const char *data, uint16_t len)
 	{
-		DynamicJsonDocument doc(SEFL::DOC_SIZE);
+        StaticJsonDocument<SEFL::DOC_SIZE> doc;
 		deserializeJson(doc, data, len);
 		if (!doc["Data"][0])
 		{
@@ -83,7 +83,7 @@ namespace SEFL
 		{
 
 			char output[128];
-			DynamicJsonDocument repDoc(SEFL::DOC_SIZE);
+            StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 			repDoc["CommandId"] =
 				static_cast<int>(SEFL::DirectCommands::STATUS_COMMAND);
 			int tstatus = static_cast<int>(this->getStatus());
@@ -98,7 +98,7 @@ namespace SEFL
 		{
 			this->setPowerStatus(true);
 			//		char output[128];
-			//		DynamicJsonDocument repDoc(SEFL::DOC_SIZE);
+			//		StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 			//		repDoc["CommandId"] =
 			//				static_cast<int>(SEFL::DirectCommands::ACTION_COMMAND);
 			enum SEFL::StartButtonClientStatuses status =
@@ -187,7 +187,7 @@ namespace SEFL
 	void Quest_Start_Button::reportStatus()
 	{
 		char output[128];
-		DynamicJsonDocument repDoc(SEFL::DOC_SIZE);
+        StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 		repDoc["CommandId"] =
 			static_cast<int>(SEFL::DirectCommands::STATUS_TRIGGER_COMMAND);
 		int tstatus = static_cast<int>(this->getStatus());

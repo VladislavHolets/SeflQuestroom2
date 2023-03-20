@@ -379,6 +379,7 @@ int16_t mirror_cathodes[3]{12,13,14};
             {11,5,5,0}
     };
     disk_dispencer_1.setHolders(pins,6);
+    disk_dispencer_1.setHoldertype(SEFL::DISPENCER);
 #endif
 #if Uniboard == 9
     DiskHolderArray disk_receiver_2(mqttclient,"disk_receiver_2",1,"tr22");
@@ -491,13 +492,13 @@ int16_t mirror_cathodes[3]{12,13,14};
     b_manager.addClient(disk_receiver_1);
 #endif
 #if Uniboard == 8
-
+    b_manager.addClient(disk_dispencer_1);
 #endif
 #if Uniboard == 9
-
+    b_manager.addClient(disk_receiver_2);
 #endif
 #if Uniboard == 10
-
+    b_manager.addClient(disk_dispencer_2);
 #endif
 #if Uniboard == 11
     b_manager.addClient(target_11);

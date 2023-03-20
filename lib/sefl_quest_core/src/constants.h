@@ -140,7 +140,7 @@ namespace SEFL
 		UKR = 1,
 		RUS = 0
 	};
-	static const uint16_t DOC_SIZE = 128;
+	static const uint16_t DOC_SIZE = 512;
 	static const char DEFAUT_OUT_TOPIC[] = "out";
 	static const char DEFAUT_IN_TOPIC[] = "in";
 	static const char DEFAUT_DEBUG_TOPIC[] = "debug";

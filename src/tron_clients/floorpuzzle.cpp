@@ -16,17 +16,19 @@ namespace SEFL {
         panels_array = nullptr;
         panels_array_size = 0;
         puzzle_state=INITIAL;
-        animation_start_flag=false;
+        animation_start_flag=true;
         current_press_number=-1;
         animation_timestamp=0;
         pause_timestamp=0;
         animation_pattern_timeout = 0;
         animation_correct_timeout = 3000;
         animation_incorrect_timeout = 3000;
-        animation_pause_timeout= 0;
-        pattern_size=0;
+        animation_pause_timeout= 1500;
+        pattern_size=2;
         panels_power_pin=-1;
-        rounds = 1;
+        rounds = 2;
+        current_round = 1;
+        booting_up_timeout = 3000;
     }
 
     void FloorPuzzle::onActive() {
@@ -37,8 +39,12 @@ namespace SEFL {
             animation_timestamp = millis();
             Pext.digitalWrite(panels_power_pin, LOW);
             puzzle_state=INITIAL;
+            booting_timestamp=millis();
         }
-        refresh_state();
+        if (millis()-booting_timestamp>booting_up_timeout) {
+            refresh_state();
+        }
+
     }
 
     void FloorPuzzle::onDefault() {
@@ -48,10 +54,14 @@ namespace SEFL {
             this->reportStatus();
             init_puzzle();
         }
+
         Pext.digitalWrite(panels_power_pin, HIGH);
         for(int i = 0; i < panels_array_size; i++) {
             Pext.digitalWrite(panels_array[i].led_pin, HIGH);
         }
+
+        current_round = 1;
+
         if (!data.empty()) {
             StaticJsonDocument<SEFL::DOC_SIZE> doc;
 
@@ -61,15 +71,12 @@ namespace SEFL {
                 Logger::notice(error.f_str());
                 return;
             }
-            JsonInteger players = doc["floor"];
-            if(players == 2 || players == 3) {
-                rounds = 3;
-                pattern_size = players;
-            }
-            else if (players == 4 || players == 5) {
-                rounds = 2;
-                pattern_size = players;
-            }
+
+            if (doc["floor_rounds"].as<uint8_t>() != 0)
+                rounds = doc["floor_rounds"].as<uint8_t>();
+
+            if (doc["floor_players"].as<uint8_t>() != 0)
+                pattern_size = doc["floor_players"].as<uint8_t>();
 
             data.remove(0);
         }
@@ -103,7 +110,9 @@ namespace SEFL {
                 if(current_press_number >= pattern_size){
                     check_panels();
                 }else{
-                    show_pattern();
+                    scan_panels(!animation_start_flag);
+                    if (animation_start_flag)
+                        show_pattern();
                 }
                 break;
             }
@@ -112,7 +121,6 @@ namespace SEFL {
                 if(pause_timestamp != 0) {
                     show_pause();
                 }
-                SEFL::Logger::notice("floor_puzzle", "Correct");
                 break;
             }
             case INCORRECT_ORDER:{
@@ -120,7 +128,6 @@ namespace SEFL {
                 if (pause_timestamp != 0) {
                     show_pause();
                 }
-                SEFL::Logger::notice("floor_puzzle", "Incorrect");
                 break;
             }
         }
@@ -150,13 +157,14 @@ namespace SEFL {
         pinMode(Mext.getCi(),INPUT_PULLUP);
 
         animation_pattern_timeout = 1000 * pattern_size;
+        animation_start_flag = true;
 
         delete[] pattern_reservoir;
     }
 
     void FloorPuzzle::show_pattern() {
         if(animation_timestamp==0){
-            scan_panels(true);
+            show_pause();
             return;
         }
         if(millis()-animation_timestamp>animation_pattern_timeout){
@@ -202,11 +210,19 @@ namespace SEFL {
 
     void FloorPuzzle::show_success() {
         if(animation_timestamp==0){
+            if (current_round < rounds) {
+                puzzle_state = INITIAL;
+                animation_timestamp=millis();
+                current_round++;
+                init_puzzle();
+            } else {
+                this->setStatus(FINISHED_STATUS);
+            }
             return;
         }
         if(millis()-animation_timestamp>animation_correct_timeout){
             for(int i=0;i<panels_array_size;i++){
-                Pext.digitalWrite(panels_array[i].led_pin,false);
+                Pext.digitalWrite(panels_array[i].led_pin,HIGH);
             }
             animation_timestamp=0;
             pause_timestamp=millis();
@@ -220,6 +236,7 @@ namespace SEFL {
 
     void FloorPuzzle::show_pause() {
         if(pause_timestamp==0){
+            animation_timestamp=millis();
             return;
         }
         if(millis()-pause_timestamp>animation_pause_timeout){
@@ -254,6 +271,7 @@ namespace SEFL {
                 //react on press
                 panels_array[i].pressed_number = current_press_number;
                 current_press_number++;
+                animation_start_flag = false;
                 SEFL::Logger::notice("floor_puzzle", i);
             }
             if(trigger_LED){
@@ -271,12 +289,13 @@ namespace SEFL {
                 || panels_array[i].press_order!=panels_array[i].pressed_number){
                     puzzle_state=INCORRECT_ORDER;
                     animation_timestamp=millis();
+                    animation_start_flag = true;
                     return;
                 }
             }
             puzzle_state=CORRECT_ORDER;
-            this->setStatus(FINISHED_STATUS);
             animation_timestamp=millis();
+            animation_start_flag = true;
         }
 //        scan_panels(true);
 //        puzzle_state=INITIAL;

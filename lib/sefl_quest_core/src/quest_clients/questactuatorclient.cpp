@@ -79,7 +79,7 @@ namespace SEFL
 		{
 
 			char output[128];
-            StaticJsonDocument<SEFL::DOC_SIZE> repDoc(SEFL::DOC_SIZE);
+            StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 			repDoc["CommandId"] =
 				static_cast<int>(SEFL::DirectCommands::STATUS_COMMAND);
 			int tstatus = static_cast<int>(this->getStatus());

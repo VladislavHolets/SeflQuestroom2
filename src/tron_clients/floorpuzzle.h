@@ -5,6 +5,7 @@
 #ifndef SEFLQUESTROOM2_FLOORPUZZLE_H
 #define SEFLQUESTROOM2_FLOORPUZZLE_H
 #include "sefl_quest_core.h"
+#include "ArduinoJson.h"
 namespace SEFL {
 
     struct Panel{
@@ -24,7 +25,9 @@ namespace SEFL {
             CORRECT_ORDER,
             INCORRECT_ORDER
         }puzzle_state;
+
         bool animation_start_flag;
+
         int8_t current_press_number;
 
         uint32_t animation_timestamp,
@@ -33,14 +36,22 @@ namespace SEFL {
         animation_correct_timeout,
         animation_incorrect_timeout,
         animation_pause_timeout;
+
         uint8_t pattern_size;
+        uint8_t rounds;
+
         void scan_panels(bool trigger_LED=false);
         void check_panels();
-        void init_puzzle(uint8_t patternSize=0);
+        void init_puzzle();
         void show_pattern();
         void show_failure();
         void show_success();
         void show_pause();
+        void refresh_state();
+
+    public:
+        void setPatternSize(uint8_t patternSize);
+
     public:
 
         FloorPuzzle(MQTTClient &mqtt, const char *name, uint8_t resetStatus, const char *placement,

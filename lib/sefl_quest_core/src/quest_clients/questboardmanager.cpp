@@ -341,7 +341,7 @@ namespace SEFL
 				Logger::notice(this->name_,
 							   F("Retrying MQTT connection in 1 second..."));
 				this->getMqtt()->disconnect();
-				delay(1000);
+				delay(500);
 			}
 
 			Logger::notice(this->name_, F("MQTT Connected!"));

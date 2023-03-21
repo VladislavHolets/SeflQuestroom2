@@ -51,7 +51,7 @@ namespace SEFL
 		case SEFL::DirectCommands::RESET_COMMAND:
 		{
 			this->reset_trigger_ = true;
-
+            publish(data);
 			this->cleanData();
 		}
 		break;

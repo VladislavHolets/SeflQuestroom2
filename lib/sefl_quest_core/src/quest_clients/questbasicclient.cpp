@@ -100,6 +100,8 @@ namespace SEFL
 		case SEFL::DirectCommands::RESET_COMMAND:
 		{
 			this->setStatus((this->reset_status_));
+
+            publish(data);
 			this->cleanData();
 		}
 		break;

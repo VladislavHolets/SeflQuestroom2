@@ -111,9 +111,9 @@ namespace SEFL
 		break;
 		case SEFL::DirectCommands::RESET_COMMAND:
 		{
-			this->setStatus(
-				static_cast<SEFL::ActuatorClientStatuses>(this->reset_status_));
+			this->setStatus(this->reset_status_);
 
+            publish(data, 2);
 			this->cleanData();
 		}
 		break;

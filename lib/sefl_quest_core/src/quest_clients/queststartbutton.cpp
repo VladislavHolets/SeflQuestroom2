@@ -124,7 +124,7 @@ namespace SEFL
 		case SEFL::DirectCommands::RESET_COMMAND:
 		{
 			this->setStatus(SEFL::StartButtonClientStatuses::DEFAULT_BUTTON_STATUS);
-
+            publish(data);
 			this->cleanData();
 		}
 		break;

@@ -32,13 +32,16 @@ namespace SEFL {
 
         uint32_t animation_timestamp,
         pause_timestamp,
+        booting_timestamp,
         animation_pattern_timeout,
         animation_correct_timeout,
         animation_incorrect_timeout,
-        animation_pause_timeout;
+        animation_pause_timeout,
+        booting_up_timeout;
 
         uint8_t pattern_size;
         uint8_t rounds;
+        uint8_t current_round;
 
         void scan_panels(bool trigger_LED=false);
         void check_panels();

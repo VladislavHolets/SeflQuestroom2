@@ -23,6 +23,7 @@ namespace SEFL {
         }else if(reset_timestamp){
             return;
         }
+        Logger::notice(this->name_,Mext.analogRead(adapter_->getSolvedStatePin()));
         if(adapter_->isSolved()){
             this->setStatus(FINISHED_STATUS);
         }
@@ -52,7 +53,7 @@ namespace SEFL {
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
         }
-        Logger::notice("TronLegacyPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
+       //Logger::notice("TronLegacyPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
 
     }
 
@@ -62,7 +63,7 @@ namespace SEFL {
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
         }
-        Logger::notice("TronLegacyPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
+       // Logger::notice("TronLegacyPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
 
     }
 

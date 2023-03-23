@@ -19,5 +19,6 @@
 #include "tronlegacypuzzle.h"
 #include "floorpuzzle.h"
 #include "infinitemirror.h"
+#include "platonicbodies.h"
 //#include ""
 #endif //SEFLQUESTROOM2_TRONCLIENTS_H

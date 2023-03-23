@@ -191,7 +191,6 @@ void setup() {
 /*
  * гамма
  * таймери 2
- * статус бари 2
  * аларм лампи 2
  * сонік дальномір
  * лазерний промінь
@@ -225,7 +224,7 @@ void setup() {
     cfg.data_pin = uext_config.MOSI;
     cfg.latch_pin = uext_config.SCLK;
     cfg.clock_pin = uext_config.SSEL;
-    cfg.chip_amount = 6;
+    cfg.chip_amount =4;
     HC595_Driver hc595_driver(cfg.data_pin, cfg.clock_pin, cfg.latch_pin, cfg.chip_amount);
     Tron_Segment_Timer timer_1(mqttclient, "timer_1", 1, placement);
     timer_1.setDriver(hc595_driver);
@@ -258,21 +257,6 @@ void setup() {
     timer_2.setSegments(timer_2_segments, sizeof(timer_2_segments));
     timer_2.setSegmentsBase(timer_2_segments_base, sizeof(timer_2_segments_base));
 
-    StatusBarHC595 status_bar_1(mqttclient,"status_bar_1",1,placement);
-    status_bar_1.setDriver(hc595_driver);
-    status_bar_1.setStatusLampsChip(4);
-    const uint8_t status_bar_1_led_pins[]={
-            7,6,5,4,3,2
-    };
-    status_bar_1.setStatusLampsPins(status_bar_1_led_pins,sizeof(status_bar_1_led_pins));
-
-    StatusBarHC595 status_bar_2(mqttclient,"status_bar_2",1,placement);
-    status_bar_2.setDriver(hc595_driver);
-    status_bar_2.setStatusLampsChip(5);
-    const uint8_t status_bar_2_led_pins[]={
-            7,6,5,4,3,2
-    };
-    status_bar_2.setStatusLampsPins(status_bar_2_led_pins,sizeof(status_bar_2_led_pins));
     /*******************************************************************************************************************
      * ENDING of HC595 dependent classes initialisation!
      ******************************************************************************************************************/
@@ -282,8 +266,12 @@ void setup() {
     sonic_adapter.setResetPin(7);
     sonic_adapter.setManualPin(8);
     sonic_adapter.setSolvedStatePin(7);
-
-
+    TronLegacyPuzzle sonic_range_finder(mqttclient, "sonic_range_finder",1,placement);
+    sonic_range_finder.setAdapter(sonic_adapter);
+    PlatonicBodies platonic_bodies(mqttclient,"platonic_bodies",1,placement);
+    platonic_bodies.setLaserPin(11);
+    platonic_bodies.setSensorPin(8);
+    platonic_bodies.setSensorSignalInverted(false);
 #endif
 
 // board 3
@@ -354,7 +342,21 @@ int16_t mirror_cathodes[3]{12,13,14};
     infiniteMirror.setLedCathodes(mirror_cathodes,sizeof(mirror_cathodes)/sizeof(mirror_cathodes[0]));
 #endif
 #if Uniboard == 6
-
+    //    StatusBarHC595 status_bar_1(mqttclient,"status_bar_1",1,placement);
+//    status_bar_1.setDriver(hc595_driver);
+//    status_bar_1.setStatusLampsChip(0);
+//    const uint8_t status_bar_1_led_pins[]={
+//            7,6,5,4,3,2
+//    };
+//    status_bar_1.setStatusLampsPins(status_bar_1_led_pins,sizeof(status_bar_1_led_pins));
+//
+//    StatusBarHC595 status_bar_2(mqttclient,"status_bar_2",1,placement);
+//    status_bar_2.setDriver(hc595_driver);
+//    status_bar_2.setStatusLampsChip(4);
+//    const uint8_t status_bar_2_led_pins[]={
+//            7,6,5,4,3,2
+//    };
+//    status_bar_2.setStatusLampsPins(status_bar_2_led_pins,sizeof(status_bar_2_led_pins));
 #endif
 #if Uniboard == 7
     DiskHolderArray disk_receiver_1(mqttclient,"disk_receiver_1",1,"tr22");
@@ -449,7 +451,7 @@ int16_t mirror_cathodes[3]{12,13,14};
 #endif
 
 
-    //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
+    //тут створюються всі об'єкти всіх вір+++туальних пристроїв за прикладом вище
 
     SEFL::Logger::notice("main", "Starting Quest_Start_Button instance");
 
@@ -465,9 +467,11 @@ int16_t mirror_cathodes[3]{12,13,14};
     // board 2
 #if Uniboard == 2
     b_manager.addClient(gamma_puzzle);
-    b_manager.addClient(status_bar_1);
-    //b_manager.addClient(timer_1);
+    b_manager.addClient(timer_1);
     b_manager.addClient(timer_2);
+    b_manager.addClient(sonic_range_finder);
+    b_manager.addClient(platonic_bodies);
+
 #endif
 
     // board 3

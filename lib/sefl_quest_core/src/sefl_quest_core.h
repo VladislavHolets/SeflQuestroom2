@@ -8,6 +8,6 @@ using namespace SEFL;
 
 #else
 
-#error ArduinoJson requires a C++ compiler, please change file extension to .cc or .cpp
+#error SEFL_QUEST_CORE requires a C++ compiler, please change file extension to .cc or .cpp
 
 #endif

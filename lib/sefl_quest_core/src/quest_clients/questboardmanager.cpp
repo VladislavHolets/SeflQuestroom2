@@ -41,12 +41,12 @@ namespace SEFL
 		this->callbacksQueue.clear();
 		mqtt.onMessage(this, &SEFL::Quest_Board_Manager::pushToCallbacksQueue);
 		Logger::notice("board_manager", F("constructor_done"));
-		
+		IWatchdog.begin(5000000);
 	}
 
-	Quest_Board_Manager::~Quest_Board_Manager()
-	{
-	}
+	Quest_Board_Manager::~Quest_Board_Manager(){
+        //TODO::Destructor
+    }
 
 	Quest_Host_Client *Quest_Board_Manager::getHost()
 	{
@@ -70,17 +70,17 @@ namespace SEFL
 
 	void Quest_Board_Manager::send_config()
 	{
-		DynamicJsonDocument repDoc(JSON_ARRAY_SIZE(33) + JSON_OBJECT_SIZE(2) + 40);
+		DynamicJsonDocument repDoc(JSON_ARRAY_SIZE((this->clients_.size()+1)*4) + JSON_OBJECT_SIZE(2) + 80);
 		repDoc["CommandId"] = static_cast<int>(REQUEST_CONFIG_COMMAND);
 		JsonArray data = repDoc.createNestedArray("Data");
 		data.add(this->host_.getName());
 		data.add(String(static_cast<unsigned int>(this->host_.getType())));
-		for (unsigned int i = 0; i < this->clients_.size(); i++)
+		for (auto & client : this->clients_)
 		{
-			if (this->clients_[i] != nullptr)
+			if (client != nullptr)
 			{
-				data.add(this->clients_[i]->getName());
-				data.add(String(static_cast<unsigned int>(this->clients_[i]->getType())));
+				data.add(client->getName());
+				data.add(String(static_cast<unsigned int>(client->getType())));
 			}
 		}
 		String output;
@@ -106,49 +106,42 @@ namespace SEFL
 
 	void Quest_Board_Manager::loop()
 	{
+        IWatchdog.reload();
 		static uint32_t message_awaiting_interval=100;
 		if (!this->getMqtt()->connected())
 		{
 			connect();
 		}
-<<<<<<< HEAD
 		static uint32_t timestamp_for_message_avaiting = 0;
 		timestamp_for_message_avaiting = millis();
 		while (millis() - timestamp_for_message_avaiting < message_awaiting_interval)
 		{
-=======
-		uint32_t timestamp_for_message_avaiting = millis();
-		//while (millis() - timestamp_for_message_avaiting < 100)
-		//{
->>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
 			this->getMqtt()->loop();
 			if (!this->getMqtt()->connected())
 			{
 				connect();
 			}
-<<<<<<< HEAD
 		}
-		static uint32_t timestamp_begining_of_loop=0;
-		timestamp_begining_of_loop=millis();
-=======
-		//}
->>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
+
+		static uint32_t timestamp_beginning_of_loop=0;
+		timestamp_beginning_of_loop=millis();
+
 		this->processCallbackQueueAll();
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{
-			Logger::notice(this->name_, "shut down");
+			Logger::warning(this->name_, "shut down");
 			this->shutdown_timestamp = 0;
 		}
 
 		if (this->power_status_ && this->shutdown_timestamp)
 		{
 
-			Logger::notice(this->name_, "clients initial stuff");
-			for (unsigned int i = 0; i < this->clients_.size(); i++)
+			Logger::warning(this->name_, "clients initial stuff");
+			for (auto & client : this->clients_)
 			{
-				if (this->clients_[i] != nullptr)
+				if (client != nullptr)
 				{
-					this->clients_[i]->setChangedStatus(true);
+					client->setChangedStatus(true);
 				}
 			}
 			this->shutdown_timestamp = 0;
@@ -157,55 +150,69 @@ namespace SEFL
 		if (this->power_status_ && !this->shutdown_timestamp)
 		{
 
-			Logger::notice(this->name_, "clients stuff");
-			for (unsigned int i = 0; i < this->clients_.size(); i++)
+			Logger::warning(this->name_, "clients stuff");
+			for (auto & client : this->clients_)
 			{
-				if (this->clients_[i] != nullptr)
+				if (client != nullptr)
 				{
-					this->clients_[i]->act();
+					client->act();
 				}
 			}
-			Logger::notice(this->name_, "clients done");
+			Logger::warning(this->name_, "clients done");
 		}
 		if (this->host_.reset_trigger_)
 		{
 			this->host_.reset_trigger_ = false;
-			for (unsigned int i = 0; i < this->clients_.size(); i++)
+			for (auto & client : this->clients_)
 			{
-				if (this->clients_[i] != nullptr)
+				if (client != nullptr)
 				{
-					this->clients_[i]->setStatus(this->clients_[i]->reset_status_);
-					this->clients_[i]->cleanData();
+					client->setStatus(client->reset_status_);
+					client->cleanData();
 				}
 			}
 		}
 
-		message_awaiting_interval=(millis()-timestamp_begining_of_loop)*3;
-		Logger::notice(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
+		message_awaiting_interval=(millis()-timestamp_beginning_of_loop)/2;
+        message_awaiting_interval=(message_awaiting_interval<100)?100:message_awaiting_interval;
+		Logger::warning(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
 	}
 
-	bool Quest_Board_Manager::addClient(SEFL::Quest_Client *client)
-	{
+    bool Quest_Board_Manager::addClient(SEFL::Quest_Client *client)
+    {
 
-		for (unsigned int i = 0; i < this->clients_.size(); i++)
-		{
-			if (this->clients_[i] == client)
-			{
-				return (1);
-			}
-		}
-		this->clients_.push_back(client);
-		return (0);
-	}
+        for (auto & i : this->clients_)
+        {
+            if (i == client)
+            {
+                return (true);
+            }
+        }
+        this->clients_.push_back(client);
+        return (false);
+    }
+    bool Quest_Board_Manager::addClient(SEFL::Quest_Client &client)
+    {
 
-	bool Quest_Board_Manager::isPowerStatus()
+        for (auto & i : this->clients_)
+        {
+            if (i == &client)
+            {
+                return (true);
+            }
+        }
+        this->clients_.push_back(&client);
+        return (false);
+    }
+
+	bool Quest_Board_Manager::isPowerStatus() const
 	{
 		return (power_status_);
 	}
 
-	void Quest_Board_Manager::setPowerStatus(bool power_status_)
+	void Quest_Board_Manager::setPowerStatus(bool powerStatus)
 	{
-		this->power_status_ = power_status_;
+		this->power_status_ = powerStatus;
 	}
 
 	void Quest_Board_Manager::inputClb(const char *data, uint16_t len)
@@ -214,8 +221,8 @@ namespace SEFL
 		//    "Arguments": []
 		//  }
 
-		const size_t capacity = JSON_ARRAY_SIZE(0) + JSON_OBJECT_SIZE(2) + 40;
-		DynamicJsonDocument doc(capacity);
+		//const size_t capacity = JSON_ARRAY_SIZE(0) + JSON_OBJECT_SIZE(2) + 40;
+        StaticJsonDocument<SEFL::DOC_SIZE> doc;
 		deserializeJson(doc, data, len);
 		SEFL::BroadcastComands command =
 			static_cast<SEFL::BroadcastComands>(doc["CommandId"].as<uint8_t>());
@@ -242,11 +249,11 @@ namespace SEFL
 			{
 				this->language_ = SEFL::Language::RUS;
 			}
-			for (unsigned int i = 0; i < this->clients_.size(); i++)
+			for (auto & client : this->clients_)
 			{
-				if (this->clients_[i] != nullptr)
+				if (client != nullptr)
 				{
-					this->clients_[i]->setLanguage(this->language_);
+					client->setLanguage(this->language_);
 				}
 			}
 		}
@@ -272,21 +279,21 @@ namespace SEFL
 
 	void Quest_Board_Manager::pushToCallbacksQueue(String &topic_name, String &payload_val)
 	{
-		CallbackItem *item = new CallbackItem();
+		auto *item = new CallbackItem();
 		item->subfeed = new String(topic_name);
 		item->payload = new String(payload_val);
-		Logger::notice(this->name_, "pushed callback ");
-		Logger::notice(this->name_, item->subfeed->c_str());
-		Logger::notice(this->name_, item->payload->c_str());
+		Logger::warning(this->name_, F("pushed callback "));
+		Logger::warning(this->name_, item->subfeed->c_str());
+		Logger::warning(this->name_, item->payload->c_str());
 		this->callbacksQueue.push_back(item);
 	}
 	void Quest_Board_Manager::processCallbackQueueOne()
 	{
-		if (this->callbacksQueue.size() == 0)
+		if (this->callbacksQueue.empty())
 			return;
-		Logger::notice(this->name_, callbacksQueue[0]->subfeed->c_str());
+		Logger::warning(this->name_, callbacksQueue[0]->subfeed->c_str());
 
-		Logger::notice(this->name_, "started");
+		Logger::warning(this->name_, "started");
 		if (this->callbacksQueue[0]->subfeed->equals(this->getSubfeed()))
 		{
 			this->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());
@@ -305,8 +312,6 @@ namespace SEFL
 				}
 			}
 		}
-
-		Logger::notice(this->name_, "finished");
 		delete this->callbacksQueue[0]->subfeed;
 		delete this->callbacksQueue[0]->payload;
 		delete this->callbacksQueue[0];
@@ -314,14 +319,14 @@ namespace SEFL
 	}
 	void Quest_Board_Manager::processCallbackQueueAll()
 	{
-		while (callbacksQueue.size())
+		while (!callbacksQueue.empty())
 		{
 			processCallbackQueueOne();
 		}
 	}
 	void Quest_Board_Manager::processCallbackQueue(int number)
 	{
-		for (size_t i = 0; i < number && callbacksQueue.size(); i++)
+		for (size_t i = 0; i < number && !callbacksQueue.empty(); i++)
 		{
 			processCallbackQueueOne();
 		}
@@ -336,7 +341,7 @@ namespace SEFL
 				Logger::notice(this->name_,
 							   F("Retrying MQTT connection in 1 second..."));
 				this->getMqtt()->disconnect();
-				delay(1000);
+				delay(500);
 			}
 
 			Logger::notice(this->name_, F("MQTT Connected!"));
@@ -353,29 +358,29 @@ namespace SEFL
 
 	bool Quest_Board_Manager::subscribeAll()
 	{
-		bool ret = 1;
-		ret = ret && this->getMqtt()->subscribe(this->getSubfeed(), SEFL::QOS_DEFAULT);
-		Logger::warning(this->name_, String("Subscribing to server: ") + (ret) ? F("success") : F("failure"));
+		bool ret = true;
+		ret = ret * this->getMqtt()->subscribe(this->getSubfeed(), SEFL::QOS_DEFAULT);
+		Logger::warning(this->name_, String("Subscribing to server: ") +((ret) ? F("success") : F("failure")));
 		if (!ret)
 		{
 			return (ret);
 		}
-		ret = ret && this->getMqtt()->subscribe(this->getHost()->getSubfeed(), SEFL::QOS_DEFAULT);
-		Logger::warning(this->name_, String("Subscribing host: ") + (ret) ? F("success") : F("failure"));
+		ret = ret * this->getMqtt()->subscribe(this->getHost()->getSubfeed(), SEFL::QOS_DEFAULT);
+		Logger::warning(this->name_, String("Subscribing host: ") + ((ret) ? F("success") : F("failure")));
 		if (!ret)
 		{
 			return (ret);
 		}
 		for (auto client : this->clients_)
 		{
-			ret = ret && this->getMqtt()->subscribe(client->getSubfeed(), SEFL::QOS_DEFAULT);
-			Logger::warning(this->name_, String("Subscribing client ") + client->getName() + F(": ") + (ret) ? F("success") : F("failure"));
+			ret = ret * this->getMqtt()->subscribe(client->getSubfeed(), SEFL::QOS_DEFAULT);
+			Logger::warning(this->name_, String("Subscribing client ") + client->getName() + F(": ") + ((ret) ? F("success") : F("failure")));
 			if (!ret)
 			{
 				return (ret);
 			}
 		}
-		return !ret;
+		return false;
 	}
 
 } /* namespace SEFL */

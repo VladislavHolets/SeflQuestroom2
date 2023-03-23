@@ -47,7 +47,7 @@ namespace SEFL
 
 	void Quest_Basic_Client::inputClb(const char *data, uint16_t len)
 	{
-		DynamicJsonDocument doc(SEFL::DOC_SIZE);
+        StaticJsonDocument<SEFL::DOC_SIZE> doc;
 		deserializeJson(doc, data, len);
 		JsonArray arr = doc["Data"].as<JsonArray>();
 		for (JsonVariant value : arr)
@@ -68,14 +68,13 @@ namespace SEFL
 		{
 
 			char output[128];
-			DynamicJsonDocument repDoc(SEFL::DOC_SIZE);
+            StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 			repDoc["CommandId"] =
 				static_cast<int>(SEFL::DirectCommands::STATUS_COMMAND);
 			int tstatus = static_cast<int>(this->getStatus());
 			repDoc["SubcommandId"] = tstatus;
 			JsonArray jdata = repDoc.createNestedArray("Data");
 			serializeJson(repDoc, output);
-			// this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
 			publish(output);
 		}
 		break;
@@ -85,8 +84,6 @@ namespace SEFL
 			enum SEFL::BasicClientStatuses status =
 				static_cast<SEFL::BasicClientStatuses>(doc["SubcommandId"].as<int>());
 			this->setStatus(status);
-
-			// this->getMqtt()->publish(this->getPubfeed().c_str(), data, 0, 2);
 			publish(data);
 		}
 		break;
@@ -103,6 +100,8 @@ namespace SEFL
 		case SEFL::DirectCommands::RESET_COMMAND:
 		{
 			this->setStatus((this->reset_status_));
+
+            publish(data);
 			this->cleanData();
 		}
 		break;
@@ -133,19 +132,18 @@ namespace SEFL
 	void Quest_Basic_Client::reportStatus()
 	{
 		char output[128];
-		DynamicJsonDocument repDoc(SEFL::DOC_SIZE);
+        StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 		repDoc["CommandId"] =
 			static_cast<int>(SEFL::DirectCommands::STATUS_TRIGGER_COMMAND);
 		int tstatus = static_cast<int>(this->getStatus());
 		repDoc["SubcommandId"] = tstatus;
 		JsonArray jdata = repDoc.createNestedArray("Data");
-		for (unsigned int i = 0; i < this->data.size(); i++)
+		for (auto & i : this->data)
 		{
-			if (this->data[i].length())
-				jdata.add(this->data[i]);
+			if (i.length())
+				jdata.add(i);
 		}
 		serializeJson(repDoc, output);
-		// this->getMqtt()->publish(this->getPubfeed().c_str(), output, 0, 2);
 		publish(output);
 	}
 

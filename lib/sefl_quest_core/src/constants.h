@@ -9,7 +9,9 @@
 #define CONSTANTS_H_
 
 #include <sys/_stdint.h>
+#if defined(ARDUINO_ARCH_STM32)
 #include <wiring_constants.h>
+#endif
 #include <Wire.h>
 
 #if defined(ARDUINO_ARCH_AVR)
@@ -138,7 +140,7 @@ namespace SEFL
 		UKR = 1,
 		RUS = 0
 	};
-	static const uint16_t DOC_SIZE = 128;
+	static const uint16_t DOC_SIZE = 512;
 	static const char DEFAUT_OUT_TOPIC[] = "out";
 	static const char DEFAUT_IN_TOPIC[] = "in";
 	static const char DEFAUT_DEBUG_TOPIC[] = "debug";
@@ -166,6 +168,9 @@ namespace SEFL
 
 	static const MQTT_Config RYBALSKA3_MQTT_CONFIG = {"192.168.90.132", 1883,
 													  "questroom", "likekadroom"};
+
+	static const MQTT_Config EDMONTON_MQTT_CONFIG = {"192.168.10.10", 1883,
+													 "questroom", "likekadroom"};
 	static const uint8_t QOS_DEFAULT = 2;
 }
 #endif /* CONSTANTS_H_ */

@@ -29,9 +29,9 @@ namespace SEFL
 		//	  "SubcommandId":0,
 		//    "Data": ["0"]
 		//  }
-		DynamicJsonDocument doc(SEFL::DOC_SIZE);
+		StaticJsonDocument<SEFL::DOC_SIZE> doc;
 		deserializeJson(doc, data, len);
-		if (!doc["Data"].getElement(0))
+		if (!doc["Data"][0])
 		{
 			JsonArray arr = doc["Data"].as<JsonArray>();
 			for (JsonVariant value : arr)
@@ -51,7 +51,7 @@ namespace SEFL
 		case SEFL::DirectCommands::RESET_COMMAND:
 		{
 			this->reset_trigger_ = true;
-
+            publish(data);
 			this->cleanData();
 		}
 		break;

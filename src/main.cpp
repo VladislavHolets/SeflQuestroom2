@@ -1,194 +1,103 @@
-#include <Arduino.h>
-#include <DFRobotDFPlayerMini.h>
-#include <SoftwareSerial.h>
-#include <Ethernet.h>
-#include <EthernetClient.h>
-#include <PCA9685.h>
-#include <PinNames.h>
-#include <variant.h>
-#include <wiring_constants.h>
-#include <wiring_digital.h>
-#include <wiring_time.h>
-#include <Wire.h>
-#include <sefl_quest_core.h>
-
-#define Uniboard 4
-
-#if Uniboard == 1
-#include "custom_clients/crypt.h"
-#include "custom_clients/tombstone.h"
-#include "custom_clients/contract.h"
-<<<<<<< HEAD
-#endif
-#if Uniboard == 2
-#include "custom_clients/labyrinth.h"
-#include "custom_clients/elevatorout.h"
-#include "custom_clients/elevatorin.h"
-#include "custom_clients/tornado.h"
-#include "custom_clients/underwater.h"
-#include "custom_clients/home.h"
-#endif
-#if Uniboard == 3
-#include "custom_clients/motorcycles.h"
-#include "custom_clients/keyboard.h"
-#include "custom_clients/fireplace.h"
-#endif
-#if Uniboard == 4
-#include "custom_clients/sportbike.h"
-#include "custom_clients/sportbikeride.h"
-#endif
-#if Uniboard == 5
-#include "custom_clients/chains.h"
-#include "custom_clients/elevatorChopperDown.h"
-#include "custom_clients/elevatorChopperUp.h"
-#include "custom_clients/chopper.h"
-#include "custom_clients/chopperride.h"
-#endif
-=======
+#include "main.h"
 
 
->>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
 
-
-#include "custom_clients/magnet.h"
-
-using namespace SEFL;
-
-extern MQTTClient *clbwrapobj;
+#ifdef USE_DFPLAYER
 SoftwareSerial dfserial(PB_4, PB_3);
 DFRobotDFPlayerMini player;
-
+#endif
 SoftwareSerial serial(PA_3, PA_2); // PA_12
+
 void setup()
 {
+    SPI.setMOSI(PB15);
+    SPI.setMISO(PB14);
+    SPI.setSCLK(PB13);
 
-  SPI.setMOSI(PB15);
-  SPI.setMISO(PB14);
-  SPI.setSCLK(PB13);
+    pinMode(PA1, OUTPUT);
+    digitalWrite(PA1, LOW);
 
-  pinMode(PA1, OUTPUT);
-  digitalWrite(PA1, LOW);
-
-  serial.begin(9600);
-  delay(100);
-  SEFL::Logger::getInstance()->setPrinter(&serial);
-
-  SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::VERBOSE); // VERBOSE   NOTICE SILENT
-  SEFL::Logger::getInstance()->setPostMessage();
-  SEFL::Logger::notice("main", "Initing board");
-
-  dfserial.begin(9600);
+    serial.begin(9600);
+    delay(100);
+    SEFL::Logger::getInstance()->setPrinter(&serial);
+    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE SILENT
+    SEFL::Logger::getInstance()->setPostMessage();
+    SEFL::Logger::notice("main", "Initing board");
+#ifdef USE_DFPLAYER
+    dfserial.begin(9600);
   player.begin(dfserial);
   player.volume(25);
   player.enableDAC();
-  delay(100);
+#endif
+    delay(100);
 
-  pinMode(PB10, OUTPUT);
-  digitalWrite(PB10, LOW);
-  Wire.setSCL(PB6);
-  Wire.setSDA(PB7);
-  Wire.begin();
-  Pext.getHandler()->resetDevices();
-  Pext.getHandler()->init();
-  Pext.getHandler()->setPWMFrequency(1600); // 1600
-  Pext.getHandler()->setAllChannelsPWM(4096);
-  SEFL::Logger::verbose("main", String(Pext.getHandler()->getI2CAddress()));
-
-  SEFL::Logger::verbose("main", "Initing ethernet");
-
+    pinMode(PB10, OUTPUT);
+    digitalWrite(PB10, LOW);
+    Wire.setSCL(PB6);
+    Wire.setSDA(PB7);
+    Wire.begin();
+    Pext.getHandler()->resetDevices();
+    Pext.getHandler()->init();
+    Pext.getHandler()->setPWMFrequency(1600); // 1600
+    Pext.getHandler()->setAllChannelsPWM(4096);
+    SEFL::Logger::notice("main", "Initing ethernet");
   //мак адреси для гб ідуть формату 30:16:00:00:00:ХХ
   // для гр 30:16:00:00:01:ХХ
+#if defined(GHOST_RIDER_ROOM)
+    const char placement[] = "gr22";
+#endif
 #if Uniboard == 1
-<<<<<<< HEAD
-  byte mac[] = {0x30, 0x16, 0x0A, 0x00, 0x01, 0x03};
+  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x01};
+  const char uniboard_name[]="U1";
 #endif
 
 #if Uniboard == 2
-=======
-  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x03};
+  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x01};
+  const char uniboard_name[]="U2";
+#endif
+
+#if Uniboard == 3
   byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x03};
+  const char uniboard_name[]="U3";
 #endif
 
-#if Uniboard == 2
-  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x04};
->>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
+#if Uniboard == 4
   byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x04};
-#endif
-
-#if Uniboard == 3
-<<<<<<< HEAD
-=======
-  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x06};
->>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
-  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x06};
-#endif
-
-#if Uniboard == 4
-<<<<<<< HEAD
-=======
-  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x07};
->>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
-  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x07};
+  const char uniboard_name[]="U4";
 #endif
 
 #if Uniboard == 5
-<<<<<<< HEAD
-=======
-  //byte mac[] = {0x30, 0x16, 0xA0, 0x01, 0x01, 0x08};
->>>>>>> d7572af417ad79756ca59f5b6f684217d0581289
-  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x08};
+  byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x01, 0x05};
+  const char uniboard_name[]="U5";
 #endif
-  /*
+    /*
 
   #if Uniboard == 10
-    byte mac[] = { 0x30, 0x16, 0x00, 0x00, 0x00, 0x32 };
+    byte mac[] = { 0x30, 0x16, 0x00, 0x00, 0x00, 0x10 };
+     const char uniboard_name[]="U10";
   #endif
   */
+    Ethernet.init(PB12);
+    EthernetClient client;
+    SEFL::Logger::verbose("main", "Inited ethernet");
 
-  Ethernet.init(PB12);
-  EthernetClient client;
-  SEFL::Logger::verbose("main", "Inited ethernet");
+    SEFL::Logger::verbose("main", "Starting MQTT_Manager instance");
 
-  SEFL::Logger::verbose("main", "Starting MQTT_Manager instance");
+    SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
+    SEFL::clbwrapobj = &mqttclient;
 
-  SEFL::MQTTClientObjectBound<SEFL::Quest_Board_Manager> mqttclient(1024);
-  SEFL::clbwrapobj = &mqttclient;
+    SEFL::Logger::verbose("main", "Started MQTT_Manager instance");
 
-  SEFL::Logger::verbose("main", "Started MQTT_Manager instance");
+    SEFL::Logger::verbose("main", "Starting ethernet");
+    Ethernet.begin(mac);
+    mqttclient.begin(SEFL::RYBALSKA3_MQTT_CONFIG.IP, client);
+    SEFL::Logger::verbose("main", "Started ethernet");
 
-  SEFL::Logger::verbose("main", "Starting ethernet");
-  Ethernet.begin(mac);
-  mqttclient.begin(SEFL::RYBALSKA3_MQTT_CONFIG.IP, client);
-  SEFL::Logger::verbose("main", "Started ethernet");
+    SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
 
-  SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
+    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, uniboard_name, placement);
 
-#if Uniboard == 1
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U1", "gr22");
-#endif
-
-#if Uniboard == 2
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U2", "gr22");
-#endif
-
-#if Uniboard == 3
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U3", "gr22");
-#endif
-
-#if Uniboard == 4
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U4", "gr22");
-#endif
-
-#if Uniboard == 5
-  SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "U5", "gr22");
-#endif
-
-  /*
-  #if Uniboard == 10
-    SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::RYBALSKA3_MQTT_CONFIG, "gbu4", "gb21");
-  #endif
-  */
-  SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");
+    SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");
 
   //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
   ////////////////////////////////////////////////////////////////////////////////
@@ -614,66 +523,4 @@ void setup()
 }
 void loop()
 {
-
-  //	Pext.getHandler()->setChannelPWM(14, pwmServo1.pwmForAngle(0)); //(0, pwmServo1.pwmForAngle(-90));
-  //	delay(2000);
-  //	Pext.getHandler()->setChannelPWM(14, pwmServo1.pwmForAngle(90)); //(0, pwmServo1.pwmForAngle(-90));
-  //	delay(2000);
-  //
-  // Pext.digitalWrite(0, 0);
-  //   Pext.digitalWrite(1, 1);
-  //
-  //
-
-  //	Pext.pwmController.setChannelPWM(0, pwmServo1.pwmForAngle(-90));
-  //
-  //		Mext.digitalRead(0);
-  //	pinMode(Mext.getCi(), INPUT_PULLUP);
-  //	//SEFL::Logger::verbose("0",Mext.analogRead(0));
-  //	SEFL::Logger::verbose("1  ",Mext.analogRead(1));
-  //	//SEFL::Logger::verbose("2  ",Mext.analogRead(2));
-  //	SEFL::Logger::verbose("3   ",Mext.analogRead(3));
-  //	//SEFL::Logger::verbose("4    ",Mext.analogRead(4));
-  //	SEFL::Logger::verbose("5     ",Mext.analogRead(5));
-  //	//SEFL::Logger::verbose("6      ",Mext.analogRead(6));
-  // SEFL::Logger::verbose("7       ",Mext.analogRead(7));
-  // delay(100);
-  ////	SEFL::Logger::verbose("8        ",Mext.analogRead(8));
-  //	SEFL::Logger::verbose("9          ",Mext.analogRead(9));
-  ////	SEFL::Logger::verbose("10          ",Mext.analogRead(10));
-  ////	SEFL::Logger::verbose("11           ",Mext.analogRead(11));
-  //	//SEFL::Logger::verbose("12            ",Mext.analogRead(12));
-  //	//SEFL::Logger::verbose("13             ",Mext.analogRead(13));
-  //	//SEFL::Logger::verbose("14              ",Mext.analogRead(14));
-  //	//SEFL::Logger::verbose("15                ",Mext.analogRead(15));
-  //
-  //
-  //	Pext.digitalWrite(1, Mext.digitalRead(1));
-  //	Pext.digitalWrite(2, Mext.digitalRead(2));
-  //	Pext.digitalWrite(3, Mext.digitalRead(3));
-  //	Pext.digitalWrite(4, Mext.digitalRead(4));
-  //	Pext.digitalWrite(5, Mext.digitalRead(5));
-  //	Pext.digitalWrite(6, Mext.digitalRead(6));
-  //	Pext.digitalWrite(7, Mext.digitalRead(7));
-  //	Pext.digitalWrite(8, Mext.digitalRead(8));
-  //	Pext.digitalWrite(9, Mext.digitalRead(9));
-  //	Pext.digitalWrite(10, Mext.digitalRead(10));
-  //	Pext.digitalWrite(11, Mext.digitalRead(11));
-  //	Pext.digitalWrite(12, Mext.digitalRead(12));
-  //	Pext.digitalWrite(13, Mext.digitalRead(13));
-  //	Pext.digitalWrite(14, Mext.digitalRead(14));
-  //	Pext.digitalWrite(0, Mext.digitalRead(0));
-
-  //	Mext.digitalRead(0);
-  //	pinMode(Mext.getCi(), INPUT_PULLUP);
-  //	SEFL::Logger::verbose("15   ",Mext.digitalRead(15));
-  //	Pext.digitalWrite(1, LOW);
-  //	delay(100);
-  //	Pext.digitalWrite(1, HIGH);
-  //	delay(500);
-  ////
-  //////	Mext.digitalRead(0);
-  //////	pinMode(Mext.getCi(), INPUT);
-  ////	Pext.analogWrite(0,  Mext.analogRead(0)*8);
-  //	SEFL::Logger::verbose("main", Mext.analogRead(0));
 }

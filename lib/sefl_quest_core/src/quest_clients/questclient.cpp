@@ -32,9 +32,9 @@ namespace SEFL
 		return (language_);
 	}
 
-	void Quest_Client::setLanguage(SEFL::Language language_)
+	void Quest_Client::setLanguage(SEFL::Language language)
 	{
-		this->language_ = language_;
+		this->language_ = language;
 	}
 
 	const char *Quest_Client::getName()
@@ -47,9 +47,9 @@ namespace SEFL
 		return (power_status_);
 	}
 
-	void Quest_Client::setPowerStatus(bool power_status_)
+	void Quest_Client::setPowerStatus(bool powerStatus)
 	{
-		this->power_status_ = power_status_;
+		this->power_status_ = powerStatus;
 	}
 
 	void Quest_Client::unsetChangedStatus()

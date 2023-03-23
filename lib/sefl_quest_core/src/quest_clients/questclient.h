@@ -43,12 +43,12 @@ namespace SEFL
 		Array<String, MAX_DATA_LENGTH> &getData();
 		const char *getInTopic();
 		SEFL::Language getLanguage();
-		void setLanguage(SEFL::Language language_);
+		void setLanguage(SEFL::Language language);
 		const char *getName();
 		const char *getOutTopic();
 		const char *getPlacement();
 		bool isPowerStatus();
-		void setPowerStatus(bool power_status_);
+		void setPowerStatus(bool powerStatus);
 		ClientType getType();
 		virtual void setStatus(uint8_t status) = 0;
 	};

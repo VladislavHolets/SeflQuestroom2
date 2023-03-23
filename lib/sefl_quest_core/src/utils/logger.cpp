@@ -19,6 +19,7 @@
 #define MEM_TYPE PROGMEM
 #endif
 
+const char LEVEL_NONE[] MEM_TYPE = "NONE";
 const char LEVEL_VERBOSE[] MEM_TYPE = "VERBOSE";
 const char LEVEL_NOTICE[] MEM_TYPE = "NOTICE";
 const char LEVEL_WARNING[] MEM_TYPE = "WARNING";
@@ -26,7 +27,7 @@ const char LEVEL_ERROR[] MEM_TYPE = "ERROR";
 const char LEVEL_FATAL[] MEM_TYPE = "FATAL";
 const char LEVEL_SILENT[] MEM_TYPE = "SILENT";
 
-const char *const LOG_LEVEL_STRINGS[] MEM_TYPE = {LEVEL_VERBOSE, LEVEL_NOTICE,
+const char *const LOG_LEVEL_STRINGS[] MEM_TYPE = {LEVEL_NONE, LEVEL_VERBOSE, LEVEL_NOTICE,
 												  LEVEL_WARNING, LEVEL_ERROR, LEVEL_FATAL, LEVEL_SILENT};
 
 void SEFL::Logger::setLogLevel(Level level)

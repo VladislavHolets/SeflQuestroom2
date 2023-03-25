@@ -313,8 +313,23 @@ void setup() {
 // board 4
 #if Uniboard == 4
 /*
- * laser barier
+ * laser barrier
  */
+uint8_t order[] = {5,1,4,2,0,3};
+uint8_t sensors[] = {0, 1, 2, 3, 4, 5};
+uint8_t segments[] = {0, 1, 2, 3, 4, 5};
+ColorPins colors = {9, 11, 10};
+uint8_t lasers_pin = 6;
+uint8_t code_sign = 12;
+
+LaserBarier laser_barrier(mqttclient, "laser_barrier", 1, placement);
+
+laser_barrier.setSegments(segments, sizeof(segments) / sizeof(segments[0]));
+laser_barrier.setColor(colors);
+laser_barrier.setBarrier(sensors, lasers_pin, sizeof(sensors)/sizeof(sensors[0]));
+laser_barrier.setOrder(order, sizeof(order)/sizeof(order[0]));
+laser_barrier.setCodeSignPin(code_sign);
+
 
 #endif
 
@@ -482,7 +497,7 @@ int16_t mirror_cathodes[3]{12,13,14};
 
     // board 4
 #if Uniboard == 4
-    b_manager.addClient(and_puzzle);
+    b_manager.addClient(laser_barrier);
 #endif
 
     // board 5

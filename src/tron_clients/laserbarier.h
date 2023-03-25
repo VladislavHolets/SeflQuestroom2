@@ -7,46 +7,72 @@
 #include "sefl_quest_core.h"
 namespace SEFL {
 
+    struct ColorPins {
+        uint8_t red;
+        uint8_t blue;
+        uint8_t green;
+    };
+
+    struct Barrier {
+        uint8_t sensor_pin;
+        uint8_t order_number;
+        int crossed_order;
+    };
+
     class LaserBarier: public Quest_Basic_Client{
         enum LaserState{
             RESETED,
             PRESSED,
             RELEASED
         };
+
         enum PuzzleState{
             INITIAL,
             CORRECT_ORDER,
             INCORRECT_ORDER
         }puzzle_state;
+
     private:
-        uint8_t *buttons_states;
-        uint8_t *buttons_pins;
-        int8_t buttons_pins_size;
-        //TODO
-        //  TANIA
-        //  neons should be replaced with mirror_led_anodes(6), and mirror_led_cathodes(3), arrays with dynamic sizes,
-        //  reference can be found in the LEDMatrixPuzzle class, it had similar connection
-        uint8_t *neons_pins;
-        int8_t neons_pins_size;
-        int8_t *correct_order;
-        int8_t *current_order;
-        int8_t order_size;
-        int8_t current_input;
-        uint32_t incorrect_animation_timestamp;
+
+        //LED
+        uint8_t *segments_pins;
+        uint8_t segments_size;
+
+        ColorPins color_pins;
+
+        //Barrier
+        Barrier *barrier;
+        uint8_t barrier_size;
+        uint8_t lasers_pin;
+
+        uint8_t curr_cross;
+
+        uint8_t code_sign_pin;
+    public:
+        void setCodeSignPin(uint8_t codeSignPin);
+
+    private:
+
+        //animation timestamps
+        uint32_t animation_timestamp;
         uint32_t incorrect_animation_timeout;
-        uint32_t correct_animation_timestamp;
         uint32_t correct_animation_timeout;
-        bool refresh_neon_flag;
+
+        void init();
+        void refresh_puzzle();
+        void show_success();
+        void show_failure();
+        void read_barrier();
+        void clearCurrentOrder();
+
     public:
         void setIncorrectAnimationTimeout(uint32_t incorrectAnimationTimeout);
         void setCorrectAnimationTimeout(uint32_t correctAnimationTimeout);
-        void setButtonsPins(const uint8_t *buttonsPins, int8_t buttonsPinsSize);
-        void setNeonsPins(const uint8_t *neonsPins, int8_t neonsPinsSize);
-        void setCorrectOrder(const int8_t *correctOrder, int8_t orderSize);
-        void scanButtons();
-        bool checkButtons();
-        void refreshNeon();
-    public:
+        void setSegments(const uint8_t *segments, uint8_t segmentsSize);
+        void setColor(ColorPins colorPins);
+        void setBarrier(const uint8_t *sensors, uint8_t lasersPin, uint8_t barrierSize);
+        void setOrder(const uint8_t *order, uint8_t orderSize);
+
         LaserBarier(MQTTClient &mqtt, const char *name, uint8_t resetStatus=1, const char *placement=DEFAULT_PLACEMENT,
         const char *inTopic=DEFAUT_IN_TOPIC, const char *outTopic=DEFAUT_OUT_TOPIC, Language language=ENG);
 

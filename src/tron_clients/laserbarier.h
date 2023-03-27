@@ -5,6 +5,7 @@
 #ifndef SEFLQUESTROOM2_LASERBARIER_H
 #define SEFLQUESTROOM2_LASERBARIER_H
 #include "sefl_quest_core.h"
+#include "ArduinoJson.h"
 namespace SEFL {
 
     struct ColorPins {
@@ -29,7 +30,8 @@ namespace SEFL {
         enum PuzzleState{
             INITIAL,
             CORRECT_ORDER,
-            INCORRECT_ORDER
+            INCORRECT_ORDER,
+            VIRUS
         }puzzle_state;
 
     private:
@@ -55,8 +57,11 @@ namespace SEFL {
 
         //animation timestamps
         uint32_t animation_timestamp;
+        uint32_t pause_timestamp;
         uint32_t incorrect_animation_timeout;
         uint32_t correct_animation_timeout;
+        uint32_t finished_puzzle_timeout;
+        uint32_t pause_timeout;
 
         void init();
         void refresh_puzzle();
@@ -64,6 +69,9 @@ namespace SEFL {
         void show_failure();
         void read_barrier();
         void clearCurrentOrder();
+        void show_virus();
+        void check_data();
+        void clear_changes();
 
     public:
         void setIncorrectAnimationTimeout(uint32_t incorrectAnimationTimeout);

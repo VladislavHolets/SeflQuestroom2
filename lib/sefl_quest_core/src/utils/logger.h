@@ -23,7 +23,7 @@ namespace SEFL {
 class Logger {
 public:
 	enum Level {
-		NONE=0, VERBOSE, NOTICE, WARNING, ERROR, FATAL, SILENT
+        VERBOSE, NOTICE, WARNING, ERROR, FATAL, SILENT
 	};
 	const char *PRE_LEVEL = "[", *POST_LEVEL = "]", *PRE_MODULE = ":",
 			*POST_MODULE = " ", *PRE_MESSAGE = " ", *POST_MESSAGE = "\n";
@@ -255,15 +255,15 @@ public:
 	static Logger* getInstance();
 
 	static const char* asString(Level level);
-	void setLevel(Level level_);
+	static void setLevel(Level level_);
 	static Print* getPrinter();
-	void setPrinter(Print *printer_);
-	void setPostLevel(const char *post_level_ = "]");
-	void setPostMessage(const char *post_message_ = "\n");
-	void setPostModule(const char *post_module_ = " ");
-	void setPreLevel(const char *pre_level_ = "[");
-	void setPreMessage(const char *pre_message_ = " ");
-	void setPreModule(const char *pre_module_ = ":");
+	static void setPrinter(Print *printer_);
+	static void setPostLevel(const char *post_level_ = "]");
+	static void setPostMessage(const char *post_message_ = "\n");
+	static void setPostModule(const char *post_module_ = " ");
+	static void setPreLevel(const char *pre_level_ = "[");
+	static void setPreMessage(const char *pre_message_ = " ");
+	static void setPreModule(const char *pre_module_ = ":");
 
 private:
 	Logger();

@@ -19,7 +19,7 @@
 #define MEM_TYPE PROGMEM
 #endif
 
-const char LEVEL_NONE[] MEM_TYPE = "NONE";
+//const char LEVEL_NONE[] MEM_TYPE = "NONE";
 const char LEVEL_VERBOSE[] MEM_TYPE = "VERBOSE";
 const char LEVEL_NOTICE[] MEM_TYPE = "NOTICE";
 const char LEVEL_WARNING[] MEM_TYPE = "WARNING";
@@ -27,8 +27,23 @@ const char LEVEL_ERROR[] MEM_TYPE = "ERROR";
 const char LEVEL_FATAL[] MEM_TYPE = "FATAL";
 const char LEVEL_SILENT[] MEM_TYPE = "SILENT";
 
-const char *const LOG_LEVEL_STRINGS[] MEM_TYPE = {LEVEL_NONE, LEVEL_VERBOSE, LEVEL_NOTICE,
+const char *const LOG_LEVEL_STRINGS[] MEM_TYPE = { LEVEL_VERBOSE, LEVEL_NOTICE,
 												  LEVEL_WARNING, LEVEL_ERROR, LEVEL_FATAL, LEVEL_SILENT};
+
+SEFL::Logger *SEFL::Logger::getInstance()
+{
+    static auto *logger = new Logger();
+    return (logger);
+}
+
+const char *SEFL::Logger::asString(Level level)
+{
+    return (LOG_LEVEL_STRINGS[level]);
+}
+
+SEFL::Logger::Logger(Print *printer) : _level(SILENT), _printer(printer)
+{
+}
 
 void SEFL::Logger::setLogLevel(Level level)
 {
@@ -759,9 +774,9 @@ void SEFL::Logger::log(Level level, const __FlashStringHelper *message)
 void SEFL::Logger::log(Level level, const char *module,
 					   const __FlashStringHelper *message)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message);
+		templateLog(level, module, message);
 	}
 }
 
@@ -773,9 +788,9 @@ void SEFL::Logger::log(Level level, const String &message)
 
 void SEFL::Logger::log(Level level, const char *module, const String &message)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message);
+		templateLog(level, module, message);
 	}
 }
 
@@ -786,9 +801,9 @@ void SEFL::Logger::log(Level level, const char *message)
 
 void SEFL::Logger::log(Level level, const char *module, const char *message)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message);
+		templateLog(level, module, message);
 	}
 }
 
@@ -799,9 +814,9 @@ void SEFL::Logger::log(Level level, char message)
 
 void SEFL::Logger::log(Level level, const char *module, char message)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message);
+		templateLog(level, module, message);
 	}
 }
 
@@ -813,9 +828,9 @@ void SEFL::Logger::log(Level level, unsigned char message, int base)
 void SEFL::Logger::log(Level level, const char *module, unsigned char message,
 					   int base)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message, base);
+		templateLog(level, module, message, base);
 	}
 }
 
@@ -826,9 +841,9 @@ void SEFL::Logger::log(Level level, int message, int base)
 
 void SEFL::Logger::log(Level level, const char *module, int message, int base)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message, base);
+		templateLog(level, module, message, base);
 	}
 }
 
@@ -840,9 +855,9 @@ void SEFL::Logger::log(Level level, unsigned int message, int base)
 void SEFL::Logger::log(Level level, const char *module, unsigned int message,
 					   int base)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message, base);
+		templateLog(level, module, message, base);
 	}
 }
 
@@ -853,9 +868,9 @@ void SEFL::Logger::log(Level level, long message, int base)
 
 void SEFL::Logger::log(Level level, const char *module, long message, int base)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message, base);
+		templateLog(level, module, message, base);
 	}
 }
 
@@ -867,9 +882,9 @@ void SEFL::Logger::log(Level level, unsigned long message, int base)
 void SEFL::Logger::log(Level level, const char *module, unsigned long message,
 					   int base)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message, base);
+		templateLog(level, module, message, base);
 	}
 }
 
@@ -880,9 +895,9 @@ void SEFL::Logger::log(Level level, double message, int digits)
 
 void SEFL::Logger::log(Level level, const char *module, double message, int digits)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message, digits);
+		templateLog(level, module, message, digits);
 	}
 }
 
@@ -893,9 +908,9 @@ void SEFL::Logger::log(Level level, const Printable &message)
 
 void SEFL::Logger::log(Level level, const char *module, const Printable &message)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message);
+		templateLog(level, module, message);
 	}
 }
 
@@ -907,9 +922,9 @@ void SEFL::Logger::log(Level level, unsigned char *message, int length)
 void SEFL::Logger::log(Level level, const char *module, unsigned char *message,
 					   int length)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
-		getInstance()->templateLog(level, module, message, length);
+		templateLog(level, module, message, length);
 	}
 }
 #ifdef SUPPORT_LONGLONG
@@ -1080,20 +1095,6 @@ void SEFL::Logger::templateLog(Level level, const char *module, int64_t message,
 }
 
 #endif
-SEFL::Logger *SEFL::Logger::getInstance()
-{
-	static SEFL::Logger *logger = new Logger();
-	return (logger);
-}
-
-const char *SEFL::Logger::asString(Level level)
-{
-	return (LOG_LEVEL_STRINGS[level]);
-}
-
-SEFL::Logger::Logger(Print *printer) : _level(WARNING), _printer(printer)
-{
-}
 
 void SEFL::Logger::templateLog(Level level, const char *module,
 							   const __FlashStringHelper *message)

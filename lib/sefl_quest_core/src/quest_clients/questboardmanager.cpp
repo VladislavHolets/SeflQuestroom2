@@ -58,9 +58,9 @@ namespace SEFL
 		return (language_);
 	}
 
-	void Quest_Board_Manager::setLanguage(Language language_)
+	void Quest_Board_Manager::setLanguage(Language language)
 	{
-		this->language_ = language_;
+		this->language_ = language;
 	}
 
 	const char *Quest_Board_Manager::getName()
@@ -129,14 +129,14 @@ namespace SEFL
 		this->processCallbackQueueAll();
 		if (!this->power_status_ && this->shutdown_timestamp && (millis() - this->shutdown_timestamp) > SEFL::shutdown_timeout)
 		{
-			Logger::warning(this->name_, "shut down");
+			Logger::notice(this->name_, "shut down");
 			this->shutdown_timestamp = 0;
 		}
 
 		if (this->power_status_ && this->shutdown_timestamp)
 		{
 
-			Logger::warning(this->name_, "clients initial stuff");
+			Logger::notice(this->name_, "clients initial stuff");
 			for (auto & client : this->clients_)
 			{
 				if (client != nullptr)
@@ -150,7 +150,7 @@ namespace SEFL
 		if (this->power_status_ && !this->shutdown_timestamp)
 		{
 
-			Logger::warning(this->name_, "clients stuff");
+			Logger::notice(this->name_, "clients stuff");
 			for (auto & client : this->clients_)
 			{
 				if (client != nullptr)
@@ -158,7 +158,7 @@ namespace SEFL
 					client->act();
 				}
 			}
-			Logger::warning(this->name_, "clients done");
+			Logger::notice(this->name_, "clients done");
 		}
 		if (this->host_.reset_trigger_)
 		{
@@ -175,7 +175,7 @@ namespace SEFL
 
 		message_awaiting_interval=(millis()-timestamp_beginning_of_loop)/2;
         message_awaiting_interval=(message_awaiting_interval<100)?100:message_awaiting_interval;
-		Logger::warning(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
+		Logger::verbose(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
 	}
 
     bool Quest_Board_Manager::addClient(SEFL::Quest_Client *client)
@@ -282,18 +282,18 @@ namespace SEFL
 		auto *item = new CallbackItem();
 		item->subfeed = new String(topic_name);
 		item->payload = new String(payload_val);
-		Logger::warning(this->name_, F("pushed callback "));
-		Logger::warning(this->name_, item->subfeed->c_str());
-		Logger::warning(this->name_, item->payload->c_str());
+		Logger::notice(this->name_, F("pushed callback "));
+		Logger::notice(this->name_, item->subfeed->c_str());
+		Logger::notice(this->name_, item->payload->c_str());
 		this->callbacksQueue.push_back(item);
 	}
 	void Quest_Board_Manager::processCallbackQueueOne()
 	{
 		if (this->callbacksQueue.empty())
 			return;
-		Logger::warning(this->name_, callbacksQueue[0]->subfeed->c_str());
+		Logger::notice(this->name_, callbacksQueue[0]->subfeed->c_str());
 
-		Logger::warning(this->name_, "started");
+		Logger::notice(this->name_, "started");
 		if (this->callbacksQueue[0]->subfeed->equals(this->getSubfeed()))
 		{
 			this->inputClb(this->callbacksQueue[0]->payload->c_str(), this->callbacksQueue[0]->payload->length());
@@ -338,8 +338,8 @@ namespace SEFL
 			Logger::notice(this->name_, F("Connecting to MQTT... "));
 			while (this->getMqtt()->connect(this->getHost()->getPubfeed().c_str(), room_config_.username, room_config_.password) == 0)
 			{
-				Logger::notice(this->name_,
-							   F("Retrying MQTT connection in 1 second..."));
+				Logger::warning(this->name_,
+							   F("Retrying MQTT connection in 500 milliseconds..."));
 				this->getMqtt()->disconnect();
 				delay(500);
 			}
@@ -360,13 +360,13 @@ namespace SEFL
 	{
 		bool ret = true;
 		ret = ret * this->getMqtt()->subscribe(this->getSubfeed(), SEFL::QOS_DEFAULT);
-		Logger::warning(this->name_, String("Subscribing to server: ") +((ret) ? F("success") : F("failure")));
+		Logger::notice(this->name_, String("Subscribing to server: ") +((ret) ? F("success") : F("failure")));
 		if (!ret)
 		{
 			return (ret);
 		}
 		ret = ret * this->getMqtt()->subscribe(this->getHost()->getSubfeed(), SEFL::QOS_DEFAULT);
-		Logger::warning(this->name_, String("Subscribing host: ") + ((ret) ? F("success") : F("failure")));
+		Logger::notice(this->name_, String("Subscribing host: ") + ((ret) ? F("success") : F("failure")));
 		if (!ret)
 		{
 			return (ret);
@@ -374,7 +374,7 @@ namespace SEFL
 		for (auto client : this->clients_)
 		{
 			ret = ret * this->getMqtt()->subscribe(client->getSubfeed(), SEFL::QOS_DEFAULT);
-			Logger::warning(this->name_, String("Subscribing client ") + client->getName() + F(": ") + ((ret) ? F("success") : F("failure")));
+			Logger::notice(this->name_, String("Subscribing client ") + client->getName() + F(": ") + ((ret) ? F("success") : F("failure")));
 			if (!ret)
 			{
 				return (ret);

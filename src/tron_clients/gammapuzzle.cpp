@@ -77,6 +77,7 @@ namespace SEFL {
             this->reportStatus();
             puzzle_state=INITIAL;
             current_input=0;
+            refresh_neon_flag=true;
             refreshNeon();
         }
         scanButtons();
@@ -103,6 +104,8 @@ namespace SEFL {
             this->changed_status_ = false;
             this->reportStatus();
             current_input=0;
+            puzzle_state=INITIAL;
+            refresh_neon_flag=true;
             refreshNeon();
         }
     }
@@ -117,6 +120,14 @@ namespace SEFL {
     }
 
     void GammaPuzzle::onManualFinished() {
+        if (this->changed_status_)
+        {
+            this->changed_status_ = false;
+            this->reportStatus();
+            puzzle_state=CORRECT_ORDER;
+            correct_animation_timestamp=millis();
+            refresh_neon_flag=true;
+        }
         onFinished();
     }
 
@@ -193,6 +204,9 @@ namespace SEFL {
             for (int i = 0; i < current_input; ++i) {
                 Pext.digitalWrite(neons_pins[current_order[i]],(i<current_input)?LOW:HIGH);
             }
+//            for (int i = current_input; i < neons_pins_size; ++i) {
+//                Pext.digitalWrite(neons_pins[i],HIGH);
+//            }
             refresh_neon_flag=false;
         }else if (puzzle_state==INCORRECT_ORDER){
             for (int i = 0; i < neons_pins_size; ++i) {
@@ -221,7 +235,7 @@ namespace SEFL {
                 }
             }else{
                 for (int i = 0; i < order_size; ++i) {
-                    Pext.digitalWrite(neons_pins[current_order[i]],LOW);
+                    Pext.digitalWrite(neons_pins[i],LOW);
                 }
                 puzzle_state=INITIAL;
                 refresh_neon_flag=false;

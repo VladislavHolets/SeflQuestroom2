@@ -131,7 +131,7 @@ namespace SEFL
 
 	void Quest_Basic_Client::reportStatus()
 	{
-		char output[128];
+		String output;
         StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
 		repDoc["CommandId"] =
 			static_cast<int>(SEFL::DirectCommands::STATUS_TRIGGER_COMMAND);

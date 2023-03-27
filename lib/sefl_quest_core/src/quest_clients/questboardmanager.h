@@ -38,7 +38,7 @@ namespace SEFL
 		Quest_Client *clients_storage[MAX_CLIENT_AMOUNT];
 		Vector<Quest_Client *> clients_;
 		void send_config();
-		void setLanguage(Language language_);
+		void setLanguage(Language language);
 		void setPowerStatus(bool powerStatus);
 		MQTT_Config room_config_;
 

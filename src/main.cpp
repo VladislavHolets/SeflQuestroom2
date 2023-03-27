@@ -17,9 +17,9 @@ void setup() {
 
     serial.begin(9600);
     delay(100);
-    SEFL::Logger::getInstance()->setPrinter(&serial);
-    SEFL::Logger::getInstance()->setLogLevel(SEFL::Logger::Level::NOTICE); // VERBOSE   NOTICE SILENT
-    SEFL::Logger::getInstance()->setPostMessage();
+    SEFL::Logger::setPrinter(&serial);
+    SEFL::Logger::setLogLevel(SEFL::Logger::Level::WARNING); // VERBOSE   NOTICE SILENT
+    //SEFL::Logger::setPostMessage();
     SEFL::Logger::notice("main", "Initing board");
 #ifdef USE_DFPLAYER
     dfserial.begin(9600);
@@ -81,7 +81,7 @@ void setup() {
 #endif
 #if Uniboard == 9
     byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x09};
-    const char uniboard_name[]="U9";
+    const char uniboard_name[] = "U9";
 #endif
 #if Uniboard == 10
     byte mac[] = {0x30, 0x16, 0x00, 0x00, 0x02, 0x0A};
@@ -188,90 +188,97 @@ void setup() {
 #endif
 // board 2
 #if Uniboard == 2
-/*
- * гамма
- * таймери 2
- * аларм лампи 2
- * сонік дальномір
- * лазерний промінь
- *
- *
- */
-    GammaPuzzle gamma_puzzle(mqttclient, "gammapuzzle", 1, placement);
-    const uint8_t gamma_buttons[] = {
-            0, 1, 2, 3, 4, 5, 6
-    };
-    const uint8_t gamma_neons[] = {
-            0, 1, 2, 3, 4, 5, 6
-    };
-    const int8_t gamma_correct_order[] = {
-            0, 1, 2, 3, 4, 5, 6
-    };
-    uint32_t gamma_correct_timeout = 5000;
-    uint32_t gamma_incorrect_timeout = 2000;
-    gamma_puzzle.setButtonsPins(gamma_buttons, sizeof(gamma_buttons));
-    gamma_puzzle.setNeonsPins(gamma_neons, sizeof(gamma_neons));
-    gamma_puzzle.setCorrectOrder(gamma_correct_order, sizeof(gamma_correct_order));
-    gamma_puzzle.setCorrectAnimationTimeout(gamma_correct_timeout);
-    gamma_puzzle.setIncorrectAnimationTimeout(gamma_incorrect_timeout);
-    //HC595_Driver driver(uext_config,2);
+    /*
+     * гамма
+     * таймери 2
+     * аларм лампи 2
+     * сонік дальномір
+     * лазерний промінь
+     *
+     *
+     */
+        GammaPuzzle gamma_puzzle(mqttclient, "gammapuzzle", 1, placement);
+        const uint8_t gamma_buttons[] = {
+                0, 1, 2, 3, 4, 5, 6
+        };
+        const uint8_t gamma_neons[] = {
+                6,1, 2, 3, 4, 5, 0
+        };
+        const int8_t gamma_correct_order[] = {
+                0, 5, 3, 1, 4, 2,6
+        };
+        uint32_t gamma_correct_timeout = 5000;
+        uint32_t gamma_incorrect_timeout = 2000;
+        gamma_puzzle.setButtonsPins(gamma_buttons, sizeof(gamma_buttons));
+        gamma_puzzle.setNeonsPins(gamma_neons, sizeof(gamma_neons));
+        gamma_puzzle.setCorrectOrder(gamma_correct_order, sizeof(gamma_correct_order));
+        gamma_puzzle.setCorrectAnimationTimeout(gamma_correct_timeout);
+        gamma_puzzle.setIncorrectAnimationTimeout(gamma_incorrect_timeout);
+        //HC595_Driver driver(uext_config,2);
 
-    /*******************************************************************************************************************
-     * BEGINING of HC595 dependent classes initialisation!
-     ******************************************************************************************************************/
+        /*******************************************************************************************************************
+         * BEGINING of HC595 dependent classes initialisation!
+         ******************************************************************************************************************/
 
-    HC595_cfg cfg{};
-    cfg.data_pin = uext_config.MOSI;
-    cfg.latch_pin = uext_config.SCLK;
-    cfg.clock_pin = uext_config.SSEL;
-    cfg.chip_amount =4;
-    HC595_Driver hc595_driver(cfg.data_pin, cfg.clock_pin, cfg.latch_pin, cfg.chip_amount);
-    Tron_Segment_Timer timer_1(mqttclient, "timer_1", 1, placement);
-    timer_1.setDriver(hc595_driver);
-    timer_1.setOverflowPeriod(60000);
-    timer_1.setStartingValue(60);
-    timer_1.setStoppingValue(0);
-    timer_1.setIncreasingOrder(false);
-    uint8_t timer_1_segments[]{
-            2, 3
-    };
-    uint8_t timer_1_segments_base[]{
-            DEC, DEC
-    };
-    timer_1.setSegments(timer_1_segments, sizeof(timer_1_segments));
-    timer_1.setSegmentsBase(timer_1_segments_base, sizeof(timer_1_segments_base));
-
-
-    Tron_Segment_Timer timer_2(mqttclient, "timer_2", 1, placement);
-    timer_2.setDriver(hc595_driver);
-    timer_2.setOverflowPeriod(60000);
-    timer_2.setStartingValue(60);
-    timer_2.setStoppingValue(0);
-    timer_2.setIncreasingOrder(false);
-    uint8_t timer_2_segments[]{
-            0, 1
-    };
-    uint8_t timer_2_segments_base[]{
-            DEC, DEC
-    };
-    timer_2.setSegments(timer_2_segments, sizeof(timer_2_segments));
-    timer_2.setSegmentsBase(timer_2_segments_base, sizeof(timer_2_segments_base));
-
-    /*******************************************************************************************************************
-     * ENDING of HC595 dependent classes initialisation!
-     ******************************************************************************************************************/
+        HC595_cfg cfg{};
+        cfg.data_pin = uext_config.MOSI;
+        cfg.latch_pin = uext_config.SCLK;
+        cfg.clock_pin = uext_config.SSEL;
+        cfg.chip_amount =4;
+        HC595_Driver hc595_driver(cfg.data_pin, cfg.clock_pin, cfg.latch_pin, cfg.chip_amount);
+        Tron_Segment_Timer timer_1(mqttclient, "timer_1", 1, placement);
+        timer_1.setDriver(hc595_driver);
+        timer_1.setOverflowPeriod(60000);
+        timer_1.setStartingValue(60);
+        timer_1.setStoppingValue(0);
+        timer_1.setIncreasingOrder(false);
+        uint8_t timer_1_segments[]{
+                2, 3
+        };
+        uint8_t timer_1_segments_base[]{
+                DEC, DEC
+        };
+        timer_1.setSegments(timer_1_segments, sizeof(timer_1_segments));
+        timer_1.setSegmentsBase(timer_1_segments_base, sizeof(timer_1_segments_base));
 
 
-    TronLegacyAdapter sonic_adapter;
-    sonic_adapter.setResetPin(7);
-    sonic_adapter.setManualPin(8);
-    sonic_adapter.setSolvedStatePin(7);
-    TronLegacyPuzzle sonic_range_finder(mqttclient, "sonic_range_finder",1,placement);
-    sonic_range_finder.setAdapter(sonic_adapter);
-    PlatonicBodies platonic_bodies(mqttclient,"platonic_bodies",1,placement);
-    platonic_bodies.setLaserPin(11);
-    platonic_bodies.setSensorPin(8);
-    platonic_bodies.setSensorSignalInverted(false);
+        Tron_Segment_Timer timer_2(mqttclient, "timer_2", 1, placement);
+        timer_2.setDriver(hc595_driver);
+        timer_2.setOverflowPeriod(60000);
+        timer_2.setStartingValue(60);
+        timer_2.setStoppingValue(0);
+        timer_2.setIncreasingOrder(false);
+        uint8_t timer_2_segments[]{
+                0, 1
+        };
+        uint8_t timer_2_segments_base[]{
+                DEC, DEC
+        };
+        timer_2.setSegments(timer_2_segments, sizeof(timer_2_segments));
+        timer_2.setSegmentsBase(timer_2_segments_base, sizeof(timer_2_segments_base));
+
+        /*******************************************************************************************************************
+         * ENDING of HC595 dependent classes initialisation!
+         ******************************************************************************************************************/
+
+
+        TronLegacyAdapter sonic_adapter;
+        sonic_adapter.setResetPin(7);
+        sonic_adapter.setManualPin(8);
+        sonic_adapter.setSolvedStatePin(7);
+        TronLegacyPuzzle sonic_range_finder(mqttclient, "sonic_range_finder",1,placement);
+        sonic_range_finder.setAdapter(sonic_adapter);
+        PlatonicBodies platonic_bodies(mqttclient,"platonic_bodies",1,placement);
+        platonic_bodies.setLaserPin(11);
+        platonic_bodies.setSensorPin(8);
+        platonic_bodies.setSensorSignalInverted(false);
+        TronCubeChest cube_chest_1(mqttclient,"cube_chest_1",1,placement);
+        cube_chest_1.setLedPin(13);
+        cube_chest_1.setMagnetPin(12);
+        Magnet alarm_1(mqttclient,"alarm_1",1,placement);
+        alarm_1.setPinNumber(14);
+        alarm_1.setInverted(false);
+
 #endif
 
 // board 3
@@ -312,34 +319,34 @@ void setup() {
 
 // board 4
 #if Uniboard == 4
-/*
- * laser barier
- */
+    /*
+     * laser barier
+     */
 
 #endif
 
 // board 5
 #if Uniboard == 5
-/*
- * pressing floor
- */
+    /*
+     * pressing floor
+     */
 
-Panel panels[] =  {
-        {.sensor_pin = 0, .led_pin = 1},
-        {.sensor_pin = 1, .led_pin = 2},
-        {.sensor_pin = 2, .led_pin = 3},
-        {.sensor_pin = 3, .led_pin = 4},
-        {.sensor_pin = 4, .led_pin = 5}
+    Panel panels[] =  {
+            {.sensor_pin = 0, .led_pin = 1},
+            {.sensor_pin = 1, .led_pin = 2},
+            {.sensor_pin = 2, .led_pin = 3},
+            {.sensor_pin = 3, .led_pin = 4},
+            {.sensor_pin = 4, .led_pin = 5}
 
-};
+    };
 
-FloorPuzzle floor_puzzle(mqttclient, "floor_puzzle", 1, placement);
-floor_puzzle.setPanels(panels, sizeof(panels)/sizeof(panels[0]),0);
-floor_puzzle.setPatternSize(2);
+    FloorPuzzle floor_puzzle(mqttclient, "floor_puzzle", 1, placement);
+    floor_puzzle.setPanels(panels, sizeof(panels)/sizeof(panels[0]),0);
+    floor_puzzle.setPatternSize(2);
 
-InfiniteMirror infiniteMirror(mqttclient, "infinite_mirror", 1, placement);
-int16_t mirror_cathodes[3]{12,13,14};
-    infiniteMirror.setLedCathodes(mirror_cathodes,sizeof(mirror_cathodes)/sizeof(mirror_cathodes[0]));
+    InfiniteMirror infiniteMirror(mqttclient, "infinite_mirror", 1, placement);
+    int16_t mirror_cathodes[3]{12,13,14};
+        infiniteMirror.setLedCathodes(mirror_cathodes,sizeof(mirror_cathodes)/sizeof(mirror_cathodes[0]));
 #endif
 #if Uniboard == 6
     //    StatusBarHC595 status_bar_1(mqttclient,"status_bar_1",1,placement);
@@ -361,53 +368,59 @@ int16_t mirror_cathodes[3]{12,13,14};
 #if Uniboard == 7
     DiskHolderArray disk_receiver_1(mqttclient,"disk_receiver_1",1,"tr22");
     HolderPins pins[6]{
-            {6,0,0,0},
-            {7,1,1,0},
-            {8,2,2,0},
-            {9,3,3,0},
-            {10,4,4,0},
-            {11,5,5,0}
+            {6,0,0,0,500,140,0},
+            {7,1,1,0,500,150,0},
+            {8,2,2,0,500,180,0},
+            {9,3,3,0,500,180,0},
+            {10,4, 4,0,100,150,0},
+            {11,5,5,0,100,140,0}
     };
     disk_receiver_1.setHolders(pins,6);
+    disk_receiver_1.setHoldertype(SEFL::RECEIVER);
 
 #endif
 #if Uniboard == 8
-    DiskHolderArray disk_dispencer_1(mqttclient,"disk_dispencer_1",1,"tr22");
+    DiskHolderArray disk_dispenser_1(mqttclient,"disk_dispenser_1",1,"tr22");
+
+ //   dispence_angle = 150;
+ //   receive_angle = 0;
     HolderPins pins[6]{
-            {6,0,0,0},
-            {7,1,1,0},
-            {8,2,2,0},
-            {9,3,3,0},
-            {10,4,4,0},
-            {11,5,5,0}
+            {6,0,0,0,950,140,0},
+            {7,1,1,0,950,150,0},
+            {8,2,2,0,980,180,0},
+            {9,3,3,0,950,180,0},
+            {10,4, 4,0,950,150,0},
+            {11,5,5,0,950,140,0}
     };
-    disk_dispencer_1.setHolders(pins,6);
-    disk_dispencer_1.setHoldertype(SEFL::DISPENCER);
+    disk_dispenser_1.setHolders(pins,6);
+    disk_dispenser_1.setHoldertype(SEFL::DISPENSER);
 #endif
 #if Uniboard == 9
-    DiskHolderArray disk_receiver_2(mqttclient,"disk_receiver_2",1,"tr22");
+    DiskHolderArray disk_receiver_2(mqttclient, "disk_receiver_2", 1, "tr22");
     HolderPins pins[6]{
-            {6,0,0,0},
-            {7,1,1,0},
-            {8,2,2,0},
-            {9,3,3,0},
-            {10,4,4,0},
-            {11,5,5,0}
+            {6,  0, 0, 0, 950, 140, 0},
+            {7,  1, 1, 0, 950, 150, 0},
+            {8,  2, 2, 0, 980, 180, 0},
+            {9,  3, 3, 0, 950, 180, 0},
+            {10, 4, 4, 0, 950, 150, 0},
+            {11, 5, 5, 0, 950, 140, 0}
     };
-    disk_receiver_2.setHolders(pins,6);
+    disk_receiver_2.setHoldertype(SEFL::RECEIVER);
+    disk_receiver_2.setHolders(pins, 6);
 
 #endif
 #if Uniboard == 10
-    DiskHolderArray disk_dispencer_2(mqttclient,"disk_dispencer_2",1,"tr22");
+    DiskHolderArray disk_dispenser_2(mqttclient,"disk_dispenser_2",1,"tr22");
     HolderPins pins[6]{
-            {6,0,0,0},
-            {7,1,1,0},
-            {8,2,2,0},
-            {9,3,3,0},
-            {10,4,4,0},
-            {11,5,5,0}
+            {6,0,0,0,950,140,0},
+            {7,1,1,0,950,150,0},
+            {8,2,2,0,980,180,0},
+            {9,3,3,0,950,180,0},
+            {10,4, 4,0,950,150,0},
+            {11,5,5,0,950,140,0}
     };
-    disk_dispencer_2 .setHolders(pins,6);
+    disk_dispenser_2.setHoldertype(SEFL::DISPENSER);
+    disk_dispenser_2 .setHolders(pins,6);
 #endif
 #if Uniboard == 11
     Quest_Tron_Target target_11(mqttclient,0,"target_11",1,placement);
@@ -471,7 +484,8 @@ int16_t mirror_cathodes[3]{12,13,14};
     b_manager.addClient(timer_2);
     b_manager.addClient(sonic_range_finder);
     b_manager.addClient(platonic_bodies);
-
+    b_manager.addClient(cube_chest_1);
+    b_manager.addClient(alarm_1);
 #endif
 
     // board 3
@@ -497,13 +511,13 @@ int16_t mirror_cathodes[3]{12,13,14};
     b_manager.addClient(disk_receiver_1);
 #endif
 #if Uniboard == 8
-    b_manager.addClient(disk_dispencer_1);
+    b_manager.addClient(disk_dispenser_1);
 #endif
 #if Uniboard == 9
     b_manager.addClient(disk_receiver_2);
 #endif
 #if Uniboard == 10
-    b_manager.addClient(disk_dispencer_2);
+    b_manager.addClient(disk_dispenser_2);
 #endif
 #if Uniboard == 11
     b_manager.addClient(target_11);
@@ -533,7 +547,7 @@ int16_t mirror_cathodes[3]{12,13,14};
 
     //	тут об'єкти пристроїв додаються до менеджера плати за прикладом вище
 
-
+    Logger::warning("main", "init went fine, starting the loop");
 
     while (true) {
         b_manager.loop();

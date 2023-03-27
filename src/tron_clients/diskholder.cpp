@@ -13,11 +13,9 @@ namespace SEFL {
             : Quest_Basic_Client(mqtt, name, resetStatus, placement, inTopic, outTopic, language) {
         holders_ = nullptr;
         holders_size_ = -1;
-        holdertype_ = DISPENCER;
+        holdertype_ = DISPENSER;
         holders_servos_ = nullptr;
         led_state_ = false;
-        dispence_angle = 150;
-        receive_angle = 0;
     }
 
     void DiskHolderArray::setHolders(HolderPins *holders, uint8_t size) {
@@ -32,6 +30,9 @@ namespace SEFL {
             holders_[i].sensor_pin = holders[i].sensor_pin;
             holders_[i].servo_pin = holders[i].servo_pin;
             holders_[i].attached_timestamp = holders[i].attached_timestamp;
+            holders_[i].sensor_trashhold=holders[i].sensor_trashhold;
+            holders_[i].dispence_angle = holders[i].dispence_angle;
+            holders_[i].receive_angle=holders[i].receive_angle;
         }
     }
 
@@ -39,15 +40,45 @@ namespace SEFL {
         if (index >= holders_size_)
             return false;
         pinMode(Mext.getCi(),INPUT);
-        bool pin_value = Mext.digitalRead(holders_[index].sensor_pin);
-        Logger::notice(this->name_, pin_value);
+        bool pin_value = Mext.analogRead(holders_[index].sensor_pin)>holders_[index].sensor_trashhold;
 
-        Pext.digitalWrite(holders_[index].led_pin, pin_value);
-//        if (led_state_) {
-//            Pext.digitalWrite(holders_[index].led_pin, pin_value);
-//        } else {
-//            Pext.digitalWrite(holders_[index].led_pin, HIGH);
-//        }
+        Logger::notice(this->name_, pin_value);
+       //Pext.digitalWrite(holders_[index].led_pin, pin_value);
+        if (led_state_) {
+            if(holdertype_ == DISPENSER) {
+                Pext.digitalWrite(holders_[index].led_pin, pin_value);
+            }else{
+                Pext.digitalWrite(holders_[index].led_pin, !pin_value);
+            }
+        }
+        else {
+            Pext.digitalWrite(holders_[index].led_pin, HIGH);
+        }
+        if(pin_value!=holders_[index].previous_pin_value){
+            holders_[index].previous_pin_value=pin_value;
+            if(!pin_value && holdertype_ == DISPENSER){
+                StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
+                repDoc["disk"]="dispensed";
+                repDoc["id"]=index;
+
+                String output;
+                serializeJson(repDoc,output);
+                data.push_back(output);
+                Quest_Basic_Client::reportStatus();
+                data.pop_back();
+            }else if(pin_value && holdertype_==RECEIVER){
+                StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
+                repDoc["disk"]="received";
+                repDoc["id"]=index;
+
+                String output;
+                serializeJson(repDoc,output);
+                data.push_back(output);
+                Quest_Basic_Client::reportStatus();
+                data.pop_back();
+            }
+
+        }
         return !pin_value;
     }
 
@@ -55,17 +86,8 @@ namespace SEFL {
         if (index >= holders_size_)
             return;
         holders_servos_[index].attach(holders_[index].servo_pin);
-        holders_servos_[index].write(dispence_angle);
+        holders_servos_[index].write(holders_[index].dispence_angle);
         holders_[index].attached_timestamp = millis();
-    }
-
-    void DiskHolderArray::dispence_disk() {
-        for (int i = 0; i < holders_size_; ++i) {
-            if (check_disk(i)) {
-                dispence_disk(i);
-                return;
-            }
-        }
     }
 
     void DiskHolderArray::set_led_state(bool led_state) {
@@ -100,6 +122,8 @@ namespace SEFL {
                 data.remove(0);
                 return;
             }
+            JsonVariant next=doc["next"];
+            if(next.isNull()){
             JsonArray holders = doc["holders"];
             for (auto &&holder: holders) {
                 if (holder[0] < holders_size_) {
@@ -109,14 +133,22 @@ namespace SEFL {
                         receive_disk(holder[0]);
                     }
                 }
+            }}
+            else{
+                process_next_disk();
             }
             data.remove(0);
         }
+
         int result = 0;
+        String debug_string;
         for (int holder = 0; holder < holders_size_; ++holder) {
             result += check_disk(holder) ? 1 : 0;
+            debug_string+= String( Mext.analogRead(holders_[holder].sensor_pin))+"  ";
         }
-        if ((holdertype_ == DISPENCER  && result == holders_size_) || (holdertype_ == RECEIVER && result == 0)) {
+       Logger::notice(this->getName(),debug_string);
+
+        if ((holdertype_ == DISPENSER && result == holders_size_) || (holdertype_ == RECEIVER && result == 0)) {
             Quest_Basic_Client::setStatus(FINISHED_STATUS);
         }
         detach_servos(2000);
@@ -137,7 +169,7 @@ namespace SEFL {
         if (isChangedStatus()) {
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
-            set_led_state(false);
+            set_led_state(true);
 
             for (int holder = 0; holder < holders_size_; ++holder) {
                 check_disk(holder);
@@ -155,8 +187,21 @@ namespace SEFL {
         if (index >= holders_size_)
             return;
         holders_servos_[index].attach(holders_[index].servo_pin);
-        holders_servos_[index].write(receive_angle);
+        holders_servos_[index].write(holders_[index].receive_angle);
         holders_[index].attached_timestamp = millis();
+    }
+    void  DiskHolderArray::process_next_disk(){
+        for (int i = 0; i < holders_size_; ++i) {
+            if (!check_disk(i) && holdertype_ == DISPENSER  ) {
+                Logger::notice(this->getName(),"dispensing next");
+                dispence_disk(i);
+                return;
+            }else if(check_disk(i) && holdertype_==RECEIVER){
+                Logger::notice(this->getName(),"receiving next");
+                receive_disk(i);
+                return;
+            }
+        }
     }
 
     DiskHolderArrayType DiskHolderArray::getHoldertype() const {

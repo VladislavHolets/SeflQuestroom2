@@ -10,14 +10,14 @@ namespace SEFL {
             mqtt, name, resetStatus, placement, inTopic, outTopic, language) {
         led_pin=-1;
         magnet_pin=-1;
-
+        inverted_=false;
 
     }
 
     void TronCubeChest::onOn() {
         if(isChangedStatus()){
-            Pext.digitalWrite(led_pin,LOW);
-            Pext.digitalWrite(magnet_pin,HIGH);
+            Pext.digitalWrite(led_pin,LOW!=inverted_);
+            Pext.digitalWrite(magnet_pin,HIGH!=inverted_);
 
             unsetChangedStatus();
             Quest_Actuator_Client::reportStatus();
@@ -26,8 +26,8 @@ namespace SEFL {
 
     void TronCubeChest::onOff() {
         if(isChangedStatus()){
-            Pext.digitalWrite(led_pin,HIGH);
-            Pext.digitalWrite(magnet_pin,LOW);
+            Pext.digitalWrite(led_pin,HIGH!=inverted_);
+            Pext.digitalWrite(magnet_pin,LOW!=inverted_);
             unsetChangedStatus();
             Quest_Actuator_Client::reportStatus();
         }
@@ -40,5 +40,9 @@ namespace SEFL {
 
     void TronCubeChest::setLedPin(int16_t ledPin) {
         led_pin = ledPin;
+    }
+
+    void TronCubeChest::setInverted(bool inverted) {
+        inverted_ = inverted;
     }
 } // SEFL

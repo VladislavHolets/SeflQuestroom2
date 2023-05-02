@@ -14,5 +14,5 @@
 #include "tron_clients/tronclients.h"
 #include "common_clients/common_clients.h"
 #define TRON_ROOM
-#define Uniboard (4)
+#define Uniboard (18)
 using namespace SEFL;

@@ -79,9 +79,7 @@ namespace SEFL {
             puzzle_status=INITIAL;
             refresh_outputs();
 
-            //magnet 3 , light 2
-            Pext.digitalWrite(locker_light_pin, HIGH);
-            Pext.digitalWrite(locker_magnet_pin, LOW);
+
 
         }
     }
@@ -92,9 +90,7 @@ namespace SEFL {
             reportStatus();
             refresh_outputs();
 
-            //magnet 3 , light 2
-            Pext.digitalWrite(locker_light_pin, LOW);
-            Pext.digitalWrite(locker_magnet_pin, HIGH);
+
         }
 
     }
@@ -106,10 +102,7 @@ namespace SEFL {
             puzzle_status = SOLVING;
             animation_timestamp=millis();
         }
-        if(puzzle_status==SOLVED) {
-            Pext.digitalWrite(locker_light_pin, LOW);
-            Pext.digitalWrite(locker_magnet_pin, HIGH);
-        }
+
         refresh_outputs();
     }
 

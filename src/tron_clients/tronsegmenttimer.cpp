@@ -5,7 +5,7 @@
  *      Author: vladi
  */
 
-#include "segmenttimer.h"
+#include "tronsegmenttimer.h"
 
 namespace SEFL
 {
@@ -23,6 +23,8 @@ namespace SEFL
     start_timestamp = -1;
     segments_size_=-1;
     overflow_period_=1000;
+    increasing_order=false;
+
 		// TODO Auto-generated constructor stub
 	}
 
@@ -47,6 +49,7 @@ namespace SEFL
         segments_=new uint8_t [size];
         segments_base_=new uint8_t [size];
         segments_value_=new uint8_t [size];
+
         for (int i = 0; i < segments_size_; ++i) {
             segments_[i]=segments[i];
             segments_value_[i]=0;
@@ -90,7 +93,7 @@ namespace SEFL
             this->setStatus(ActuatorClientStatuses::OFF_STATUS);
         }
         if(calculated_value!=temp){
-            calculated_value=temp;
+            calculated_value=temp+offset_minutes_*((increasing_order)?-1:1);
         }else{
             return false;
         }
@@ -117,6 +120,35 @@ namespace SEFL
         }
         if(calculate_values()){
         refresh_timer();
+        }
+        if (!data.empty()) {
+            StaticJsonDocument<SEFL::DOC_SIZE> doc;
+
+            DeserializationError error = deserializeJson(doc, data.front());
+            if (error) {
+                Logger::notice(F("deserializeJson() failed: "));
+                Logger::notice(error.f_str());
+                return;
+            }
+
+            if (doc.containsKey("starting_value"))
+                starting_value= doc["starting_value"].as<int16_t>();
+            if (doc.containsKey("stopping_value"))
+                stopping_value= doc["stopping_value"].as<int16_t>();
+            if (doc.containsKey("increasing_order"))
+                increasing_order= doc[""].as<bool>();
+            if (doc["overflow_period"]!= 0)
+                overflow_period_= doc["overflow_period"].as<uint32_t>();
+            if (doc["segments_base"]!= 0)
+                for (int i = 0; i < segments_size_; ++i) {
+                    segments_base_[i]= doc["segments_base"].as<uint8_t>();
+                }
+            if (doc.containsKey("offset_minutes"))
+                offset_minutes_= doc["offset_minutes"].as<int32_t>();
+            if (doc.containsKey("add_offset_minutes"))
+                offset_minutes_+= doc["add_offset_minutes"].as<int32_t>();
+
+            data.remove(0);
         }
     }
 

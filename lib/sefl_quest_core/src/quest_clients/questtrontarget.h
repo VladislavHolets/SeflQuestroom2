@@ -26,6 +26,7 @@ namespace SEFL
         int16_t led_pins_size;
         void displayHealth();
         int16_t max_health;
+        uint8_t targets_amount;
 	public:
         void setMaxHealth(int16_t maxHealth);
 

@@ -197,17 +197,42 @@ namespace SEFL
 		}
 		while (!this->data.empty())
 		{
-			if (this->data.front().toInt())
-			{
-				health += this->data.front().toInt();
-				this->data.remove(0);
-			}
+
+            StaticJsonDocument<SEFL::DOC_SIZE> doc;
+
+            DeserializationError error = deserializeJson(doc, data.front());
+            if (error) {
+                Logger::notice(F("deserializeJson() failed: "));
+                Logger::notice(error.f_str());
+                return;
+            }
+            if(doc.containsKey("max_health"))
+                setMaxHealth( doc["max_health"].as<int16_t>());
+            if (doc.containsKey("health"))
+                health= doc["health"].as<int16_t>();
+            if (doc.containsKey("add_health"))
+                health += doc["add_health"].as<int16_t>();
+            if (doc.containsKey("targets_amount"))
+                targets_amount= doc["targets_amount"].as<uint8_t>();
+            data.remove(0);
+//			if (this->data.front().toInt())
+//			{
+//				health += this->data.front().toInt();
+//				this->data.remove(0);
+//			}
 
             displayHealth();
 		}
 		if (health <= 0)
 		{
             health=0;
+            targets_amount--;
+            StaticJsonDocument<SEFL::DOC_SIZE> report_doc;
+            report_doc["targets_left"]=targets_amount;
+            String report;
+            serializeJson(report_doc,report);
+            data.clear();
+            data.push_back(report);
 			this->setStatus(SEFL::TronTargetClientStatuses::DEAD_STATUS);
 		}
         if(health>=max_health){
@@ -215,7 +240,7 @@ namespace SEFL
         }
 		if (IrReceiver.decode())
 		{
-			health = health - 1;
+			health--;
 			IrReceiver.resume();
             displayHealth();
 		}

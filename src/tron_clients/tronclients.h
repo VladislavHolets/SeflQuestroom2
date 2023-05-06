@@ -10,7 +10,7 @@
 #include "ledmatrixpuzzleneopixelkeyboard.h"
 #include "rampuzzle.h"
 #include "gammapuzzle.h"
-#include "segmenttimer.h"
+#include "tronsegmenttimer.h"
 #include "statusbar.h"
 #include "statusbarhc595.h"
 #include "generator.h"

@@ -8,7 +8,7 @@
 #ifndef TRONSEGMENTTIMER_H_
 #define TRONSEGMENTTIMER_H_
 #include "sefl_quest_core.h"
-
+#include "ArduinoJson.h"
 #include <sys/_stdint.h>
 
 namespace SEFL
@@ -55,7 +55,7 @@ namespace SEFL
        int64_t start_timestamp;
        bool increasing_order;
        int16_t starting_value,stopping_value;
-
+       int32_t offset_minutes_;
        void refresh_timer();
        bool calculate_values();
        void start_timer();

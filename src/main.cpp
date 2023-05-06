@@ -272,12 +272,12 @@ void setup() {
         platonic_bodies.setLaserPin(11);
         platonic_bodies.setSensorPin(8);
         platonic_bodies.setSensorSignalInverted(false);
-        TronCubeChest cube_chest_1(mqttclient,"Cube chest 2",1,placement);
-        cube_chest_1.setLedPin(13);
-        cube_chest_1.setMagnetPin(12);
-        Magnet alarm_1(mqttclient,"Alarm 2",1,placement);
-        alarm_1.setPinNumber(14);
-        alarm_1.setInverted(false);
+        TronCubeChest cube_chest_2(mqttclient,"Cube chest 2",1,placement);
+        cube_chest_2.setLedPin(13);
+        cube_chest_2.setMagnetPin(12);
+        Magnet alarm_2(mqttclient,"Alarm 2",1,placement);
+        alarm_2.setPinNumber(14);
+        alarm_2.setInverted(false);
 
 #endif
 
@@ -309,7 +309,7 @@ void setup() {
 
     //Mext white, Pext green
 
-    ANDPuzzle and_puzzle(mqttclient,"AND",1,"tr22");
+    ANDPuzzle and_puzzle(mqttclient,"AND",1,placement);
     TronLegacyAdapter tronLegacyAdapter;
     tronLegacyAdapter.setResetPin(6);
     tronLegacyAdapter.setManualPin(7);
@@ -448,42 +448,42 @@ void setup() {
 #endif
 #if Uniboard == 11
     Quest_Tron_Target target_11(mqttclient,0,"Target 11",1,placement);
-    uint8_t target_11_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    uint8_t target_11_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_11.setLedPins(target_11_led_pins, sizeof(target_11_led_pins));
 #endif
 #if Uniboard == 12
     Quest_Tron_Target target_12(mqttclient,0,"Target 12",1,placement);
-    uint8_t target_12_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    uint8_t target_12_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_12.setLedPins(target_12_led_pins, sizeof(target_12_led_pins));
 #endif
 #if Uniboard == 13
     Quest_Tron_Target target_13(mqttclient,0,"Target 13",1,placement);
-    uint8_t target_13_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    uint8_t target_13_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_13.setLedPins(target_13_led_pins, sizeof(target_13_led_pins));
 #endif
 #if Uniboard == 14
     Quest_Tron_Target target_14(mqttclient,0,"Target 14",1,placement);
-    uint8_t target_14_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    uint8_t target_14_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_14.setLedPins(target_14_led_pins, sizeof(target_14_led_pins));
 #endif
 #if Uniboard == 15
     Quest_Tron_Target target_21(mqttclient,0,"Target 21",1,placement);
-    uint8_t target_21_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    uint8_t target_21_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_21.setLedPins(target_21_led_pins, sizeof(target_21_led_pins));
 #endif
 #if Uniboard == 16
     Quest_Tron_Target target_22(mqttclient,0,"Target 22",1,placement);
-    uint8_t target_22_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    uint8_t target_22_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_22.setLedPins(target_22_led_pins, sizeof(target_22_led_pins));
 #endif
 #if Uniboard == 17
     Quest_Tron_Target target_23(mqttclient,0,"Target 23",1,placement);
-    uint8_t target_23_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    uint8_t target_23_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_23.setLedPins(target_23_led_pins, sizeof(target_23_led_pins));
 #endif
 #if Uniboard == 18
     Quest_Tron_Target target_24(mqttclient,0,"Target 24",1,placement);
-    uint8_t target_24_led_pins[]{0,1,2,3,4,5,6,7,8,9,10};
+    uint8_t target_24_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_24.setLedPins(target_24_led_pins, sizeof(target_24_led_pins));
 #endif
 
@@ -515,12 +515,16 @@ void setup() {
     // board 3
 #if Uniboard == 3
     b_manager.addClient(generator_puzzle);
+    b_manager.addClient(generator_locker);
     b_manager.addClient(and_puzzle);
 #endif
 
     // board 4
 #if Uniboard == 4
     b_manager.addClient(laser_barrier);
+    b_manager.addClient(status_bar_1);
+    b_manager.addClient(status_bar_2);
+
 #endif
 
     // board 5

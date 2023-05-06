@@ -24,6 +24,7 @@ namespace SEFL {
         HolderPins *holders_;
         int16_t holders_size_;
         PextServo *holders_servos_;
+        uint8_t holder_order_id;
         bool led_state_;
         bool check_disk(uint8_t index);
         void dispence_disk(uint8_t index);

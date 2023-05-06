@@ -16,6 +16,7 @@ namespace SEFL {
         holdertype_ = DISPENSER;
         holders_servos_ = nullptr;
         led_state_ = false;
+        holder_order_id=0;
     }
 
     void DiskHolderArray::setHolders(HolderPins *holders, uint8_t size) {
@@ -33,6 +34,7 @@ namespace SEFL {
             holders_[i].sensor_trashhold=holders[i].sensor_trashhold;
             holders_[i].dispence_angle = holders[i].dispence_angle;
             holders_[i].receive_angle=holders[i].receive_angle;
+            holders_[i].previous_pin_value= (holdertype_ == DISPENSER);
         }
     }
 
@@ -58,7 +60,7 @@ namespace SEFL {
             holders_[index].previous_pin_value=pin_value;
             if(!pin_value && holdertype_ == DISPENSER){
                 StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
-                repDoc["disk"]="dispensed";
+                repDoc["action"]="dispensed_disk";
                 repDoc["id"]=index;
 
                 String output;
@@ -68,9 +70,9 @@ namespace SEFL {
                 data.pop_back();
             }else if(pin_value && holdertype_==RECEIVER){
                 StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
-                repDoc["disk"]="received";
-                repDoc["id"]=index;
-
+                repDoc["action"]="received_disk";
+                repDoc["id"]=holder_order_id;
+                holder_order_id++;
                 String output;
                 serializeJson(repDoc,output);
                 data.push_back(output);
@@ -109,6 +111,7 @@ namespace SEFL {
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
             set_led_state(true);
+            holder_order_id=0;
         }
         if (!data.empty()) {
             Logger::notice(data[0]);

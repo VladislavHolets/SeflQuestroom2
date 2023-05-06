@@ -1,10 +1,10 @@
 //
 // Created by vladi on 22.10.2022.
 //
-
 #ifndef SEFLQUESTROOM2_TRONCLIENTS_H
 #define SEFLQUESTROOM2_TRONCLIENTS_H
 
+#if defined(ARDUINO_ARCH_STM32)
 #include "ledmatrixpuzzle.h"
 #include "ledmatrixpuzzleneopixel.h"
 #include "ledmatrixpuzzleneopixelkeyboard.h"
@@ -23,4 +23,8 @@
 #include "laserbarier.h"
 #include "troncubechest.h"
 //#include ""
+#endif
+#if defined(ARDUINO_ARCH_ESP32)
+#include "blasterclient.h"
+#endif
 #endif //SEFLQUESTROOM2_TRONCLIENTS_H

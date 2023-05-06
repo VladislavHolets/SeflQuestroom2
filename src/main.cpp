@@ -359,8 +359,14 @@ void setup() {
             7, 6, 5, 4, 3, 2
     };
     status_bar_2.setStatusLampsPins(status_bar_2_led_pins, sizeof(status_bar_2_led_pins));
-
-
+    Quest_Battle_Manager_Client battleManagerClient(mqttclient,"Battle manager",1,placement);
+    TronCubeChest door_to_arcade_table(mqttclient,"Door to arcade table",1,placement);
+    door_to_arcade_table.setMagnetPin(12);
+    door_to_arcade_table.setLedPin(13);
+    door_to_arcade_table.setInverted(false);
+    Magnet alarm_1(mqttclient,"Alarm 1",1,placement);
+    alarm_1.setPinNumber(7);
+    alarm_1.setInverted(true);
 #endif
 
 // board 5
@@ -375,7 +381,6 @@ void setup() {
             {.sensor_pin = 2, .led_pin = 3},
             {.sensor_pin = 3, .led_pin = 4},
             {.sensor_pin = 4, .led_pin = 5}
-
     };
 
     FloorPuzzle floor_puzzle(mqttclient, "Interactive floor", 1, placement);
@@ -385,6 +390,14 @@ void setup() {
     InfiniteMirror infiniteMirror(mqttclient, "Infinite mirror", 1, placement);
     int16_t mirror_cathodes[3]{12,13,14};
         infiniteMirror.setLedCathodes(mirror_cathodes,sizeof(mirror_cathodes)/sizeof(mirror_cathodes[0]));
+    TronCubeChest door_to_floor_puzzle(mqttclient,"Door to interactive floor",1,placement);
+    door_to_floor_puzzle.setMagnetPin(6);
+    door_to_floor_puzzle.setLedPin(7);
+    door_to_floor_puzzle.setInverted(true);
+    TronCubeChest cube_chest_1(mqttclient,"Cube chest 1",1,placement);
+    cube_chest_1.setLedPin(9);
+    cube_chest_1.setMagnetPin(10);
+    cube_chest_1.setInverted(false);
 #endif
 #if Uniboard == 6
 
@@ -524,13 +537,17 @@ void setup() {
     b_manager.addClient(laser_barrier);
     b_manager.addClient(status_bar_1);
     b_manager.addClient(status_bar_2);
-
+    b_manager.addClient(door_to_arcade_table);
+    b_manager.addClient(battleManagerClient);
+    b_manager.addClient(alarm_1);
 #endif
 
     // board 5
 #if Uniboard == 5
     b_manager.addClient(floor_puzzle);
     b_manager.addClient(infiniteMirror);
+    b_manager.addClient(door_to_floor_puzzle);
+    b_manager.addClient(cube_chest_1);
 #endif
 #if Uniboard == 6
 

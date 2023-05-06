@@ -19,3 +19,4 @@
 #include "quest_clients/queststartbutton.h"
 #include "quest_clients/questtimerclient.h"
 #include "quest_clients/questtrontarget.h"
+#include "quest_clients/questbattlemanagerclient.h"

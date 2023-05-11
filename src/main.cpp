@@ -186,6 +186,7 @@ void setup() {
   chips_adapter.setResetTimeout(3000);
   chips_puzzle.setAdapter(chips_adapter);
 #endif
+
 // board 2
 #if Uniboard == 2
     /*
@@ -278,7 +279,6 @@ void setup() {
         Magnet alarm_2(mqttclient,"Alarm 2",1,placement);
         alarm_2.setPinNumber(14);
         alarm_2.setInverted(false);
-
 #endif
 
 // board 3
@@ -303,8 +303,8 @@ void setup() {
     generator_puzzle.setMotorsEnablePin(4);
     generator_puzzle.setGeneratorMotorsPin(motor_pins, sizeof(motor_pins)/sizeof(motor_pins[0]));
     TronCubeChest generator_locker(mqttclient,"Generator locker",1,placement);
-    generator_locker.setMagnetPin(3);
-    generator_locker.setLedPin(2);
+    generator_locker.setMagnetPin(2);
+    generator_locker.setLedPin(3);
     generator_locker.setInverted(true);
 
     //Mext white, Pext green
@@ -321,9 +321,9 @@ void setup() {
 
 // board 4
 #if Uniboard == 4
-/*
- * laser barrier
- */
+    /*
+    * laser barrier
+    */
     uint8_t order[] = {5, 1, 4, 2, 0, 3};
     uint8_t sensors[] = {0, 1, 2, 3, 4, 5};
     uint8_t segments[] = {0, 1, 2, 3, 4, 5};
@@ -348,7 +348,7 @@ void setup() {
     status_bar_1.setDriver(hc595_driver);
     status_bar_1.setStatusLampsChip(0);
     const uint8_t status_bar_1_led_pins[] = {
-            7, 6, 5, 4, 3, 2
+            7, 6, 5, 4, 3, 0
     };
     status_bar_1.setStatusLampsPins(status_bar_1_led_pins, sizeof(status_bar_1_led_pins));
 
@@ -356,17 +356,31 @@ void setup() {
     status_bar_2.setDriver(hc595_driver);
     status_bar_2.setStatusLampsChip(1);
     const uint8_t status_bar_2_led_pins[] = {
-            7, 6, 5, 4, 3, 2
+            7, 1, 5, 4, 3, 2
     };
     status_bar_2.setStatusLampsPins(status_bar_2_led_pins, sizeof(status_bar_2_led_pins));
     Quest_Battle_Manager_Client battleManagerClient(mqttclient,"Battle manager",1,placement);
-    TronCubeChest door_to_arcade_table(mqttclient,"Door to arcade table",1,placement);
-    door_to_arcade_table.setMagnetPin(12);
-    door_to_arcade_table.setLedPin(13);
-    door_to_arcade_table.setInverted(false);
+//    TronCubeChest door_to_arcade_table(mqttclient,"Door to arcade table",1,placement);
+//    door_to_arcade_table.setMagnetPin(12);
+//    door_to_arcade_table.setLedPin(13);
+//    door_to_arcade_table.setInverted(false);
     Magnet alarm_1(mqttclient,"Alarm 1",1,placement);
     alarm_1.setPinNumber(7);
     alarm_1.setInverted(true);
+//    StatusBarHC595 body_scanner_1(mqttclient,"Body scanner 1",2,placement);
+//    const uint8_t body_scanner_1_pins[]={2, 1};
+//    body_scanner_1.setDriver(hc595_driver);
+//    body_scanner_1.setStatusLampsChip(0);
+//    body_scanner_1.setStatusLampsPins(body_scanner_1_pins, sizeof(body_scanner_1_pins));
+    Magnet body_scanner_1(mqttclient,"Body scanner 1",1,placement);
+    body_scanner_1.setPinNumber(8);
+    body_scanner_1.setInverted(true);
+
+    StatusBarHC595 body_scanner_2(mqttclient,"Body scanner 2",1,placement);
+    const uint8_t body_scanner_2_pins[]={0};
+    body_scanner_2.setDriver(hc595_driver);
+    body_scanner_2.setStatusLampsChip(1);
+    body_scanner_2.setStatusLampsPins(body_scanner_2_pins, sizeof(body_scanner_2_pins));
 #endif
 
 // board 5
@@ -398,10 +412,13 @@ void setup() {
     cube_chest_1.setLedPin(9);
     cube_chest_1.setMagnetPin(10);
     cube_chest_1.setInverted(false);
+
 #endif
+
 #if Uniboard == 6
 
 #endif
+
 #if Uniboard == 7
     DiskHolderArray disk_receiver_2(mqttclient,"Disk receiver 2",1,"tr22");
     HolderPins pins[6]{
@@ -432,8 +449,9 @@ void setup() {
     disk_dispenser_2.setHolders(pins,6);
     disk_dispenser_2.setHoldertype(SEFL::DISPENSER);
 #endif
+
 #if Uniboard == 9
-    DiskHolderArray disk_receiver_1(mqttclient, "Disk receiver 1", 1, "tr22");
+    DiskHolderArray disk_receiver_1(mqttclient, "Disk receiver 1", 1, placement);
     HolderPins pins[6]{
             {6,  0, 0, 0, 950, 140, 0},
             {7,  1, 1, 0, 950, 150, 0},
@@ -444,8 +462,15 @@ void setup() {
     };
     disk_receiver_1.setHoldertype(SEFL::RECEIVER);
     disk_receiver_1.setHolders(pins, 6);
+    Magnet pacman_button_light(mqttclient,"Pacman red button light", 1,placement);
+    pacman_button_light.setPinNumber(12);
+    pacman_button_light.setInverted(false);
+    Magnet pacman_pc_controls_light(mqttclient,"Pacman pc controls light", 1,placement);
+    pacman_pc_controls_light.setPinNumber(13);
+    pacman_pc_controls_light.setInverted(false);
 
 #endif
+
 #if Uniboard == 10
     DiskHolderArray disk_dispenser_1(mqttclient,"Disk dispenser 1",1,"tr22");
     HolderPins pins[6]{
@@ -459,41 +484,49 @@ void setup() {
     disk_dispenser_1.setHoldertype(SEFL::DISPENSER);
     disk_dispenser_1.setHolders(pins,6);
 #endif
+
 #if Uniboard == 11
     Quest_Tron_Target target_11(mqttclient,0,"Target 11",1,placement);
     uint8_t target_11_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_11.setLedPins(target_11_led_pins, sizeof(target_11_led_pins));
 #endif
+
 #if Uniboard == 12
     Quest_Tron_Target target_12(mqttclient,0,"Target 12",1,placement);
     uint8_t target_12_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_12.setLedPins(target_12_led_pins, sizeof(target_12_led_pins));
 #endif
+
 #if Uniboard == 13
     Quest_Tron_Target target_13(mqttclient,0,"Target 13",1,placement);
     uint8_t target_13_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_13.setLedPins(target_13_led_pins, sizeof(target_13_led_pins));
 #endif
+
 #if Uniboard == 14
     Quest_Tron_Target target_14(mqttclient,0,"Target 14",1,placement);
     uint8_t target_14_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_14.setLedPins(target_14_led_pins, sizeof(target_14_led_pins));
 #endif
+
 #if Uniboard == 15
     Quest_Tron_Target target_21(mqttclient,0,"Target 21",1,placement);
     uint8_t target_21_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_21.setLedPins(target_21_led_pins, sizeof(target_21_led_pins));
 #endif
+
 #if Uniboard == 16
     Quest_Tron_Target target_22(mqttclient,0,"Target 22",1,placement);
     uint8_t target_22_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_22.setLedPins(target_22_led_pins, sizeof(target_22_led_pins));
 #endif
+
 #if Uniboard == 17
     Quest_Tron_Target target_23(mqttclient,0,"Target 23",1,placement);
     uint8_t target_23_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
     target_23.setLedPins(target_23_led_pins, sizeof(target_23_led_pins));
 #endif
+
 #if Uniboard == 18
     Quest_Tron_Target target_24(mqttclient,0,"Target 24",1,placement);
     uint8_t target_24_led_pins[]{10,0,1,2,3,4,5,6,7,8,9};
@@ -537,9 +570,11 @@ void setup() {
     b_manager.addClient(laser_barrier);
     b_manager.addClient(status_bar_1);
     b_manager.addClient(status_bar_2);
-    b_manager.addClient(door_to_arcade_table);
+    //b_manager.addClient(door_to_arcade_table);
     b_manager.addClient(battleManagerClient);
     b_manager.addClient(alarm_1);
+    b_manager.addClient(body_scanner_1);
+   b_manager.addClient(body_scanner_2);
 #endif
 
     // board 5
@@ -560,6 +595,8 @@ void setup() {
 #endif
 #if Uniboard == 9
     b_manager.addClient(disk_receiver_1);
+    b_manager.addClient(pacman_button_light);
+    b_manager.addClient(pacman_pc_controls_light);
 #endif
 #if Uniboard == 10
     b_manager.addClient(disk_dispenser_1);

@@ -102,12 +102,12 @@ namespace SEFL {
 
     void StatusBarHC595::refreshLeds() {
         String debug_string="Setting "+String(status_lamps_size)+" bits:\n";
-        driver_->setDataByte(status_lamps_chip,0);
+        //driver_->setDataByte(status_lamps_chip,0);
         for (int i = 0; i < status_lamps_size; ++i) {
             debug_string+=String(status_lamps_pins[i] + status_lamps_chip * 8)+" is " + status_lamps_states[i] +"\n";
-
-            driver_->setDataItem(status_lamps_pins[i] + status_lamps_chip * 8, status_lamps_states[i]);
-
+            //if(status_lamps_states[i]) {
+                driver_->setDataItem(status_lamps_pins[i] + status_lamps_chip * 8, status_lamps_states[i]);
+           // }
         }
         debug_string+="resulting in: \n";
         driver_->sendData();

@@ -24,6 +24,9 @@ namespace SEFL
     segments_size_=-1;
     overflow_period_=1000;
     increasing_order=false;
+    offset_minutes_=0;
+    starting_value=0;
+    stopping_value=0;
 
 		// TODO Auto-generated constructor stub
 	}

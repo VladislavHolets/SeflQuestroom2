@@ -70,6 +70,7 @@ namespace SEFL
 		MEDIA_PLAYER = 6,
 		SERVER = 7,
 		HOST = 8,
+        TRON_BLASTER=12,
 		TRON_TARGET = 13,
 	};
 	static const char *const CLIENT_STRINGS[] MEM_TYPE = {

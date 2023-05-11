@@ -7,11 +7,20 @@
 
 #ifndef SEFL_VARIANTS_BLACKPILL_VARIANT_HPP_
 #define SEFL_VARIANTS_BLACKPILL_VARIANT_HPP_
-
+#if defined(ARDUINO_ARCH_STM32)
 #include <sys/_stdint.h>
+#include <SoftwareSerial.h>
+#include <Ethernet.h>
+#include <EthernetClient.h>
+#include <PCA9685.h>
+#include <PinNames.h>
+#include <variant.h>
 #include <wiring_constants.h>
+#include <wiring_digital.h>
+#include <wiring_time.h>
 #include <Wire.h>
 #define MEM_TYPE PROGMEM
+
 namespace SEFL {
 const uint16_t HC595_BUFFER_SIZE=10;
 struct PEXT_Config {
@@ -41,5 +50,10 @@ struct UEXT_Config {
 };
 static const UEXT_Config uext_config = { PA_2, PA_3, PB_6, PB_7, PA_6, PA_7,
 		PA_5, PB_2 };
+
+    // bool variant_init();
+
 }
+
+#endif
 #endif /* SEFL_VARIANTS_BLACKPILL_VARIANT_HPP_ */

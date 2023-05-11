@@ -17,7 +17,8 @@ namespace SEFL
 																	out_topic, language)
 	{
 		pin_number = 0;
-		inverted = 0;
+		inverted = false;
+        //changed_status_=true;
 	}
 
 	Magnet::~Magnet()

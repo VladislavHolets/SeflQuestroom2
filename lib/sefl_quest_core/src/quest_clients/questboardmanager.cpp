@@ -85,6 +85,23 @@ namespace SEFL
 		}
 		String output;
 		serializeJson(repDoc, output);
+
+        //IMPORTANT: a fix to overcome server overflow when it requests configs from devices
+        // creates a random delay no more than 2 seconds to reply for a config
+        randomSeed(millis());
+        auto timestamp=random(2000)+millis();
+       while(millis()>timestamp){
+           if (this->power_status_ && !this->shutdown_timestamp)
+           {
+
+               IWatchdog.reload();
+               Logger::notice(this->name_, "clients acting");
+               clientsAct();
+               Logger::notice(this->name_, "clients acting done");
+           }
+       }
+        //end of fix
+
 		publish(output);
 	}
 
@@ -112,9 +129,9 @@ namespace SEFL
 		{
 			connect();
 		}
-		static uint32_t timestamp_for_message_avaiting = 0;
-		timestamp_for_message_avaiting = millis();
-		while (millis() - timestamp_for_message_avaiting < message_awaiting_interval)
+		static uint32_t timestamp_for_message_awaiting = 0;
+        timestamp_for_message_awaiting = millis();
+		while (millis() - timestamp_for_message_awaiting < message_awaiting_interval)
 		{
 			this->getMqtt()->loop();
 			if (!this->getMqtt()->connected())
@@ -135,48 +152,57 @@ namespace SEFL
 
 		if (this->power_status_ && this->shutdown_timestamp)
 		{
-
-			Logger::notice(this->name_, "clients initial stuff");
-			for (auto & client : this->clients_)
-			{
-				if (client != nullptr)
-				{
-					client->setChangedStatus(true);
-				}
-			}
-			this->shutdown_timestamp = 0;
+			Logger::notice(this->name_, "clients init");
+            clientsInit();
+            this->shutdown_timestamp = 0;
 		}
 
 		if (this->power_status_ && !this->shutdown_timestamp)
 		{
 
-			Logger::notice(this->name_, "clients stuff");
-			for (auto & client : this->clients_)
-			{
-				if (client != nullptr)
-				{
-					client->act();
-				}
-			}
-			Logger::notice(this->name_, "clients done");
+			Logger::notice(this->name_, "clients acting");
+            clientsAct();
+            Logger::notice(this->name_, "clients acting done");
 		}
 		if (this->host_.reset_trigger_)
-		{
-			this->host_.reset_trigger_ = false;
-			for (auto & client : this->clients_)
-			{
-				if (client != nullptr)
-				{
-					client->setStatus(client->reset_status_);
-					client->cleanData();
-				}
-			}
-		}
+            resetClients();
 
-		message_awaiting_interval=(millis()-timestamp_beginning_of_loop)/2;
+        message_awaiting_interval=(millis()-timestamp_beginning_of_loop)/2;
         message_awaiting_interval=(message_awaiting_interval<100)?100:message_awaiting_interval;
-		Logger::verbose(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
+		Logger::notice(this->getName(),String("calculated message interval: ")+String(message_awaiting_interval));
 	}
+
+    void Quest_Board_Manager::clientsInit() {
+        for (auto & client : clients_)
+        {
+            if (client != nullptr)
+            {
+                client->setChangedStatus(true);
+            }
+        }
+    }
+
+    void Quest_Board_Manager::clientsAct() {
+        for (auto & client : clients_)
+        {
+            if (client != nullptr)
+            {
+                client->act();
+            }
+        }
+    }
+
+    void Quest_Board_Manager::resetClients() {
+        host_.reset_trigger_ = false;
+        for (auto & client : clients_)
+        {
+            if (client != nullptr)
+            {
+                client->setStatus(client->reset_status_);
+                client->cleanData();
+            }
+        }
+    }
 
     bool Quest_Board_Manager::addClient(SEFL::Quest_Client *client)
     {

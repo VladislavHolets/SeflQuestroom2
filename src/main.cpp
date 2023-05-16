@@ -381,6 +381,14 @@ void setup() {
     body_scanner_2.setDriver(hc595_driver);
     body_scanner_2.setStatusLampsChip(1);
     body_scanner_2.setStatusLampsPins(body_scanner_2_pins, sizeof(body_scanner_2_pins));
+
+    Magnet light_to_arcade_table(mqttclient,"Light to arcade table",1,placement);
+    light_to_arcade_table.setPinNumber(13);
+    light_to_arcade_table.setInverted(false);
+
+    Magnet magnet_to_arcade_table(mqttclient,"Magnet to arcade table",2,placement);
+    magnet_to_arcade_table.setPinNumber(14);
+    magnet_to_arcade_table.setInverted(false);
 #endif
 
 // board 5
@@ -403,16 +411,17 @@ void setup() {
 
     InfiniteMirror infiniteMirror(mqttclient, "Infinite mirror", 1, placement);
     int16_t mirror_cathodes[3]{12,13,14};
-        infiniteMirror.setLedCathodes(mirror_cathodes,sizeof(mirror_cathodes)/sizeof(mirror_cathodes[0]));
-    TronCubeChest door_to_floor_puzzle(mqttclient,"Door to interactive floor",1,placement);
-    door_to_floor_puzzle.setMagnetPin(6);
-    door_to_floor_puzzle.setLedPin(7);
-    door_to_floor_puzzle.setInverted(true);
+    infiniteMirror.setLedCathodes(mirror_cathodes,sizeof(mirror_cathodes)/sizeof(mirror_cathodes[0]));
+    Magnet light_to_interactive_floor(mqttclient,"Light to interactive floor",1,placement);
+    light_to_interactive_floor.setPinNumber(6);
+    light_to_interactive_floor.setInverted(true);
+    Magnet magnet_to_interactive_floor(mqttclient,"Magnet to interactive floor",2,placement);
+    magnet_to_interactive_floor.setPinNumber(7);
+    magnet_to_interactive_floor.setInverted(true);
     TronCubeChest cube_chest_1(mqttclient,"Cube chest 1",1,placement);
     cube_chest_1.setLedPin(9);
     cube_chest_1.setMagnetPin(10);
     cube_chest_1.setInverted(false);
-
 #endif
 
 #if Uniboard == 6
@@ -473,16 +482,16 @@ void setup() {
 
 #if Uniboard == 10
     DiskHolderArray disk_dispenser_1(mqttclient,"Disk dispenser 1",1,"tr22");
-    HolderPins pins[6]{
-            {6,0,0,0,950,140,0},
+    HolderPins pins[]{
+          //  {6,0,0,0,950,140,0},
             {7,1,1,0,950,150,0},
-            {8,2,2,0,980,180,0},
+            {8,2,2,0,100,180,0},
             {9,3,3,0,950,180,0},
             {10,4, 4,0,950,150,0},
-            {11,5,5,0,950,140,0}
+           {11,5,5,0,950,140,0}
     };
     disk_dispenser_1.setHoldertype(SEFL::DISPENSER);
-    disk_dispenser_1.setHolders(pins,6);
+    disk_dispenser_1.setHolders(pins,5);
 #endif
 
 #if Uniboard == 11
@@ -570,7 +579,8 @@ void setup() {
     b_manager.addClient(laser_barrier);
     b_manager.addClient(status_bar_1);
     b_manager.addClient(status_bar_2);
-    //b_manager.addClient(door_to_arcade_table);
+    b_manager.addClient(light_to_arcade_table);
+    b_manager.addClient(magnet_to_arcade_table);
     b_manager.addClient(battleManagerClient);
     b_manager.addClient(alarm_1);
     b_manager.addClient(body_scanner_1);
@@ -581,7 +591,8 @@ void setup() {
 #if Uniboard == 5
     b_manager.addClient(floor_puzzle);
     b_manager.addClient(infiniteMirror);
-    b_manager.addClient(door_to_floor_puzzle);
+    b_manager.addClient(light_to_interactive_floor);
+    b_manager.addClient(magnet_to_interactive_floor);
     b_manager.addClient(cube_chest_1);
 #endif
 #if Uniboard == 6

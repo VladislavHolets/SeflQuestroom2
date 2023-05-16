@@ -214,6 +214,8 @@ namespace SEFL
                 health += doc["add_health"].as<int16_t>();
             if (doc.containsKey("targets_amount"))
                 targets_amount= doc["targets_amount"].as<uint8_t>();
+            if (doc["target_died"].as<bool>())
+                targets_amount--;
             data.remove(0);
 //			if (this->data.front().toInt())
 //			{

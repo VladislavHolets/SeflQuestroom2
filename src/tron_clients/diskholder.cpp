@@ -71,13 +71,20 @@ namespace SEFL {
             }else if(pin_value && holdertype_==RECEIVER){
                 StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
                 repDoc["action"]="received_disk";
-                repDoc["id"]=holder_order_id;
-                holder_order_id++;
+                int id=0;
+                for(int i=0;i<holders_size_;i++){
+                    if(holders_[i].previous_pin_value){
+                        id++;
+                    }
+                }
+                repDoc["id"]=id;
+               // holder_order_id++;
                 String output;
                 serializeJson(repDoc,output);
                 data.push_back(output);
                 Quest_Basic_Client::reportStatus();
                 data.pop_back();
+
             }
 
         }
@@ -162,8 +169,10 @@ namespace SEFL {
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
             set_led_state(false);
+
             for (int holder = 0; holder < holders_size_; ++holder) {
                  check_disk(holder);
+
             }
         }
     }

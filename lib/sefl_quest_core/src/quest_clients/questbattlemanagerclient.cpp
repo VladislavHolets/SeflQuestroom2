@@ -30,8 +30,8 @@ namespace SEFL {
             }
             if(doc["TriggerId"]!=0){
                 String trigger_id=doc["TriggerId"];
-                if(trigger_id.compareTo(String("web_setup"))){
-                    mode=doc["GameMode"];
+                if(trigger_id.equals("web_setup")){
+                    mode=static_cast<QuestModes>(doc["GameMode"].as<int>());
                     if(mode==ERROR){
                         mode=MONO;
                     }
@@ -41,6 +41,7 @@ namespace SEFL {
                     serializeJson(doc,reply);
                     data.push_back(reply);
                     Quest_Sensor_Client::reportStatus();
+                    data.remove(data.size()-1);
                 }
             }
         }

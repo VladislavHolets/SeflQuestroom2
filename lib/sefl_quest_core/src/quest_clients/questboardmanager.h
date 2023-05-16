@@ -65,7 +65,13 @@ namespace SEFL
 		void processCallbackQueueOne();
 		void processCallbackQueueAll();
 		void processCallbackQueue(int number);
-	};
+
+        void resetClients();
+
+        void clientsAct();
+
+        void clientsInit();
+    };
 
 } /* namespace SEFL */
 

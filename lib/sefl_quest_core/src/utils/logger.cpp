@@ -1036,7 +1036,7 @@ void SEFL::Logger::log(Level level, int64_t message, uint8_t base)
 void SEFL::Logger::log(Level level, const char *module, int64_t message,
 					   uint8_t base)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
 		getInstance()->templateLog(level, module, message, base);
 	}
@@ -1050,7 +1050,7 @@ void SEFL::Logger::log(Level level, uint64_t message, uint8_t base)
 void SEFL::Logger::log(Level level, const char *module, uint64_t message,
 					   uint8_t base)
 {
-	if (level <= Logger::getInstance()->getLogLevel())
+	if (level >= Logger::getInstance()->getLogLevel())
 	{
 		getInstance()->templateLog(level, module, message, base);
 	}

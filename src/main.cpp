@@ -21,6 +21,7 @@ void setup() {
     SEFL::Logger::setLogLevel(SEFL::Logger::Level::WARNING); // VERBOSE   NOTICE SILENT
     //SEFL::Logger::setPostMessage();
     SEFL::Logger::notice("main", "Initing board");
+
 #ifdef USE_DFPLAYER
     dfserial.begin(9600);
   player.begin(dfserial);
@@ -142,9 +143,14 @@ void setup() {
     SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
 
     SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, uniboard_name, placement);
-
+    unsigned long seed =1;
+    for(auto i:mac) {
+                if (i) {
+                    seed *= i;
+                }
+    }
+    b_manager.setRandomSeed(seed);
     SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");
-
     //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////

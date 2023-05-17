@@ -42,6 +42,7 @@ namespace SEFL
 		mqtt.onMessage(this, &SEFL::Quest_Board_Manager::pushToCallbacksQueue);
 		Logger::notice("board_manager", F("constructor_done"));
 		IWatchdog.begin(5000000);
+        random_seed=millis();
 	}
 
 	Quest_Board_Manager::~Quest_Board_Manager(){
@@ -88,8 +89,10 @@ namespace SEFL
 
         //IMPORTANT: a fix to overcome server overflow when it requests configs from devices
         // creates a random delay no more than 2 seconds to reply for a config
-        randomSeed(millis());
-        auto timestamp=random(2000)+millis();
+
+        srand(random_seed*millis());
+        auto timestamp=rand()%2000+millis();
+
        while(millis()>timestamp){
            if (this->power_status_ && !this->shutdown_timestamp)
            {
@@ -408,5 +411,9 @@ namespace SEFL
 		}
 		return false;
 	}
+
+    void Quest_Board_Manager::setRandomSeed(uint32_t randomSeed) {
+        Quest_Board_Manager::random_seed = randomSeed;
+    }
 
 } /* namespace SEFL */

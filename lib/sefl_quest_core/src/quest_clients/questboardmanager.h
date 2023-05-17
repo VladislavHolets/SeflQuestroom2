@@ -44,7 +44,7 @@ namespace SEFL
 
 		bool connect();
 		bool subscribeAll();
-
+        uint32_t random_seed;
 	protected:
 	public:
 		void removeAllClients();
@@ -71,6 +71,8 @@ namespace SEFL
         void clientsAct();
 
         void clientsInit();
+
+        void setRandomSeed(uint32_t randomSeed);
     };
 
 } /* namespace SEFL */

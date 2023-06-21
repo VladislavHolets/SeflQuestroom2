@@ -37,6 +37,7 @@ namespace SEFL
 
 	void Quest_Start_Button::act()
 	{
+        this->processDelayedPublications();
 		switch (this->getStatus())
 		{
 		case SEFL::StartButtonClientStatuses::ACTIVATED_BUTTON_STATUS:

@@ -41,7 +41,7 @@ namespace SEFL {
         }
         pinMode(Mext.getCi(),INPUT);
         //Logger::notice("ANDPuzzle",Mext.analogRead(adapter_->getSolvedStatePin()));
-        if(Mext.analogRead(adapter_->getSolvedStatePin())>380){
+        if(Mext.analogRead(adapter_->getSolvedStatePin())>300){
             this->setStatus(FINISHED_STATUS);
         }
     }

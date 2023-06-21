@@ -21,6 +21,7 @@ namespace SEFL
 
 	void Quest_Host_Client::act()
 	{
+        this->processDelayedPublications();
 	}
 
 	void Quest_Host_Client::inputClb(const char *data, uint16_t len)

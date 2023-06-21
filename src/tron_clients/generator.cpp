@@ -62,6 +62,11 @@ namespace SEFL {
             unsetChangedStatus();
             reportStatus();
             puzzle_status=INITIAL;
+            initial_animation_timestamp=millis();
+        }
+        if(millis()-initial_animation_timestamp<5000) {
+            Pext.analogWrite(this->frame_light_pin, (sin(millis() * TWO_PI / 250) + 1) * 2048);
+            return;
         }
         if(puzzle_status==INITIAL) {
             scan_inputs();

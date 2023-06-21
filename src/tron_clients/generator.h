@@ -19,6 +19,7 @@ namespace SEFL {
         int16_t motors_enable_pin;
         int16_t locker_magnet_pin;
         int16_t locker_light_pin;
+        uint32_t initial_animation_timestamp;
     public:
         void setMotorsEnablePin(int16_t motorsEnablePin);
 

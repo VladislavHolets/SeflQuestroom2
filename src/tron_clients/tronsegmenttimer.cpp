@@ -120,6 +120,7 @@ namespace SEFL
             setChangedStatus(false);
             reportStatus();
             start_timer();
+            offset_minutes_=0;
         }
         if(calculate_values()){
         refresh_timer();
@@ -139,10 +140,10 @@ namespace SEFL
             if (doc.containsKey("stopping_value"))
                 stopping_value= doc["stopping_value"].as<int16_t>();
             if (doc.containsKey("increasing_order"))
-                increasing_order= doc[""].as<bool>();
-            if (doc["overflow_period"]!= 0)
+                increasing_order= doc["increasing_order"].as<bool>();
+            if (doc.containsKey("overflow_period"))
                 overflow_period_= doc["overflow_period"].as<uint32_t>();
-            if (doc["segments_base"]!= 0)
+            if (doc.containsKey("segments_base"))
                 for (int i = 0; i < segments_size_; ++i) {
                     segments_base_[i]= doc["segments_base"].as<uint8_t>();
                 }

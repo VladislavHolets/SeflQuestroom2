@@ -24,6 +24,7 @@ namespace SEFL {
         Adafruit_NeoPixel strip;
         int8_t segment_size;
         uint8_t strip_pin;
+        uint32_t anim_timestamp;
         enum ButtonState
         {
             RESETED,

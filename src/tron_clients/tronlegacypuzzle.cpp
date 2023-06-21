@@ -46,25 +46,39 @@ namespace SEFL {
     }
 
     void TronLegacyPuzzle::onFinished() {
+        static uint32_t reset_timestamp = 0;
         if (isChangedStatus()) {
             adapter_->setDevice();
             adapter_->unSolveDevice();
-            adapter_->resetDevice();
+            //adapter_->resetDevice();
+            reset_timestamp = millis();
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
+        }
+        if(reset_timestamp && millis()-reset_timestamp>adapter_->getResetTimeout()) {
+
+            this->adapter_->resetDevice();
+            reset_timestamp=0;
         }
        //Logger::notice("TronLegacyPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
 
     }
 
     void TronLegacyPuzzle::onManualFinished() {
+        static uint32_t reset_timestamp = 0;
         if (isChangedStatus()) {
             adapter_->solveDevice();
+            reset_timestamp = millis();
             unsetChangedStatus();
             Quest_Basic_Client::reportStatus();
         }
        // Logger::notice("TronLegacyPuzzle", Mext.digitalRead(adapter_->getSolvedStatePin()));
 
+        if(reset_timestamp && millis()-reset_timestamp>adapter_->getResetTimeout()) {
+            //Quest_Basic_Client::reportStatus();
+            this->adapter_->resetDevice();
+            reset_timestamp=0;
+        }
     }
 
     void TronLegacyPuzzle::setAdapter(TronLegacyAdapter &adapter) {

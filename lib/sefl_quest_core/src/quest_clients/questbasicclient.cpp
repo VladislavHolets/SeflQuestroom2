@@ -20,6 +20,7 @@ namespace SEFL
 
 	void Quest_Basic_Client::act()
 	{
+        this->processDelayedPublications();
 		switch (this->getStatus())
 		{
 		case SEFL::BasicClientStatuses::DEFAULT_STATUS:

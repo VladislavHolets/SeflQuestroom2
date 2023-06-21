@@ -44,7 +44,7 @@ namespace SEFL
 
 		bool connect();
 		bool subscribeAll();
-        uint32_t random_seed;
+        uint32_t broadcast_response_delay;
 	protected:
 	public:
 		void removeAllClients();
@@ -53,7 +53,7 @@ namespace SEFL
 							const char *placement = DEFAULT_PLACEMENT, const char *server_name = DEFAULT_SERVER_NAME,
 							const char *in_topic = DEFAUT_OUT_TOPIC, const char *out_topic = DEFAUT_IN_TOPIC, SEFL::Language language = UKR);
 		virtual ~Quest_Board_Manager();
-		virtual void inputClb(const char *data, uint16_t len) override;
+		void inputClb(const char *data, uint16_t len) override;
 		void loop();
         bool addClient(SEFL::Quest_Client *client);
         bool addClient(SEFL::Quest_Client &client);
@@ -72,7 +72,7 @@ namespace SEFL
 
         void clientsInit();
 
-        void setRandomSeed(uint32_t randomSeed);
+        void setBroadcastResponseDelay(uint32_t broadcastResponseDelay);
     };
 
 } /* namespace SEFL */

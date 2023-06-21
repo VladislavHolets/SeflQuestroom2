@@ -47,7 +47,8 @@ namespace SEFL
 	};
 
 	static const uint32_t CALLBACK_TIMEOUT = 60000;
-	static const u_int16_t MAX_MESSAGE_QUEUE_AMOUNT = 500;
+    static const uint16_t MAX_MESSAGE_QUEUE_AMOUNT = 500;
+    static const uint16_t MAX_DELAYED_MESSAGE_QUEUE_AMOUNT = 50;
 	static const uint8_t MAX_CLIENT_AMOUNT = 50;
 	static const char DEFAULT_DEVICE_TYPE[] MEM_TYPE = "DEFAULT";
 	static const char ACTUATOR_DEVICE_TYPE[] MEM_TYPE = "Actuator";

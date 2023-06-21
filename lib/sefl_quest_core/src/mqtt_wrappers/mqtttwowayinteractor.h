@@ -11,6 +11,8 @@
 #include <sys/_stdint.h>
 #include <WString.h>
 #include "../constants.h"
+#include "Array.h"
+
 namespace SEFL
 {
 
@@ -21,7 +23,13 @@ namespace SEFL
 		String subfeed_;
 		String pubfeed_;
 		// SEFL::MQTT_Subscriber_Object_Bound<MQTT_Two_Way_Interactor> sub_;
+        struct DelayedMessage{
+            String payload;
+            uint32_t publish_time;
+            int qos;
+        };
 
+        Array<DelayedMessage, MAX_DELAYED_MESSAGE_QUEUE_AMOUNT> delayed_messages;
 	protected:
 	public:
 		MQTTClient *getMqtt();
@@ -39,6 +47,9 @@ namespace SEFL
 		// SEFL::MQTT_Subscriber_Object_Bound<MQTT_Two_Way_Interactor> *getSub();
 		bool publish(String payload, int qos = SEFL::QOS_DEFAULT);
 		bool publish(const char *payload, int qos = SEFL::QOS_DEFAULT);
+        bool publishDelayed(String payload,uint32_t delay, int qos = SEFL::QOS_DEFAULT);
+        bool publishDelayed(const char *payload,uint32_t delay,int qos = SEFL::QOS_DEFAULT);
+        void processDelayedPublications();
 		// bool publish(const char *payload, unsigned int length, int qos = SEFL::QOS_DEFAULT);
 	};
 

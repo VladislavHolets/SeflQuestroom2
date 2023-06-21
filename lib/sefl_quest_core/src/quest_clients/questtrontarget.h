@@ -24,9 +24,11 @@ namespace SEFL
 		int16_t health;
         uint8_t *led_pins;
         int16_t led_pins_size;
-        void displayHealth();
+        void displayHealth(int16_t displayed_health=-1);
         int16_t max_health;
         uint8_t targets_amount;
+        bool was_killed;
+        uint32_t animation_timestamp;
 	public:
         void setMaxHealth(int16_t maxHealth);
 
@@ -39,7 +41,7 @@ namespace SEFL
 		void act() override;
 		void setStatus(uint8_t status) override;
 		void reportStatus() override;
-		virtual void onDislabled();
+		virtual void onDisabled();
 		virtual void onAlive();
 		virtual void onDead();
 		void inputClb(const char *data, uint16_t len) override;

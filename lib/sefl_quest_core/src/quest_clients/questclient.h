@@ -36,17 +36,17 @@ namespace SEFL
 		Quest_Client(MQTTClient &mqtt, const char *name, ClientType type = DEFAULT_DEVICE,
 					 uint8_t reset_status = 1, const char *placement = DEFAULT_PLACEMENT,
 					 const char *in_topic = DEFAUT_IN_TOPIC, const char *out_topic = DEFAUT_OUT_TOPIC, SEFL::Language language = UKR);
-		virtual ~Quest_Client();
+		~Quest_Client() override;
 		virtual void act() = 0;
 		virtual void reportStatus() = 0;
 		bool isChangedStatus();
 		Array<String, MAX_DATA_LENGTH> &getData();
-		const char *getInTopic();
+		//const char *getInTopic();
 		SEFL::Language getLanguage();
 		void setLanguage(SEFL::Language language);
 		const char *getName();
-		const char *getOutTopic();
-		const char *getPlacement();
+		//const char *getOutTopic();
+		//const char *getPlacement();
 		bool isPowerStatus();
 		void setPowerStatus(bool powerStatus);
 		ClientType getType();

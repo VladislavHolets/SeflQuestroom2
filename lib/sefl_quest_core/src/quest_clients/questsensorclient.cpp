@@ -25,6 +25,7 @@ namespace SEFL
 
 	void Quest_Sensor_Client::act()
 	{
+        this->processDelayedPublications();
 		switch (this->getStatus())
 		{
 		case SEFL::SensorClientStatuses::SET_STATUS:

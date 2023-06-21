@@ -42,7 +42,25 @@ namespace SEFL {
             this->reportStatus();
             pinMode(Mext.getCi(), INPUT_PULLUP);
             this->initButtons();
+            anim_timestamp=millis();
         }
+if(millis()-anim_timestamp<5000){
+
+    Mext.digitalRead(this->strip_pin);
+    pinMode(Mext.getCi(),INPUT);
+    //Logger::notice(this->getName(),"BEFORE STRIP BEGIN");
+    strip.begin();
+
+    if((millis()/500)%2){
+        this->strip.fill(Adafruit_NeoPixel::Color(255,0,0));
+    }else{
+        this->strip.fill(Adafruit_NeoPixel::Color(0,0,0));
+    }
+
+    this->strip.show();
+    this->strip.show();
+    return;
+}
         this->scanButtons();
         bool solved = checkPattern();
         if (solved)

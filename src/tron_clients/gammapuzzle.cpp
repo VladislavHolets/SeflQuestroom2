@@ -71,6 +71,7 @@ namespace SEFL {
     }
 
     void GammaPuzzle::onActive() {
+        static uint32_t init_blink_timestamp=0;
         if (this->changed_status_)
         {
             this->changed_status_ = false;
@@ -79,9 +80,15 @@ namespace SEFL {
             current_input=0;
             refresh_neon_flag=true;
             refreshNeon();
+            init_blink_timestamp=millis();
+        }
+        if(millis()-init_blink_timestamp<5000){
+            for (int i = 0; i < neons_pins_size; ++i) {
+                Pext.digitalWrite(neons_pins[i],((millis()-incorrect_animation_timestamp)/500%2)?HIGH:LOW);
+            }
+            return;
         }
         scanButtons();
-
         refreshNeon();
         if(checkButtons()){
             current_input=0;

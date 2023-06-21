@@ -58,7 +58,40 @@ namespace SEFL
 		this->getMqtt()->publish(this->getPubfeed().c_str(), payload, strlen(payload), 0, qos);
 		return true;
 	}
-	// bool MQTT_Two_Way_Interactor::publish(const char *payload, unsigned int length, int qos)
+
+    bool MQTT_Two_Way_Interactor::publishDelayed(const char *payload, uint32_t delay, int qos) {
+        if(delayed_messages.full()){
+            return false;
+        }
+        DelayedMessage message;
+        message.payload=String(payload);
+        message.qos=qos;
+        message.publish_time=millis()+delay;
+        delayed_messages.push_back(message);
+        return true;
+    }
+
+    bool MQTT_Two_Way_Interactor::publishDelayed(String payload, uint32_t delay, int qos) {
+        if(delayed_messages.full()){
+            return false;
+        }
+        DelayedMessage message;
+        message.payload=payload;
+        message.qos=qos;
+        message.publish_time=millis()+delay;
+        delayed_messages.push_back(message);
+        return true;
+    }
+
+    void MQTT_Two_Way_Interactor::processDelayedPublications() {
+        for(int i=delayed_messages.size()-1;i>=0;i--){
+            if(millis()>=delayed_messages[i].publish_time){
+                publish(delayed_messages[i].payload, delayed_messages[i].qos);
+                delayed_messages.remove(i);
+            }
+        }
+    }
+    // bool MQTT_Two_Way_Interactor::publish(const char *payload, unsigned int length, int qos)
 	// {
 	// 	this->getMqtt()->publish(this->getPubfeed().c_str(), payload, length, 0, qos);
 	// }

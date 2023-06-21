@@ -143,13 +143,8 @@ void setup() {
     SEFL::Logger::verbose("main", "Starting Quest_Board_Manager instance");
 
     SEFL::Quest_Board_Manager b_manager(mqttclient, SEFL::EDMONTON_MQTT_CONFIG, uniboard_name, placement);
-    unsigned long seed =1;
-    for(auto i:mac) {
-                if (i) {
-                    seed *= i;
-                }
-    }
-    b_manager.setRandomSeed(seed);
+
+    b_manager.setBroadcastResponseDelay(Uniboard*250);
     SEFL::Logger::verbose("main", "Started Quest_Board_Manager instance");
     //тут створюються всі об'єкти всіх віртуальних пристроїв за прикладом вище
     ////////////////////////////////////////////////////////////////////////////////
@@ -414,6 +409,9 @@ void setup() {
     FloorPuzzle floor_puzzle(mqttclient, "Interactive floor", 1, placement);
     floor_puzzle.setPanels(panels, sizeof(panels)/sizeof(panels[0]),0);
     floor_puzzle.setPatternSize(2);
+    floor_puzzle.setStripPin(5);
+    floor_puzzle.setStripSize(52);
+
 
     InfiniteMirror infiniteMirror(mqttclient, "Infinite mirror", 1, placement);
     int16_t mirror_cathodes[3]{12,13,14};

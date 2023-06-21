@@ -125,10 +125,7 @@ namespace SEFL {
                 break;
             }
             case CORRECT_ORDER: {
-                show_success();
-                if (animation_timestamp == 0) {
-                    this->setStatus(FINISHED_STATUS);
-                }
+                this->setStatus(FINISHED_STATUS);
                 break;
             }
             case INCORRECT_ORDER: {

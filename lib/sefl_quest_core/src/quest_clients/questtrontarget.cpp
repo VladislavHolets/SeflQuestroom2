@@ -18,185 +18,167 @@
 #include "peripherals/pwmpinsextender.h"
 
 #define DECODE_NEC
-namespace SEFL
-{
+namespace SEFL {
 
-	Quest_Tron_Target::~Quest_Tron_Target()
-	{
-		// TODO Auto-generated destructor stub
-	}
+    Quest_Tron_Target::~Quest_Tron_Target() {
+        // TODO Auto-generated destructor stub
+    }
 
-	void Quest_Tron_Target::act()
-	{
-		switch (this->getStatus())
-		{
-		case SEFL::TronTargetClientStatuses::DISABLED_STATUS:
-		{
-			this->onDislabled();
-		}
-		break;
-		case SEFL::TronTargetClientStatuses::DEAD_STATUS:
-		{
-			this->onDead();
-		}
-		break;
-		case SEFL::TronTargetClientStatuses::ALIVE_STATUS:
-		{
-			this->onAlive();
-		}
-		break;
-		}
-	}
+    void Quest_Tron_Target::act() {
+        this->processDelayedPublications();
+        switch (this->getStatus()) {
+            case SEFL::TronTargetClientStatuses::DISABLED_STATUS: {
+                this->onDisabled();
+            }
+                break;
+            case SEFL::TronTargetClientStatuses::DEAD_STATUS: {
+                this->onDead();
+            }
+                break;
+            case SEFL::TronTargetClientStatuses::ALIVE_STATUS: {
+                this->onAlive();
+            }
+                break;
+        }
+    }
 
-	void Quest_Tron_Target::setStatus(uint8_t status)
-	{
-		if (this->status_ != static_cast<SEFL::TronTargetClientStatuses>(status))
-		{
-			status_ = static_cast<SEFL::TronTargetClientStatuses>(status);
-			this->changed_status_ = true;
-		}
-	}
+    void Quest_Tron_Target::setStatus(uint8_t status) {
+        if (this->status_ != static_cast<SEFL::TronTargetClientStatuses>(status)) {
+            status_ = static_cast<SEFL::TronTargetClientStatuses>(status);
+            this->changed_status_ = true;
+        }
+    }
 
-	void Quest_Tron_Target::reportStatus()
-	{
-		char output[128];
+    void Quest_Tron_Target::reportStatus() {
+        char output[128];
         StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
-		repDoc["CommandId"] =
-			static_cast<int>(SEFL::DirectCommands::STATUS_TRIGGER_COMMAND);
-		int tstatus = static_cast<int>(this->getStatus());
-		repDoc["SubcommandId"] = tstatus;
-		JsonArray jdata = repDoc.createNestedArray("Data");
-		for (unsigned int i = 0; i < this->data.size(); i++)
-		{
-			if (this->data[i].length())
-				jdata.add(this->data[i]);
-		}
-		serializeJson(repDoc, output);
-		publish( output, 2);
-	}
+        repDoc["CommandId"] =
+                static_cast<int>(SEFL::DirectCommands::STATUS_TRIGGER_COMMAND);
+        int tstatus = static_cast<int>(this->getStatus());
+        repDoc["SubcommandId"] = tstatus;
+        JsonArray jdata = repDoc.createNestedArray("Data");
+        for (unsigned int i = 0; i < this->data.size(); i++) {
+            if (this->data[i].length())
+                jdata.add(this->data[i]);
+        }
+        serializeJson(repDoc, output);
+        publish(output, 2);
+    }
 
-	Quest_Tron_Target::Quest_Tron_Target(MQTTClient &mqtt, uint8_t receiver,
-										 const char *name, uint8_t reset_status, const char *placement,
-										 const char *in_topic, const char *out_topic, SEFL::Language language) : Quest_Client(mqtt, name, TRON_TARGET, reset_status, placement, in_topic,
-																															  out_topic, language),
-																												 status_(
-																													 SEFL::TronTargetClientStatuses::DISABLED_STATUS),
-																												 RECEIVER(
-																													 receiver),
-																												 health(0)
-	{
-        led_pins= nullptr;
-        led_pins_size=-1;
-        max_health=100;
-		Mext.digitalRead(RECEIVER);
-		IrReceiver.begin(Mext.getCi());
-	}
+    Quest_Tron_Target::Quest_Tron_Target(MQTTClient &mqtt, uint8_t receiver,
+                                         const char *name, uint8_t reset_status, const char *placement,
+                                         const char *in_topic, const char *out_topic, SEFL::Language language)
+            : Quest_Client(mqtt, name, TRON_TARGET, reset_status, placement, in_topic,
+                           out_topic, language),
+              status_(
+                      SEFL::TronTargetClientStatuses::DISABLED_STATUS),
+              RECEIVER(
+                      receiver),
+              health(0) {
+        led_pins = nullptr;
+        led_pins_size = -1;
+        max_health = 100;
+        Mext.digitalRead(RECEIVER);
+        IrReceiver.begin(Mext.getCi());
+        was_killed = false;
+        animation_timestamp = 0;
+    }
 
-	void Quest_Tron_Target::inputClb(const char *data, uint16_t len)
-	{
+    void Quest_Tron_Target::inputClb(const char *data, uint16_t len) {
         StaticJsonDocument<SEFL::DOC_SIZE> doc;
-		deserializeJson(doc, data, len);
-		JsonArray arr = doc["Data"].as<JsonArray>();
-		for (JsonVariant value : arr)
-		{
-			this->data.push_back(String(value.as<const char *>()));
-		}
-		//	}
-		int command = doc["CommandId"];
-		switch (command)
-		{
-		case SEFL::DirectCommands::PING_COMMAND:
-		{
-			publish(data,2);
-		}
-		break;
-		case SEFL::DirectCommands::STATUS_COMMAND:
-		{
+        deserializeJson(doc, data, len);
+        JsonArray arr = doc["Data"].as<JsonArray>();
+        for (JsonVariant value: arr) {
+            this->data.push_back(String(value.as<const char *>()));
+        }
+        //	}
+        int command = doc["CommandId"];
+        switch (command) {
+            case SEFL::DirectCommands::PING_COMMAND: {
+                publish(data, 2);
+            }
+                break;
+            case SEFL::DirectCommands::STATUS_COMMAND: {
 
-			char output[128];
-            StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
-			repDoc["CommandId"] =
-				static_cast<int>(SEFL::DirectCommands::STATUS_COMMAND);
-			int tstatus = static_cast<int>(this->getStatus());
-			repDoc["SubcommandId"] = tstatus;
-			JsonArray jdata = repDoc.createNestedArray("Data");
-			serializeJson(repDoc, output);
-			publish(output, 2);
-		}
-		break;
-		case SEFL::DirectCommands::ACTION_COMMAND:
-		{
-			this->setPowerStatus(true);
-			enum SEFL::TronTargetClientStatuses status =
-				static_cast<SEFL::TronTargetClientStatuses>(doc["SubcommandId"].as<int>());
-			this->setStatus(status);
+                char output[128];
+                StaticJsonDocument<SEFL::DOC_SIZE> repDoc;
+                repDoc["CommandId"] =
+                        static_cast<int>(SEFL::DirectCommands::STATUS_COMMAND);
+                int tstatus = static_cast<int>(this->getStatus());
+                repDoc["SubcommandId"] = tstatus;
+                JsonArray jdata = repDoc.createNestedArray("Data");
+                serializeJson(repDoc, output);
+                publish(output, 2);
+            }
+                break;
+            case SEFL::DirectCommands::ACTION_COMMAND: {
+                this->setPowerStatus(true);
+                enum SEFL::TronTargetClientStatuses status =
+                        static_cast<SEFL::TronTargetClientStatuses>(doc["SubcommandId"].as<int>());
+                this->setStatus(status);
 
-			publish(data, 2);
-		}
-		break;
-		case SEFL::DirectCommands::DEACTIVATE_DEVICE_COMMAND:
-		{
-			this->setPowerStatus(false);
-		}
-		break;
-		case SEFL::DirectCommands::DEBUG_MODE_COMMAND:
-		{
-			//	this->setPowerStatus(false);
-		}
-		break;
-		case SEFL::DirectCommands::RESET_COMMAND:
-		{
-			this->setStatus((this->reset_status_));
-            publish(data, 2);
-			this->cleanData();
-		}
-		break;
-		default:
-		{
-		}
-		}
-	}
+                publish(data, 2);
+            }
+                break;
+            case SEFL::DirectCommands::DEACTIVATE_DEVICE_COMMAND: {
+                this->setPowerStatus(false);
+            }
+                break;
+            case SEFL::DirectCommands::DEBUG_MODE_COMMAND: {
+                //	this->setPowerStatus(false);
+            }
+                break;
+            case SEFL::DirectCommands::RESET_COMMAND: {
+                this->setStatus((this->reset_status_));
+                publish(data, 2);
+                this->cleanData();
+            }
+                break;
+            default: {
+            }
+        }
+    }
 
-	TronTargetClientStatuses Quest_Tron_Target::getStatus()
-	{
-		return (status_);
-	}
+    TronTargetClientStatuses Quest_Tron_Target::getStatus() {
+        return (status_);
+    }
 
-	void Quest_Tron_Target::onDead()
-	{
-		if (isChangedStatus())
-		{
-			unsetChangedStatus();
-			reportStatus();
-            health=0;
+    void Quest_Tron_Target::onDead() {
+        if (isChangedStatus()) {
+            unsetChangedStatus();
+            reportStatus();
+            health = 0;
+            was_killed = true;
             displayHealth();
-		}
-	}
-	void Quest_Tron_Target::onDislabled()
-	{
-		if (isChangedStatus())
-		{
-			unsetChangedStatus();
-			this->data.clear();
-			reportStatus();
+        }
+    }
 
-            health=0;
+    void Quest_Tron_Target::onDisabled() {
+        if (isChangedStatus()) {
+            unsetChangedStatus();
+            this->data.clear();
+            reportStatus();
+            was_killed = false;
+            health = 0;
             displayHealth();
-		}
-	}
+        }
+    }
 
-	void Quest_Tron_Target::onAlive()
-	{
-		if (isChangedStatus())
-		{
-			unsetChangedStatus();
-			reportStatus();
-
+    void Quest_Tron_Target::onAlive() {
+        if (isChangedStatus()) {
+            if (this->was_killed) {
+                this->setStatus(SEFL::TronTargetClientStatuses::DEAD_STATUS);
+                this->unsetChangedStatus();
+                data.clear();
+                return;
+            }
+            unsetChangedStatus();
+            reportStatus();
             SEFL::Logger::notice("target", "alive");
             displayHealth();
-		}
-		while (!this->data.empty())
-		{
+        }
+
+        while (!this->data.empty()) {
 
             StaticJsonDocument<SEFL::DOC_SIZE> doc;
 
@@ -206,14 +188,14 @@ namespace SEFL
                 Logger::notice(error.f_str());
                 return;
             }
-            if(doc.containsKey("max_health"))
-                setMaxHealth( doc["max_health"].as<int16_t>());
+            if (doc.containsKey("max_health"))
+                setMaxHealth(doc["max_health"].as<int16_t>());
             if (doc.containsKey("health"))
-                health= doc["health"].as<int16_t>();
+                health = doc["health"].as<int16_t>();
             if (doc.containsKey("add_health"))
                 health += doc["add_health"].as<int16_t>();
             if (doc.containsKey("targets_amount"))
-                targets_amount= doc["targets_amount"].as<uint8_t>();
+                targets_amount = doc["targets_amount"].as<int8_t>();
             if (doc["target_died"].as<bool>())
                 targets_amount--;
             data.remove(0);
@@ -224,52 +206,58 @@ namespace SEFL
 //			}
 
             displayHealth();
-		}
-		if (health <= 0)
-		{
-            health=0;
+        }
+        if (health <= 0) {
+            health = 0;
             targets_amount--;
             StaticJsonDocument<SEFL::DOC_SIZE> report_doc;
-            report_doc["targets_left"]=targets_amount;
+            report_doc["targets_left"] = targets_amount;
             String report;
-            serializeJson(report_doc,report);
+            serializeJson(report_doc, report);
             data.clear();
             data.push_back(report);
-			this->setStatus(SEFL::TronTargetClientStatuses::DEAD_STATUS);
-		}
-        if(health>=max_health){
-            health=max_health;
+            this->setStatus(SEFL::TronTargetClientStatuses::DEAD_STATUS);
         }
-		if (IrReceiver.decode())
-		{
-			health--;
-			IrReceiver.resume();
+        if (health >= max_health) {
+            health = max_health;
+        }
+        if (IrReceiver.decode()) {
+            health--;
+            IrReceiver.resume();
+            animation_timestamp = millis();
             displayHealth();
-		}
-	}
-
-    void Quest_Tron_Target::setLedPins(const uint8_t *ledPins,uint8_t ledPinsSize) {
-        if(led_pins!= nullptr){
-            delete [] led_pins;
         }
-        led_pins_size=ledPinsSize;
-        led_pins=new uint8_t[led_pins_size];
-        for (int i = 0; i < led_pins_size; ++i) {
-            led_pins[i]=ledPins[i];
+        if (millis() - animation_timestamp < 2000) {
+            ((millis() / 500) % 2) ? displayHealth() : displayHealth(0);
+        }else{
+            displayHealth();
         }
     }
 
-    void Quest_Tron_Target::displayHealth() {
-        if(led_pins_size<0){
+    void Quest_Tron_Target::setLedPins(const uint8_t *ledPins, uint8_t ledPinsSize) {
+        if (led_pins != nullptr) {
+            delete[] led_pins;
+        }
+        led_pins_size = ledPinsSize;
+        led_pins = new uint8_t[led_pins_size];
+        for (int i = 0; i < led_pins_size; ++i) {
+            led_pins[i] = ledPins[i];
+        }
+    }
+
+    void Quest_Tron_Target::displayHealth(int16_t displayed_health) {
+
+        if (led_pins_size < 0) {
             return;
         }
         for (int i = 0; i < led_pins_size; ++i) {
-            int temp =this->health-(this->max_health / led_pins_size * i);
-            temp=(temp>this->max_health / led_pins_size)?(this->max_health / led_pins_size):(temp);
-            int value=((temp>0)?temp:0) * 4096 / (max_health / led_pins_size);
-            Logger::notice(this->getName(),value);
-            Pext.analogWrite(led_pins[i], (led_pins[i]>8)?value:(4096-value));
+            int temp = ((displayed_health == -1) ? health : displayed_health) - (this->max_health / led_pins_size * i);
+            temp = (temp > this->max_health / led_pins_size) ? (this->max_health / led_pins_size) : (temp);
+            int value = ((temp > 0) ? temp : 0) * 4096 / (max_health / led_pins_size);
+            Logger::notice(this->getName(), value);
+            Pext.analogWrite(led_pins[i], (led_pins[i] > 8) ? value : (4096 - value));
         }
+
     }
 
     void Quest_Tron_Target::setMaxHealth(int16_t maxHealth) {

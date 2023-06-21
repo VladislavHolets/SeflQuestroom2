@@ -19,6 +19,7 @@ namespace SEFL
 
 	void Quest_Actuator_Client::act()
 	{
+        this->processDelayedPublications();
 		switch (this->getStatus())
 		{
 		case SEFL::ActuatorClientStatuses::OFF_STATUS:
